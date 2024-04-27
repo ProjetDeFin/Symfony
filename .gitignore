@@ -4,3 +4,4 @@ var/**/
 public/bundles/**
 supervisord.log
 supervisord.pid
+node_modules/
