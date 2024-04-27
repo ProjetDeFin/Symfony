@@ -10,7 +10,7 @@ MUTAGEN_NAME=$(shell bash ./scripts/get-mutagen-name.sh)
 .PHONY: start up perm db cc ssh vendor assets assets-watch stop rm
 .PHONY: maintenance-on maintenance-off
 
-start: up perm vendor db cc perm robots-disallow
+start: up perm vendor db cc perm
 
 up:
 	docker kill $$(docker ps -q) || true
@@ -62,9 +62,7 @@ db: wait-for-db
 	$(EXEC) rm -rf public/uploads/*
 	$(EXEC) bin/console doctrine:database:create --if-not-exists
 	$(EXEC) bin/console doctrine:schema:update --force
-	$(EXEC) bin/console smart:setting:import
-	$(EXEC) bin/console doctrine:fixtures:load --append -n
-	$(EXEC) bin/console app:index:all-searchable
+	#$(EXEC) bin/console doctrine:fixtures:load --append -n
 
 db-migrate:
 	$(EXEC) bin/console doctrine:migration:migrate
@@ -90,9 +88,6 @@ ifeq ($(ENVIRONMENT),Linux)
 else
 	$(EXEC) chown -R www-data:root var/ public/uploads public/media
 endif
-
-robots-disallow:
-	$(EXEC) cp robots/robots-disallow.txt public/robots.txt
 
 # Cache
 cc:
@@ -131,7 +126,6 @@ update-prod:
 	yarn build
 	# Update Database
 	bin/console doctrine:migrations:migrate --no-interaction
-	bin/console smart:setting:import
 	bin/console c:warmup
 	cp robots/robots-allow.txt public/robots.txt
 	# Update cronjobs
@@ -158,7 +152,6 @@ update-feature:
 	yarn build
 	# Update Database
 	bin/console doctrine:migrations:migrate --no-interaction
-	bin/console smart:setting:import
 	bin/console c:warmup
 	cp robots/robots-allow.txt public/robots.txt
 	# Update cronjobs
