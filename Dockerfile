@@ -5,7 +5,7 @@ ENV LANG="en_US.UTF-8" \
     LANGUAGE="en_US.UTF-8" \
     TERM="xterm" \
     DEBIAN_FRONTEND="noninteractive" \
-    PHP_VERSION=8.1
+    PHP_VERSION=8.2
 
 WORKDIR /app
 
@@ -85,17 +85,12 @@ RUN wget https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/download/v3.13.0/
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configuration files
-#COPY docker/dev/app/php.ini /etc/php/${PHP_VERSION}/cli/conf.d/50-setting.ini
-#COPY docker/dev/app/php.ini /etc/php/${PHP_VERSION}/fpm/conf.d/50-setting.ini
+COPY php.ini /etc/php/${PHP_VERSION}/cli/conf.d/50-setting.ini
+COPY php.ini /etc/php/${PHP_VERSION}/fpm/conf.d/50-setting.ini
 #COPY docker/dev/app/pool.conf /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
-#COPY docker/dev/app/nginx.conf /etc/nginx/nginx.conf
-#COPY docker/dev/app/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-#COPY docker/dev/app/symfony.conf /etc/nginx/symfony.conf
-
-# SSL Certificates
-#COPY docker/dev/app/mw.local.crt /etc/nginx/ssl/mw.local.crt
-#COPY docker/dev/app/mw.local.key /etc/nginx/ssl/mw.local.key
-#COPY docker/dev/app/dhparam.pem /etc/nginx/ssl/dhparam.pem
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY symfony.conf /etc/nginx/symfony.conf
 
 RUN mkdir -p /app/var/log /app/var/cache /run/php
 

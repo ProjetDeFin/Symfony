@@ -2,3 +2,5 @@
 vendor/
 var/**/
 public/bundles/**
+supervisord.log
+supervisord.pid
