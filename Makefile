@@ -10,7 +10,7 @@ MUTAGEN_NAME=$(shell bash ./scripts/get-mutagen-name.sh)
 .PHONY: start up perm db cc ssh vendor assets assets-watch stop rm
 .PHONY: maintenance-on maintenance-off
 
-start: up perm ssh-key vendor assets db cc perm robots-disallow
+start: up perm vendor db cc perm robots-disallow
 
 up:
 	docker kill $$(docker ps -q) || true
@@ -46,13 +46,9 @@ vendor: wait-for-db
 	$(EXEC) composer install -n
 	$(EXEC) yarn install --pure-lockfile
 	make perm
-	$(EXEC) php scripts/load_font.php 'Arial' public/pdf/arial.ttf public/pdf/b_arial.ttf
 
 ssh:
 	$(EXEC) bash
-
-ssh-key:
-	$(EXEC) ssh-add /root/.ssh/id_rsa
 
 run:
 	$(EXEC) $(c)
@@ -172,10 +168,6 @@ update-feature:
 	crontab cron/preprod
 	# Set maintenance to off
 	make maintenance-off
-
-sonar:
-	$(EXEC) sonar-scanner
-	@echo "Consult 'http://localhost:9000/dashboard' for sonar-scanner analysis"
 
 maintenance-on:
 ifeq ($(shell test -e public/index.php.old && echo -n yes),yes)

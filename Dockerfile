@@ -51,9 +51,9 @@ RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add - && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Node & yarn
-COPY --from=node:16.14.0-stretch-slim /usr/local/bin/node /usr/local/bin/node
-COPY --from=node:16.14.0-stretch-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
-COPY --from=node:16.14.0-stretch-slim /opt/ /opt
+COPY --from=node:current-bullseye-slim /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:current-bullseye-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node:current-bullseye-slim /opt/ /opt
 RUN yarn_dir=$(find /opt -type f -name yarn) && ln -s $yarn_dir /usr/local/bin/yarn
 RUN yarn config set python /usr/bin/python3
 

@@ -1,8 +1,6 @@
 services:
   ssh-agent:
     image: nardeas/ssh-agent:latest
-    volumes:
-      - "~/mw-ssh:/root/.ssh:ro"
     environment:
       - SSH_AUTH_SOCK=/.ssh-agent/socket
 
@@ -13,6 +11,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: bourse_aux_stages
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
 
   app:
     ports:
@@ -24,7 +24,6 @@ services:
       network: host
     volumes:
       - "./:/app"
-      - "~/mw-ssh:/root/.ssh:ro"
     environment:
       - SSH_AUTH_SOCK=/.ssh-agent/socket
     restart: always
