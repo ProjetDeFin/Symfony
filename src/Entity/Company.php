@@ -6,10 +6,8 @@ use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\EnabledTrait;
 use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
-use App\Repository\UserRepository;
+use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ORM\Table(name: '`company`')]

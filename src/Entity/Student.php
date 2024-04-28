@@ -19,7 +19,7 @@ class Student
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\OneToOne(targetEntity: User::class)]
     private ?User $user = null;
 
     #[ORM\Column(type: 'date')]
