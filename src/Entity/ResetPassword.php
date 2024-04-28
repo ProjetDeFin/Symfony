@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\ResetPasswordRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity(repositoryClass: ResetPasswordRepository::class)]
+#[ORM\Table(name: '`student`')]
 class ResetPassword
 {
     #[ORM\Id]
