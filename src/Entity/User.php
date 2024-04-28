@@ -13,10 +13,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements PasswordAuthenticatedUserInterface
+class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     use TimestampableTrait;
     use SoftDeleteTrait;
+    use EnabledTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,6 +29,9 @@ class User implements PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180)]
     private ?string $name = null;
+
+    #[ORM\Column(length: 180)]
+    private ?string $civility = null;
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -72,11 +76,7 @@ class User implements PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     /**
@@ -126,5 +126,37 @@ class User implements PasswordAuthenticatedUserInterface
         $this->name = $name;
 
         return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->getFirstname() . ' ' . $this->getName();
+    }
+
+    public function getCivility(): ?string
+    {
+        return $this->civility;
+    }
+
+    public function setCivility(string $civility): static
+    {
+        $this->civility = $civility;
+
+        return $this;
+    }
+
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    public function eraseCredentials(): void
+    {
+    }
+
+    public function __toString(): string
+    {
+        // Choose a property that represents the object clearly, for example, the email or name
+        return $this->email;
     }
 }

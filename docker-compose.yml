@@ -4,9 +4,9 @@ services:
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: Symfony
-            MYSQL_USER: Symfony
-            MYSQL_PASSWORD: Symfony
+            MYSQL_DATABASE: bourse_aux_stages
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
         ports:
             - "3306:3306"
         volumes:
@@ -28,14 +28,8 @@ services:
         networks:
             - "skeleton_network"
 
-    php:
-        build: .
-        depends_on:
-            - db
-        networks:
-            - "skeleton_network"
-
     app:
+        build: .
         image: nginx:latest
         ports:
             - "8080:80"
@@ -43,7 +37,7 @@ services:
             - "./nginx.conf:/etc/nginx/nginx.conf"
             - "./:/var/www"
         depends_on:
-            - php
+            - db
         networks:
             - "skeleton_network"
 
