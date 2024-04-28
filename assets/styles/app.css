@@ -15,47 +15,118 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
     font-size: 100%;
-    font: inherit;
     vertical-align: baseline;
 }
+
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
-body {
-    background-color: skyblue;
-    line-height: 1;
-}
+
 ol, ul {
     list-style: none;
 }
+
 blockquote, q {
     quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
     content: '';
     content: none;
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
 * {
     box-sizing: border-box;
 }
+
+body {
+    font-family: "Epilogue", sans-serif;
+    font-style: normal;
+    line-height: 1;
+}
+
 a {
-    text-decoration:none;
+    text-decoration: none;
     color: inherit;
 }
+
 .d-flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .justify-start {
     justify-content: flex-start;
 }
+
 .justify-end {
     justify-content: flex-start;
 }
+
+.align-start {
+    align-items: flex-start;
+}
+
+.align-end {
+    align-items: flex-end;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.direction-column {
+    flex-direction: column;
+}
+
+#login img {
+    width: 50%;
+    height: 100dvh;
+}
+
+#login h1 {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#login input[type=password],
+#login input[type=email],
+#login button {
+    width: 100%;
+    padding: 12px 6px;
+    border-radius: 16px;
+}
+
+#login input[type=password],
+#login input[type=email] {
+    margin-top: 12px;
+    border: 1px solid #D3D3D3;
+}
+
+#login button {
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    margin-top: 12px;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: "Epilogue", sans-serif;
+}
+
+#login #password-input {
+    margin: 24px 0 36px 0;
+}
+
+#login form {
+    margin: 0 auto;
+    width: 35%;
+}
+
