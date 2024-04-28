@@ -11,10 +11,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCrudController extends AbstractCrudController
 {
+    private $adminUrlGenerator;
+
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher,
         private readonly EntityManagerInterface $entityManager
@@ -63,7 +66,7 @@ class UserCrudController extends AbstractCrudController
 
         if ($entityInstance instanceof User && in_array('ROLE_SUPER_ADMIN', $entityInstance->getRoles())) {
             if ($entityInstance->getId() === $this->getUser()->getId()) {
-                $this->addFlash('warning', 'Ne peut pas se supprimer.');
+                $this->addFlash('warning', 'Ne peut pas se supprimer soi-même.');
                 return;
             }
 
@@ -79,10 +82,24 @@ class UserCrudController extends AbstractCrudController
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if ($entityInstance instanceof User && !empty($entityInstance->getPassword())) {
-            $entityInstance->setPassword(
-                $this->hasher->hashPassword($entityInstance, $entityInstance->getPassword())
-            );
+        // Check if trying to update the super admin
+        if (in_array('ROLE_SUPER_ADMIN', $entityInstance->getRoles())) {
+            $superAdminCount = $entityManager->getRepository(User::class)
+                ->count(['roles' => json_encode(['ROLE_SUPER_ADMIN'])]);
+
+            // Prevent role change if this is the only super admin
+            if ($superAdminCount <= 1) {
+                $this->addFlash('warning', 'Cannot change the role of the last super administrator.');
+                // Redirect to prevent saving changes
+                $response = new RedirectResponse($this->adminUrlGenerator->setAction('index')->generateUrl());
+                $response->send();
+                return;
+            }
+        }
+
+        // Hash password if changed
+        if (!empty($entityInstance->getPlainPassword())) {
+            $entityInstance->setPassword($this->hasher->hashPassword($entityInstance, $entityInstance->getPlainPassword()));
         }
 
         parent::updateEntity($entityManager, $entityInstance);

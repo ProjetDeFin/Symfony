@@ -52,7 +52,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Students', 'fas fa-user-graduate', Student::class);
         yield MenuItem::linkToCrud('Companies', 'fas fa-building', Company::class);
         yield MenuItem::section();
-        yield MenuItem::linkToUrl('Your Website', 'fas fa-globe', 'https://www.yourwebsite.com');
         yield MenuItem::linkToLogout('Logout', 'fas fa-sign-out-alt');
     }
 }
