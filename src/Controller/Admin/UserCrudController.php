@@ -3,18 +3,24 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $hasher,
+        private readonly EntityManagerInterface $entityManager
+    ){
+    }
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -34,13 +40,6 @@ class UserCrudController extends AbstractCrudController
             'Autres' => 'Autres',
         ];
 
-        $passwordField = TextField::new('password', 'Password')
-            ->hideOnIndex();
-
-        if ($pageName === Crud::PAGE_EDIT || $pageName === Crud::PAGE_NEW) {
-            $passwordField->setFormType(PasswordType::class);
-        }
-
         return [
             IdField::new('id')->hideOnForm(), // Hide ID in form as it's not typically editable
             ChoiceField::new('civility', 'Genre')
@@ -51,9 +50,42 @@ class UserCrudController extends AbstractCrudController
             ChoiceField::new('roles', 'Roles')
                 ->allowMultipleChoices()
                 ->setChoices($roles),
-            $passwordField,
+            TextField::new('password', 'Password')
+                ->hideOnIndex()
+                ->setFormType(PasswordType::class),
             BooleanField::new('enabled', 'Enabled')
         ];
+    }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+
+
+        if ($entityInstance instanceof User && in_array('ROLE_SUPER_ADMIN', $entityInstance->getRoles())) {
+            if ($entityInstance->getId() === $this->getUser()->getId()) {
+                $this->addFlash('warning', 'Ne peut pas se supprimer.');
+                return;
+            }
+
+            $superAdminCount = $entityManager->getRepository(User::class)->count(['roles' => 'ROLE_SUPER_ADMIN']);
+            if ($superAdminCount <= 1) {
+                $this->addFlash('warning', 'Vous ne peut pas supprimer le dernier administrate.');
+                return;
+            }
+        }
+
+        parent::deleteEntity($entityManager, $entityInstance);
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof User && !empty($entityInstance->getPassword())) {
+            $entityInstance->setPassword(
+                $this->hasher->hashPassword($entityInstance, $entityInstance->getPassword())
+            );
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
     }
 }
 
