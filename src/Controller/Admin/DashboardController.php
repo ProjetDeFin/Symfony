@@ -38,14 +38,15 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Your Company Name')
-            ->setFaviconPath('build/images/favicon.ico')
-            ->renderContentMaximized()
-            ->disableUrlSignatures();
+                        ->setTitle('Your Company Name')
+                        ->setFaviconPath('build/images/favicon.ico')
+                        ->renderContentMaximized()
+                        ->disableUrlSignatures();
     }
 
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::linkToUrl('Profile', 'fas fa-user', 'admin?crudAction=edit&crudControllerFqcn=App\Controller\Admin\UserCrudController&entityId='. $this->getUser()->getId());
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::section('Management');
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
