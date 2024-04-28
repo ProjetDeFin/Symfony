@@ -2,54 +2,99 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\EnabledTrait;
+use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\StudentRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ORM\Table(name: '`student`')]
 class Student
 {
     use TimestampableTrait;
+    use AddressTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    private ?string $position = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $user = null;
 
-    private ?string $phone = null;
+    #[ORM\Column(type: 'date')]
+    private ?\DateTimeInterface $birthday = null;
+
+    #[ORM\Column(type: 'string')]
+    private ?string $mobile = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $customCurriculumVitae = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $photo = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPosition(): ?string
+    public function getUser(): ?User
     {
-        return $this->position;
+        return $this->user;
     }
 
-    public function setPosition(string $position): static
+    public function setUser(?User $user): static
     {
-        $this->position = $position;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getPhone(): ?string
+    public function getBirthday(): ?\DateTimeInterface
     {
-        return $this->phone;
+        return $this->birthday;
     }
 
-    public function setPhone(string $phone): static
+    public function setBirthday(\DateTimeInterface $birthday): static
     {
-        $this->phone = $phone;
+        $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    public function getMobile(): ?string
+    {
+        return $this->mobile;
+    }
+
+    public function setMobile(string $mobile): static
+    {
+        $this->mobile = $mobile;
+
+        return $this;
+    }
+
+    public function getCustomCurriculumVitae(): ?string
+    {
+        return $this->customCurriculumVitae;
+    }
+
+    public function setCustomCurriculumVitae(string $customCurriculumVitae): static
+    {
+        $this->customCurriculumVitae = $customCurriculumVitae;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): static
+    {
+        $this->photo = $photo;
 
         return $this;
     }
