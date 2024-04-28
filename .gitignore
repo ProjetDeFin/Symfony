@@ -5,4 +5,5 @@ public/bundles/**
 supervisord.log
 supervisord.pid
 node_modules/
+/.env.local
 /.env
