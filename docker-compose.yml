@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
     db:
         image: mariadb
@@ -11,8 +13,6 @@ services:
             - "3306:3306"
         volumes:
             - db_data:/var/lib/mysql
-        networks:
-            - "skeleton_network"
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
@@ -25,8 +25,6 @@ services:
             PMA_HOST: db
             MYSQL_USERNAME: root
             MYSQL_ROOT_PASSWORD: root
-        networks:
-            - "skeleton_network"
 
     app:
         build: .
@@ -46,4 +44,4 @@ networks:
         driver: bridge
 
 volumes:
-    db_data: { }
+    db_data: {}
