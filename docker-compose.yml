@@ -4,9 +4,9 @@ services:
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: Symfony
-            MYSQL_USER: Symfony
-            MYSQL_PASSWORD: Symfony
+            MYSQL_DATABASE: bourse_aux_stages
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
         ports:
             - "3306:3306"
         volumes:

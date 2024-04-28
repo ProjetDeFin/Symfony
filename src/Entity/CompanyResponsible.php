@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: CompanyResponsibleRepository::class)]
-#[ORM\Table(name: '`Company_responsible`')]
+#[ORM\Table(name: '`company_responsible`')]
 class CompanyResponsible
 {
     use TimestampableTrait;
