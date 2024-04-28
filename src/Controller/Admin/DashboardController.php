@@ -38,10 +38,9 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-                        ->setTitle('Your Company Name')
-                        ->setFaviconPath('build/images/favicon.ico')
-                        ->renderContentMaximized()
-                        ->disableUrlSignatures();
+            ->setFaviconPath('build/images/favicon.ico')
+            ->renderContentMaximized()
+            ->disableUrlSignatures();
     }
 
     public function configureMenuItems(): iterable

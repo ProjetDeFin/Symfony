@@ -72,7 +72,7 @@ class UserCrudController extends AbstractCrudController
 
             $superAdminCount = $entityManager->getRepository(User::class)->count(['roles' => 'ROLE_SUPER_ADMIN']);
             if ($superAdminCount <= 1) {
-                $this->addFlash('warning', 'Vous ne peut pas supprimer le dernier administrate.');
+                $this->addFlash('warning', 'Vous ne peut pas supprimer le dernier administrateur.');
                 return;
             }
         }

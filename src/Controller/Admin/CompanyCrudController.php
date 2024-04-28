@@ -25,7 +25,11 @@ class CompanyCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(), // It's good practice to hide ID on forms
             TextField::new('name', 'Company Name'),
-            TextField::new('socialReason', 'Social Reason')->hideOnIndex(),
+            TextField::new('socialReason', 'Social Reason'),
+            TextField::new('address1', 'Address')->hideOnIndex(),
+            IntegerField::new('$zipCode', 'Postal Code'),
+            TextField::new('city', 'City'),
+            TextField::new('country', 'Country')->hideOnIndex(),
             IntegerField::new('siret', 'SIRET Number'),
             TextField::new('workforce', 'Workforce'),
             NumberField::new('sellFigure', 'Sell Figure')->setNumDecimals(2),

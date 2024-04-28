@@ -153,4 +153,10 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function eraseCredentials(): void
     {
     }
+
+    public function __toString(): string
+    {
+        // Choose a property that represents the object clearly, for example, the email or name
+        return $this->email;
+    }
 }
