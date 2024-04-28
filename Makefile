@@ -1,5 +1,4 @@
 COMPOSE=docker-compose -f docker-compose.yml
-COMPOSE_MAC=$(COMPOSE) -f docker-compose-sync.yml
 EXEC=$(COMPOSE) exec app
 EXEC_TTY=$(COMPOSE) exec -T app
 CONSOLE=$(EXEC) bin/console
@@ -14,33 +13,16 @@ start: up perm vendor db cc perm
 
 up:
 	docker kill $$(docker ps -q) || true
-ifeq ($(ENVIRONMENT),Mac)
-	$(COMPOSE_MAC) build --force-rm
-	$(COMPOSE_MAC) up -d
-	bash ./scripts/start-macos.sh
-else
 	$(COMPOSE) build --force-rm
 	$(COMPOSE) up -d
-endif
 
 stop:
-ifeq ($(ENVIRONMENT),Mac)
-	$(COMPOSE_MAC) stop
-	$(COMPOSE_MAC) kill
-	mutagen sync pause $(MUTAGEN_NAME)
-else
 	$(COMPOSE) stop
 	$(COMPOSE) kill
-endif
 
 rm:
 	make stop
-ifeq ($(ENVIRONMENT),Mac)
-	$(COMPOSE_MAC) rm
-	mutagen sync terminate $(MUTAGEN_NAME)
-else
 	$(COMPOSE) rm
-endif
 
 vendor: wait-for-db
 	$(EXEC) composer install -n
