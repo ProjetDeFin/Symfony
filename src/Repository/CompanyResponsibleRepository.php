@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CompanyResponsible;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,5 +20,16 @@ class CompanyResponsibleRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CompanyResponsible::class);
+    }
+
+    public function findCompanyResponsibleByUser(User $user): ?CompanyResponsible
+    {
+        return $this->createQueryBuilder('cr')
+            ->leftJoin('cr.user', 'user')
+            ->andWhere('cr.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }
