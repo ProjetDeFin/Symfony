@@ -33,6 +33,7 @@ class CompanyCrudController extends AbstractCrudController
             IntegerField::new('siret', 'SIRET Number'),
             TextField::new('workforce', 'Workforce'),
             NumberField::new('sellFigure', 'Sell Figure')->setNumDecimals(2),
+            DateField::new('creation', 'Creation Date'),
             TextField::new('phone', 'Phone Number'),
             EmailField::new('email', 'Email Address'),
             UrlField::new('websiteUrl', 'Website URL')->hideOnIndex(),
