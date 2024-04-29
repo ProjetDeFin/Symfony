@@ -23,11 +23,11 @@ class CompanyCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->hideOnForm(), // It's good practice to hide ID on forms
+            IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Company Name'),
             TextField::new('socialReason', 'Social Reason'),
             TextField::new('address1', 'Address')->hideOnIndex(),
-            TextField::new('$zipCode', 'Postal Code'),
+            TextField::new('zipCode', 'Postal Code'), // Corrected here
             TextField::new('city', 'City'),
             TextField::new('country', 'Country')->hideOnIndex(),
             IntegerField::new('siret', 'SIRET Number'),

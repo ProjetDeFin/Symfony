@@ -19,7 +19,7 @@ class StudentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->onlyOnIndex(), // Display ID only on the index page
+            IdField::new('id')->onlyOnIndex(),
             AssociationField::new('user', 'Utilisateur'),
             DateField::new('birthday'),
             TextField::new('mobile'),
