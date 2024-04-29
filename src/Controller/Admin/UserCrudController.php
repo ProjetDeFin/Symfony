@@ -131,6 +131,8 @@ class UserCrudController extends AbstractCrudController
         // Hash password if it's not empty or null
         if ($entityInstance->getPassword() !== null && $entityInstance->getPassword() !== '') {
             $entityInstance->setPassword($this->hasher->hashPassword($entityInstance, $entityInstance->getPassword()));
+        } elseif (!$entityInstance->getPassword()) {
+            $entityInstance->setPassword($existingUser->getPassword());
         }
 
         parent::updateEntity($entityManager, $entityInstance);
