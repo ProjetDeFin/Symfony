@@ -7,19 +7,19 @@ use Doctrine\ORM\Mapping as ORM;
 trait AddressTrait
 {
     #[ORM\Column(type: 'string', length: 255)]
-    protected bool $address1 = false;
+    protected ?string $address1 = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected bool $address2 = false;
+    protected ?string $address2 = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected bool $city = false;
+    protected ?string $city = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected bool $zipCode = false;
+    protected ?string $zipCode = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected bool $country = false;
+    protected ?string $country = null;
 
     public function getAddress1(): ?string
     {
