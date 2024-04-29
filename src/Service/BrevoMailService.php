@@ -4,13 +4,13 @@ namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class BrevoMailService
+final readonly class BrevoMailService
 {
     public function __construct(
-        private readonly HttpClientInterface $client,
-        private readonly string $apiKey,
-        private readonly string $accountSenderEmail,
-        private readonly string $apiUrl,
+        private HttpClientInterface $client,
+        private string $apiKey,
+        private string $accountSenderEmail,
+        private string $apiUrl,
     ) {
     }
 

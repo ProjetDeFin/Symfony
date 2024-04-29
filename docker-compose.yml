@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
     db:
         image: mariadb
@@ -46,4 +48,4 @@ networks:
         driver: bridge
 
 volumes:
-    db_data: { }
+    db_data: {}
