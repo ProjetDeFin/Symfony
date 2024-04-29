@@ -26,7 +26,6 @@ class StudentCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(), // Display ID only on the index page
             AssociationField::new('user', 'Utilisateur'),
-            DateField::new('birthday'),
             TextField::new('mobile'),
         ];
     }
