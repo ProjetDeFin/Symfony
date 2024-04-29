@@ -27,7 +27,7 @@ class CompanyCrudController extends AbstractCrudController
             TextField::new('name', 'Company Name'),
             TextField::new('socialReason', 'Social Reason'),
             TextField::new('address1', 'Address')->hideOnIndex(),
-            IntegerField::new('$zipCode', 'Postal Code'),
+            TextField::new('$zipCode', 'Postal Code'),
             TextField::new('city', 'City'),
             TextField::new('country', 'Country')->hideOnIndex(),
             IntegerField::new('siret', 'SIRET Number'),
