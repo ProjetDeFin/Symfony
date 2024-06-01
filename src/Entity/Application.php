@@ -2,49 +2,33 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampableTrait;
+use App\Enum\ApplicationStatusEnum;
 use App\Repository\ApplicationRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ApplicationRepository::class)
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(repositoryClass: ApplicationRepository::class)]
+#[ORM\Table(name: 'application')]
 class Application
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use TimestampableTrait;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=InternshipOffer::class)
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $offer;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Student::class)
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $student;
+    #[ORM\ManyToOne(targetEntity: InternshipOffer::class)]
+    #[ORM\JoinColumn(name: 'offer_id', referencedColumnName: 'id')]
+    private InternshipOffer $offer;
 
-    /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('PENDING', 'APPROVED', 'REJECTED')")
-     */
-    private $status;
+    #[ORM\ManyToOne(targetEntity: Student::class)]
+    private Student $student;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+    #[ORM\Column(type: Types::STRING, enumType: ApplicationStatusEnum::class, options: ['default' => ApplicationStatusEnum::PENDING])]
+    private string $status = ApplicationStatusEnum::PENDING;
 
     public function getId(): ?int
     {
@@ -85,40 +69,6 @@ class Application
         $this->status = $status;
 
         return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function onPrePersist(): void
-    {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function onPreUpdate(): void
-    {
-        $this->updatedAt = new \DateTime();
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
     }
 }
 

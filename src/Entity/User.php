@@ -28,7 +28,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?string $firstname = null;
 
     #[ORM\Column(length: 180)]
-    private ?string $name = null;
+    private ?string $lastName = null;
 
     #[ORM\Column(length: 180)]
     private ?string $civility = null;
@@ -116,21 +116,21 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getName(): ?string
+    public function getLastname(): ?string
     {
-        return $this->name;
+        return $this->lastName;
     }
 
-    public function setName(string $name): static
+    public function setLastname(string $lastName): static
     {
-        $this->name = $name;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     public function getFullName(): string
     {
-        return $this->getFirstname() . ' ' . $this->getName();
+        return $this->getFirstname() . ' ' . $this->getLastname();
     }
 
     public function getCivility(): ?string

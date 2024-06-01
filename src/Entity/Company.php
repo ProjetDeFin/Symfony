@@ -10,7 +10,7 @@ use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[ORM\Table(name: '`company`')]
+#[ORM\Table(name: 'company')]
 class Company
 {
     use TimestampableTrait;
