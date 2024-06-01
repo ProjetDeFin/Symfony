@@ -2,18 +2,18 @@
 
 namespace App\Enum;
 
-class UserGenderEnum
+enum UserGenderEnum: string
 {
-    public const MAN = 'man';
-    public const WOMAN = 'woman';
-    public const OTHER = 'other';
+    case MAN = 'man';
+    case WOMAN = 'woman';
+    case OTHER = 'other';
 
-    public static function fromString(string $gender): string
+    public static function fromString(string $gender): UserGenderEnum
     {
         return match ($gender) {
-            self::MAN => self::MAN,
-            self::WOMAN => self::WOMAN,
-            self::OTHER => self::OTHER,
+            'man' => self::MAN,
+            'woman' => self::WOMAN,
+            'other' => self::OTHER,
             default => throw new \InvalidArgumentException('Gender value is not valid.'),
         };
     }

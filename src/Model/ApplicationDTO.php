@@ -5,7 +5,7 @@ namespace App\Model;
 use App\Enum\UserGenderEnum;
 
 class ApplicationDTO {
-    private string $gender;
+    private UserGenderEnum $gender;
     private string $firstName;
     private string $lastName;
     private string $email;
@@ -16,19 +16,26 @@ class ApplicationDTO {
     private ?string $city;
     private ?string $websiteUrl;
     private ?string $linkedinUrl;
-    private ?string $studyLevel;
+    private string $studyLevel;
     private ?string $motivation;
     private ?string $cv;
+    private bool $createAccount = false;
 
     public function __construct(array $data) {
-        if (!$data['gender'] || !$data['firstName'] || !$data['lastName'] || !$data['email'] || !$data['phone'] || $data['birthDate'] || $data['studyLevel']) {
+        if (!$data['gender'] || !$data['firstName'] || !$data['lastName'] || !$data['email'] || !$data['phone'] || !$data['birthDate'] || !$data['studyLevel']) {
             throw new \InvalidArgumentException('Required fields are missing.');
         }
         if ($data['email'] !== $data['confirmEmail']) {
             throw new \InvalidArgumentException('Emails do not match.');
         }
         if (!is_numeric($data['phone']) || strlen($data['phone']) !== 10) {
-            throw new \InvalidArgumentException("The provided string is not a valid number.");
+            throw new \InvalidArgumentException("The provided phone number is not a valid.");
+        }
+        if (!is_numeric($data['studyLevel'])) {
+            throw new \InvalidArgumentException("The provided study level is not a valid.");
+        }
+        if (!is_bool($data['createAccount'])) {
+            throw new \InvalidArgumentException("The provided value is not a boolean.");
         }
         try {
             $birthDate = new \DateTime($data['birthDate']);
@@ -46,19 +53,29 @@ class ApplicationDTO {
         $this->city = $data['city'] ?? null;
         $this->websiteUrl = $data['websiteUrl'] ?? null;
         $this->linkedinUrl = $data['linkedinUrl'] ?? null;
-        $this->studyLevel = $data['studyLevel'] ?? null;
+        $this->studyLevel = (int)$data['studyLevel'];
         $this->motivation = $data['motivation'] ?? null;
         $this->cv = $data['cv'] ?? null;
+        $this->createAccount = $data['createAccount'];
     }
 
-    public function getGender(): string
+    public function getGender(): UserGenderEnum
     {
         return $this->gender;
     }
 
-    public function setGender(string $gender): static
+    public function setGender(UserGenderEnum $gender): static
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function setGenderFromString(string $gender): static
     {
         $this->gender = UserGenderEnum::fromString($gender);
+
+        return $this;
     }
 
     public function getFirstName(): string {
@@ -187,6 +204,16 @@ class ApplicationDTO {
 
     public function setCv(string $cv): static {
         $this->cv = $cv;
+
+        return $this;
+    }
+
+    public function getCreateAccount(): bool {
+        return $this->createAccount;
+    }
+
+    public function setCreateAccount(bool $createAccount): static {
+        $this->createAccount = $createAccount;
 
         return $this;
     }

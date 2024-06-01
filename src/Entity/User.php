@@ -5,7 +5,10 @@ namespace App\Entity;
 use App\Entity\Traits\EnabledTrait;
 use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
+use App\Enum\UserGenderEnum;
+use App\Model\ApplicationDTO;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,25 +24,25 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(type: Types::STRING, length: 180)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(type: Types::STRING, length: 180)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $civility = null;
+    #[ORM\Column(type: Types::STRING, enumType: UserGenderEnum::class)]
+    private ?UserGenderEnum $civility = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(type: Types::STRING, length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
     private array $roles = [];
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $password = null;
 
     public function getId(): ?int
@@ -116,12 +119,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getLastname(): ?string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setLastname(string $lastName): static
+    public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
 
@@ -130,15 +133,15 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function getFullName(): string
     {
-        return $this->getFirstname() . ' ' . $this->getLastname();
+        return $this->getFirstname() . ' ' . $this->getLastName();
     }
 
-    public function getCivility(): ?string
+    public function getCivility(): ?UserGenderEnum
     {
         return $this->civility;
     }
 
-    public function setCivility(string $civility): static
+    public function setCivility(UserGenderEnum $civility): static
     {
         $this->civility = $civility;
 

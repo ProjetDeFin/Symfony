@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\TimestampableTrait;
+use App\Model\ApplicationDTO;
 use App\Repository\StudentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -97,5 +98,26 @@ class Student
         $this->photo = $photo;
 
         return $this;
+    }
+
+    public static function fromApplicationDTO(ApplicationDTO $applicationDTO): Student
+    {
+        $user = new User();
+        $user
+            ->setEmail($applicationDTO->getEmail())
+            ->setFirstname($applicationDTO->getFirstname())
+            ->setLastName($applicationDTO->getLastname())
+            ->setCivility($applicationDTO->getGender())
+            ->setRoles(['ROLE_USER'])
+        ;
+        $student = new self();
+        $student
+            ->setUser($user)
+            ->setBirthday($applicationDTO->getBirthDate())
+            ->setMobile($applicationDTO->getPhone())
+            ->setCustomCurriculumVitae($applicationDTO->getCv())
+        ;
+
+        return $student;
     }
 }
