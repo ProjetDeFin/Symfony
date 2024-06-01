@@ -4,10 +4,11 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\CompanyResponsibleRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompanyResponsibleRepository::class)]
-#[ORM\Table(name: '`company_responsible`')]
+#[ORM\Table(name: 'company_responsible')]
 class CompanyResponsible
 {
     use TimestampableTrait;
@@ -23,10 +24,10 @@ class CompanyResponsible
     #[ORM\ManyToOne(targetEntity: Company::class)]
     private ?Company $company = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $position = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::STRING, length: 10)]
     private ?string $phone = null;
 
     public function getId(): ?int

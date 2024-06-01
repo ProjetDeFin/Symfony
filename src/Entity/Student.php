@@ -6,6 +6,9 @@ use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Model\ApplicationDTO;
 use App\Repository\StudentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
@@ -23,17 +26,25 @@ class Student
     #[ORM\OneToOne(targetEntity: User::class)]
     private ?User $user = null;
 
-    #[ORM\Column(type: 'date')]
-    private ?\DateTimeInterface $birthday = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private \DateTime $birthday;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING, length: 10)]
     private ?string $mobile = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $customCurriculumVitae = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $photo = null;
+
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'student')]
+    private Collection $applications;
+
+    public function __construct()
+    {
+        $this->applications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,12 +63,12 @@ class Student
         return $this;
     }
 
-    public function getBirthday(): ?\DateTimeInterface
+    public function getBirthday(): \DateTime
     {
         return $this->birthday;
     }
 
-    public function setBirthday(\DateTimeInterface $birthday): static
+    public function setBirthday(\DateTime $birthday): static
     {
         $this->birthday = $birthday;
 

@@ -26,5 +26,13 @@ services:
             $accountSenderEmail: '%env(BREVO_MAIL_ACCOUNT_SENDER_EMAIL)%'
             $apiUrl: '%env(BREVO_MAIL_API_URL)%'
 
+    App\Service\ApiResponseService:
+        arguments:
+            $frontUrl: '%env(CORS_ALLOW_ORIGIN)%'
+
+    App\Controller\ApplicationController:
+        arguments:
+            $apiUrl: '%env(API_URL)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

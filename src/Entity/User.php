@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table(name: 'user')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
@@ -28,16 +28,16 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    private ?string $firstname = null;
+    private string $firstname;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    private ?string $lastName = null;
+    private string $lastName;
 
     #[ORM\Column(type: Types::STRING, enumType: UserGenderEnum::class)]
     private ?UserGenderEnum $civility = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
     private array $roles = [];
@@ -50,7 +50,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }

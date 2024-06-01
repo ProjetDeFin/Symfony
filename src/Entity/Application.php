@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
 use App\Enum\ApplicationStatusEnum;
+use App\Model\ApplicationDTO;
 use App\Repository\ApplicationRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
@@ -40,7 +41,7 @@ class Application
         return $this->offer;
     }
 
-    public function setOffer(?InternshipOffer $offer): self
+    public function setOffer(?InternshipOffer $offer): static
     {
         $this->offer = $offer;
 
@@ -52,7 +53,7 @@ class Application
         return $this->student;
     }
 
-    public function setStudent(?Student $student): self
+    public function setStudent(?Student $student): static
     {
         $this->student = $student;
 
@@ -64,11 +65,23 @@ class Application
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
         return $this;
+    }
+
+    public static function fromDTO(ApplicationDTO $dto, Student $student, InternshipOffer $offer): static
+    {
+        $application = new static();
+        $application
+            ->setOffer($offer)
+            ->setStudent($student)
+            ->setStatus(ApplicationStatusEnum::PENDING)
+        ;
+
+        return $application;
     }
 }
 

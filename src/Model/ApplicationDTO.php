@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Enum\UserGenderEnum;
 
 class ApplicationDTO {
+    private int $offerId;
     private UserGenderEnum $gender;
     private string $firstName;
     private string $lastName;
@@ -22,6 +23,9 @@ class ApplicationDTO {
     private bool $createAccount = false;
 
     public function __construct(array $data) {
+        if (!$data['offerId']) {
+            throw new \InvalidArgumentException('Internship offer ID is missing.');
+        }
         if (!$data['gender'] || !$data['firstName'] || !$data['lastName'] || !$data['email'] || !$data['phone'] || !$data['birthDate'] || !$data['studyLevel']) {
             throw new \InvalidArgumentException('Required fields are missing.');
         }
@@ -34,6 +38,9 @@ class ApplicationDTO {
         if (!is_numeric($data['studyLevel'])) {
             throw new \InvalidArgumentException("The provided study level is not a valid.");
         }
+        if (!is_numeric($data['offerId'])) {
+            throw new \InvalidArgumentException("The provided offer ID is not a valid.");
+        }
         if (!is_bool($data['createAccount'])) {
             throw new \InvalidArgumentException("The provided value is not a boolean.");
         }
@@ -42,12 +49,13 @@ class ApplicationDTO {
         } catch (\Exception $e) {
             throw new \InvalidArgumentException('Invalid birth date.');
         }
+        $this->offerId = (int)$data['offerId'];
         $this->gender = UserGenderEnum::fromString($data['gender']);
         $this->firstName = $data['firstName'];
         $this->lastName = $data['lastName'];
         $this->email = $data['email'];
         $this->birthDate = $birthDate;
-        $this->phone = (int)$data['phone'];
+        $this->phone = $data['phone'];
         $this->address = $data['address'] ?? null;
         $this->additionalAddress = $data['additionalAddress'] ?? null;
         $this->city = $data['city'] ?? null;
@@ -57,6 +65,16 @@ class ApplicationDTO {
         $this->motivation = $data['motivation'] ?? null;
         $this->cv = $data['cv'] ?? null;
         $this->createAccount = $data['createAccount'];
+    }
+
+    public function getOfferId(): int {
+        return $this->offerId;
+    }
+
+    public function setOfferId(int $offerId): static {
+        $this->offerId = $offerId;
+
+        return $this;
     }
 
     public function getGender(): UserGenderEnum

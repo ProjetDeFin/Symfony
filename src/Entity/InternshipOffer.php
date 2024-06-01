@@ -2,46 +2,44 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\EnabledTrait;
+use App\Entity\Traits\SoftDeleteTrait;
+use App\Entity\Traits\TimestampableTrait;
 use App\Repository\InternshipOfferRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=InternshipOfferRepository::class)
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(repositoryClass: InternshipOfferRepository::class)]
+#[ORM\Table(name: 'internship_offer')]
 class InternshipOffer
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use TimestampableTrait;
+    use SoftDeleteTrait;
+    use EnabledTrait;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $title;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $id;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $description;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private ?string $title;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $company;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'internshipOffers')]
+    private Company $company;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
+    private Collection $applications;
+
+    public function __construct()
+    {
+        $this->applications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -53,7 +51,7 @@ class InternshipOffer
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(string $title): static
     {
         $this->title = $title;
 
@@ -65,50 +63,22 @@ class InternshipOffer
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(string $description): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getCompany(): ?string
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(string $company): self
+    public function setCompany(Company $company): static
     {
         $this->company = $company;
 
         return $this;
     }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function onPrePersist(): void
-    {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function onPreUpdate(): void
-    {
-        $this->updatedAt = new \DateTime();
-    }
 }
-
