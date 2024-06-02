@@ -1,5 +1,8 @@
 <h2>Reintialiser votre mot de passe</h2>
 <form action="/reset_password/send_mail" method="post">
-    <input type="email" id="email" name="email" required>
+    <input type="email" id="email" name="email" placeholder="Email" required>
     <input type="submit" value="Reset">
 </form>
+{% if message is not null %}
+    <p>{{ message }}</p>
+{% endif %}

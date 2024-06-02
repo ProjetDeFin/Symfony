@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
+use App\Entity\ResetPassword;
 use App\Form\Type\ResetPasswordType;
 use App\Repository\ResetPasswordRepository;
+use App\Repository\UserRepository;
 use App\Service\BrevoMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\ResetPassword;
-use App\Repository\UserRepository;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 #[Route(path: '/reset_password', name: 'app_reset_password')]
@@ -31,10 +31,12 @@ class ResetPasswordController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', methods: ['GET'])]
+    #[Route(path: '/', methods: ['GET'], name: '')]
     public function showResetPassword(): Response
     {
-        return $this->render('/admin/email-reset.html.twig',);
+        return $this->render('app/email-reset.html.twig', [
+            'message' => null,
+        ]);
     }
 
     #[Route(path: '/send_mail', methods: ['POST'])]
@@ -43,26 +45,25 @@ class ResetPasswordController extends AbstractController
         ResetPasswordRepository $resetPasswordRepository,
     ): Response
     {
-        $email = $request->get('email');
-        $user = $this->userRepository->findOneBy(['email' => $email]);
-
-        if (!$user) {
-            throw new NotFoundHttpException('User not found.');
-        }
-
-        $resetPassword = $resetPasswordRepository->findOneBy(['user' => $user]);
-
-        if (!$resetPassword) {
-            $resetPassword = new ResetPassword();
-            $resetPassword
-                ->setUser($user)
-                ->setToken($this->tokenGenerator->generateToken());
-        }
-
-        $this->entityManager->persist($resetPassword);
-        $this->entityManager->flush();
-
         try {
+            $email = $request->get('email');
+            $user = $this->userRepository->findOneBy(['email' => $email]);
+
+            if (!$user) {
+                throw new NotFoundHttpException('User not found.');
+            }
+
+            $resetPassword = $resetPasswordRepository->findOneBy(['user' => $user]);
+
+            if (!$resetPassword) {
+                $resetPassword = new ResetPassword();
+                $resetPassword
+                    ->setUser($user)
+                    ->setToken($this->tokenGenerator->generateToken());
+            }
+
+            $this->entityManager->persist($resetPassword);
+            $this->entityManager->flush();
 
             $this->mailService->sendMail($email, 'Reset password',
                 [
@@ -74,16 +75,21 @@ class ResetPasswordController extends AbstractController
                 ],
             );
 
+            $message = 'An email has been sent to reset your password.';
+
             $this->addFlash('success', 'An email has been sent to reset your password.');
         } catch (\Exception $e) {
             // TODO log error
+            $message = $e->getMessage();
             $this->addFlash('error', 'An error occurred while sending the email.');
         }
 
-        return $this->redirectToRoute('app_reset_password');
+        return $this->render('app/email-reset.html.twig', [
+            'message' => $message,
+        ]);
     }
 
-    #[Route(path: '/reset/{token}', name: 'reset', methods: ['GET', 'POST'])]
+    #[Route(path: '/reset/{token}', name: '_reset', methods: ['GET', 'POST'])]
     public function resetPasswordForm(string $token, ResetPasswordRepository $resetPasswordRepository): Response
     {
         $resetPassword = $resetPasswordRepository->findOneBy(['token' => $token]);
