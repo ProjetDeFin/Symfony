@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 final readonly class ApiResponseService
 {
@@ -10,9 +10,9 @@ final readonly class ApiResponseService
         private string $frontUrl,
     ) {
     }
-    public function getResponse(): Response
+    public function getResponse(): JsonResponse
     {
-        $response = new Response();
+        $response = new JsonResponse();
         $response->headers->set('Access-Control-Allow-Origin', $this->frontUrl);
         $response->headers->set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE');
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');

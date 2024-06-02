@@ -28,11 +28,9 @@ security:
         api:
             pattern: ^/api/
             stateless: true
-            anonymous: true
 
     access_control:
         - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
-        - { path: ^/api/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_COMPANY_RESPONSIBLE, ROLE_STUDENT, ROLE_ALLOWED_TO_SWITCH]
