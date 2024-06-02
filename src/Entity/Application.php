@@ -6,7 +6,6 @@ use App\Entity\Traits\TimestampableTrait;
 use App\Enum\ApplicationStatusEnum;
 use App\Model\ApplicationDTO;
 use App\Repository\ApplicationRepository;
-use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,7 +28,7 @@ class Application
     private Student $student;
 
     #[ORM\Column(type: Types::STRING, enumType: ApplicationStatusEnum::class, options: ['default' => ApplicationStatusEnum::PENDING])]
-    private string $status = ApplicationStatusEnum::PENDING;
+    private ApplicationStatusEnum $status;
 
     public function getId(): ?int
     {
@@ -60,12 +59,12 @@ class Application
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ApplicationStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(ApplicationStatusEnum $status): static
     {
         $this->status = $status;
 

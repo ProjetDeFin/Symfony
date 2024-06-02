@@ -12,7 +12,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-#[ORM\Table(name: '`student`')]
+#[ORM\Table(name: 'student')]
 class Student
 {
     use TimestampableTrait;
@@ -26,7 +26,7 @@ class Student
     #[ORM\OneToOne(targetEntity: User::class)]
     private ?User $user = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTime $birthday;
 
     #[ORM\Column(type: Types::STRING, length: 10)]

@@ -8,7 +8,7 @@ use App\Repository\ResetPasswordRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ResetPasswordRepository::class)]
-#[ORM\Table(name: '`reset_password`')]
+#[ORM\Table(name: 'reset_password')]
 class ResetPassword
 {
     #[ORM\Id]
