@@ -5,13 +5,16 @@ namespace App\Entity;
 use App\Entity\Traits\EnabledTrait;
 use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
+use App\Enum\UserGenderEnum;
+use App\Model\ApplicationDTO;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table(name: 'user')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
@@ -21,25 +24,25 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $firstname = null;
+    #[ORM\Column(type: Types::STRING, length: 180)]
+    private string $firstname;
 
-    #[ORM\Column(length: 180)]
-    private ?string $name = null;
+    #[ORM\Column(type: Types::STRING, length: 180)]
+    private string $lastName;
 
-    #[ORM\Column(length: 180)]
-    private ?string $civility = null;
+    #[ORM\Column(type: Types::STRING, enumType: UserGenderEnum::class)]
+    private ?UserGenderEnum $civility = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $email = null;
+    #[ORM\Column(type: Types::STRING, length: 180)]
+    private string $email;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
     private array $roles = [];
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $password = null;
 
     public function getId(): ?int
@@ -47,7 +50,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -116,29 +119,29 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getName(): ?string
+    public function getLastName(): ?string
     {
-        return $this->name;
+        return $this->lastName;
     }
 
-    public function setName(string $name): static
+    public function setLastName(string $lastName): static
     {
-        $this->name = $name;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     public function getFullName(): string
     {
-        return $this->getFirstname() . ' ' . $this->getName();
+        return $this->getFirstname() . ' ' . $this->getLastName();
     }
 
-    public function getCivility(): ?string
+    public function getCivility(): ?UserGenderEnum
     {
         return $this->civility;
     }
 
-    public function setCivility(string $civility): static
+    public function setCivility(UserGenderEnum $civility): static
     {
         $this->civility = $civility;
 

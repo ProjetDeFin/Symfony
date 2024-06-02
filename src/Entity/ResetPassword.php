@@ -32,7 +32,7 @@ class ResetPassword
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
@@ -44,7 +44,7 @@ class ResetPassword
         return $this->token;
     }
 
-    public function setToken(?string $token): self
+    public function setToken(?string $token): static
     {
         $this->token = $token;
 

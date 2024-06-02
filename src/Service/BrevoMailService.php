@@ -34,7 +34,7 @@ final readonly class BrevoMailService
                             'email' => $to,
                         ],
                     ],
-                    'templateId' => 2,
+                    'templateId' => 1,
                     'subject' => $subject,
                     'params' => $params,
                 ],

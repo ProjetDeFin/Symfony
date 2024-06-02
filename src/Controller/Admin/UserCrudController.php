@@ -32,12 +32,13 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+//        TODO: UserRoleEnum
         $roles = [
             'Etudiant' => 'ROLE_STUDENT',
             'Super Admin' => 'ROLE_SUPER_ADMIN',
             'Responsable d\'entreprise' => 'ROLE_COMPANY_RESPONSIBLE',
         ];
-
+// TODO: replace with UserGenderEnum (already created)
         $civilities = [
             'M.' => 'M.',
             'Mme' => 'Mme',
@@ -49,7 +50,7 @@ class UserCrudController extends AbstractCrudController
             ChoiceField::new('civility', 'Genre')
                 ->setChoices($civilities),
             TextField::new('firstname', 'First Name'),
-            TextField::new('name', 'Last Name'),
+            TextField::new('lastName', 'Last Name'),
             EmailField::new('email', 'Email'),
             ChoiceField::new('roles', 'Roles')
                 ->allowMultipleChoices()

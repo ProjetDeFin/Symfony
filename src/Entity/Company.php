@@ -7,10 +7,13 @@ use App\Entity\Traits\EnabledTrait;
 use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\CompanyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[ORM\Table(name: '`company`')]
+#[ORM\Table(name: 'company')]
 class Company
 {
     use TimestampableTrait;
@@ -23,50 +26,58 @@ class Company
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\OneToMany(targetEntity: InternshipOffer::class, mappedBy: 'company')]
+    private Collection $internshipOffers;
+
+    #[ORM\Column(type: Types::STRING, unique: true)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     private ?string $socialReason = null;
 
-    #[ORM\Column(type: 'bigint', unique: true)]
+    #[ORM\Column(type: Types::BIGINT, unique: true)]
     private ?int $siret = null;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     private ?string $workforce = null;
 
-    #[ORM\Column(type: 'float', options: ['default' => 0])]
+    #[ORM\Column(type: TYPES::FLOAT, options: ['default' => 0])]
     private float $sellFigure = 0;
 
     #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $creation = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $logo = null;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: Types::STRING, unique: true)]
     private ?string $phone = null;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: Types::STRING, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $websiteUrl = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $fax = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $linkedinUrl = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $facebookUrl = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $instagramUrl = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $xUrl = null;
+
+    public function __construct()
+    {
+        $this->internshipOffers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {

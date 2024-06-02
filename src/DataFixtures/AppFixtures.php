@@ -6,6 +6,7 @@ use App\Entity\Company;
 use App\Entity\CompanyResponsible;
 use App\Entity\Student;
 use App\Entity\User;
+use App\Enum\UserGenderEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -21,8 +22,8 @@ class AppFixtures extends Fixture
             ->setRoles(['ROLE_SUPER_ADMIN'])
             ->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w')
             ->setFirstname('Super')
-            ->setName('Admin')
-            ->setCivility('Autres')
+            ->setLastName('Admin')
+            ->setCivility(UserGenderEnum::OTHER)
         ;
 
         $manager->persist($superAdmin);
@@ -31,8 +32,8 @@ class AppFixtures extends Fixture
         $studentUser->setEmail('student@example.com');
         $studentUser->setRoles(['ROLE_STUDENT']);
         $studentUser->setFirstname('Student');
-        $studentUser->setName('User');
-        $studentUser->setCivility('Autres');
+        $studentUser->setLastName('User');
+        $studentUser->setCivility(UserGenderEnum::OTHER);
         $studentUser->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w');
         $manager->persist($studentUser);
 
@@ -65,8 +66,8 @@ class AppFixtures extends Fixture
         $companyResponsableUser->setEmail('company.admin@example.com');
         $companyResponsableUser->setRoles(['ROLE_COMPANY_RESPONSIBLE']);
         $companyResponsableUser->setFirstname('Company');
-        $companyResponsableUser->setName('Admin');
-        $companyResponsableUser->setCivility('Autres');
+        $companyResponsableUser->setLastName('Admin');
+        $companyResponsableUser->setCivility(UserGenderEnum::OTHER);
         $companyResponsableUser->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w');
         $manager->persist($companyResponsableUser);
 
