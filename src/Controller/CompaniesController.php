@@ -25,15 +25,6 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 class CompaniesController extends AbstractController
 {
     public function __construct(
-        private readonly CompanyRepository $companyRepository,
     ) {
     }
-
-    #[Route('/home', name: 'homeList', methods: ['GET'])]
-    public function homeList(): Response {
-        $companies = $this->companyRepository->findHome();
-
-        return $this->json($companies, 200, [], ['groups' => 'company']);
-    }
-
 }
