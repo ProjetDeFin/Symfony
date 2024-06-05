@@ -34,13 +34,9 @@ class InternshipOfferController extends AbstractController
         $filters = $request->get('filters');
         $order = $request->get('order');
         $orderBy = $request->get('orderBy');
-
-        if ($request->get('page')) {
-            $page = $request->get('page');
-            $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy, $page);
-        } else {
-            $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy);
-        }
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 10);
+        $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
         return $this->json($internshipOffers);
     }

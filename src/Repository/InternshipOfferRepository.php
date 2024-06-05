@@ -41,7 +41,7 @@ class InternshipOfferRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByFilter(array $filters, string $order, string $orderBy, int $page = 1, int $limit = 9): array
+    public function findByFilter(array $filters, string $order, string $orderBy, int $page, int $limit): array
     {
         $qb = $this->createQueryBuilder('i');
 
