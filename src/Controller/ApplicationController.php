@@ -26,7 +26,6 @@ class ApplicationController extends AbstractController
 {
     public function __construct(
         private string $apiUrl,
-        private readonly ApplicationRepository $applicationRepository,
     ) {
     }
     #[Route(path: '/apply', name: 'new', methods: ['POST'])]
@@ -83,13 +82,5 @@ class ApplicationController extends AbstractController
         }
 
         return $response;
-    }
-
-    #[Route(path: '/home', name: 'homeList', methods: ['GET'])]
-    public function homeList(): Response
-    {
-        $applications = $this->applicationRepository->findHome();
-
-        return $this->json($applications, 200, [], ['groups' => 'application']);
     }
 }

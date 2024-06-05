@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\ResetPassword;
 use App\Entity\Student;
 use App\Model\ApplicationDTO;
+use App\Repository\ApplicationRepository;
+use App\Repository\CompanyRepository;
 use App\Repository\InternshipOfferRepository;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\StudentRepository;
@@ -20,33 +22,24 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
-#[Route('/api/offers', name: 'applications_')]
-class InternshipOfferController extends AbstractController
+#[Route('/api/home', name: 'home_')]
+class DefaultController extends AbstractController
 {
     public function __construct(
+        private readonly CompanyRepository $companyRepository,
+        private readonly ApplicationRepository $applicationRepository,
         private readonly InternshipOfferRepository $internshipOfferRepository,
     ) {
     }
-    #[Route(path: '/', name: 'list', methods: ['GET'])]
-    public function index(
-        Request $request,
-    ): Response {
-        $filters = $request->get('filters');
-        $order = $request->get('order');
-        $orderBy = $request->get('orderBy');
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 10);
-        $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
-        return $this->json($internshipOffers);
-    }
+    #[Route('/', name: 'home', methods: ['GET'])]
+    public function index(): Response {
+        $homeResponse = [
+            'companies' => $this->companyRepository->findHome(),
+            'applications' => $this->applicationRepository->findHome(),
+            'internshipOffers' => $this->internshipOfferRepository->findHome(),
+        ];
 
-    #[Route(path: '/{id}', name: 'show', methods: ['GET'])]
-    public function show(
-        int $id
-    ): Response
-    {
-        $internshipOffer = $this->internshipOfferRepository->find($id);
-        return $this->json($internshipOffer);
+        return $this->json($homeResponse, 200, [], ['groups' => 'company']);
     }
 }
