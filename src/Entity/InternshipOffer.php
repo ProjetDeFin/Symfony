@@ -36,9 +36,42 @@ class InternshipOffer
     #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
     private Collection $applications;
 
+    /**
+     * @var Collection<int, JobProfile>
+     */
+    #[ORM\ManyToMany(targetEntity: JobProfile::class, mappedBy: 'internshipOffer')]
+    private Collection $jobProfiles;
+
+    /**
+     * @var Collection<int, DiplomaSearched>
+     */
+    #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'internshipOffer')]
+    private Collection $diplomaSearcheds;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $startAt = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $endAt = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $endApplyDate = null;
+
+    /**
+     * @var Collection<int, Skill>
+     */
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'internshipOffers')]
+    private Collection $skill;
+
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->applications = new ArrayCollection();
+        $this->jobProfiles = new ArrayCollection();
+        $this->diplomaSearcheds = new ArrayCollection();
+        $this->skill = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,6 +111,132 @@ class InternshipOffer
     public function setCompany(Company $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobProfile>
+     */
+    public function getJobProfiles(): Collection
+    {
+        return $this->jobProfiles;
+    }
+
+    public function addJobProfile(JobProfile $jobProfile): static
+    {
+        if (!$this->jobProfiles->contains($jobProfile)) {
+            $this->jobProfiles->add($jobProfile);
+            $jobProfile->addInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobProfile(JobProfile $jobProfile): static
+    {
+        if ($this->jobProfiles->removeElement($jobProfile)) {
+            $jobProfile->removeInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DiplomaSearched>
+     */
+    public function getDiplomaSearcheds(): Collection
+    {
+        return $this->diplomaSearcheds;
+    }
+
+    public function addDiplomaSearched(DiplomaSearched $diplomaSearched): static
+    {
+        if (!$this->diplomaSearcheds->contains($diplomaSearched)) {
+            $this->diplomaSearcheds->add($diplomaSearched);
+            $diplomaSearched->addInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiplomaSearched(DiplomaSearched $diplomaSearched): static
+    {
+        if ($this->diplomaSearcheds->removeElement($diplomaSearched)) {
+            $diplomaSearched->removeInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function getStartAt(): ?\DateTimeImmutable
+    {
+        return $this->startAt;
+    }
+
+    public function setStartAt(\DateTimeImmutable $startAt): static
+    {
+        $this->startAt = $startAt;
+
+        return $this;
+    }
+
+    public function getEndAt(): ?\DateTimeImmutable
+    {
+        return $this->endAt;
+    }
+
+    public function setEndAt(\DateTimeImmutable $endAt): static
+    {
+        $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getEndApplyDate(): ?\DateTimeImmutable
+    {
+        return $this->endApplyDate;
+    }
+
+    public function setEndApplyDate(\DateTimeImmutable $endApplyDate): static
+    {
+        $this->endApplyDate = $endApplyDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkill(): Collection
+    {
+        return $this->skill;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skill->contains($skill)) {
+            $this->skill->add($skill);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        $this->skill->removeElement($skill);
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

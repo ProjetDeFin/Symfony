@@ -38,12 +38,46 @@ class Student
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $photo = null;
 
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $cv = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $motivation = null;
+
     #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'student')]
     private Collection $applications;
+
+    /**
+     * @var Collection<int, ProfesionalExperience>
+     */
+    #[ORM\OneToMany(targetEntity: ProfesionalExperience::class, mappedBy: 'student')]
+    private Collection $profesionalExperiences;
+
+    /**
+     * @var Collection<int, Hobby>
+     */
+    #[ORM\OneToMany(targetEntity: Hobby::class, mappedBy: 'student')]
+    private Collection $hobbies;
+
+    /**
+     * @var Collection<int, Skill>
+     */
+    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'student')]
+    private Collection $skills;
+
+    /**
+     * @var Collection<int, LanguageStudent>
+     */
+    #[ORM\OneToMany(targetEntity: LanguageStudent::class, mappedBy: 'student')]
+    private Collection $languageStudents;
 
     public function __construct()
     {
         $this->applications = new ArrayCollection();
+        $this->profesionalExperiences = new ArrayCollection();
+        $this->skills = new ArrayCollection();
+        $this->hobbies = new ArrayCollection();
+        $this->languageStudents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,5 +164,122 @@ class Student
         ;
 
         return $student;
+    }
+
+    /**
+     * @return Collection<int, ProfesionalExperience>
+     */
+    public function getProfesionalExperiences(): Collection
+    {
+        return $this->profesionalExperiences;
+    }
+
+    public function addProfesionalExperience(ProfesionalExperience $profesionalExperience): static
+    {
+        if (!$this->profesionalExperiences->contains($profesionalExperience)) {
+            $this->profesionalExperiences->add($profesionalExperience);
+            $profesionalExperience->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfesionalExperience(ProfesionalExperience $profesionalExperience): static
+    {
+        if ($this->profesionalExperiences->removeElement($profesionalExperience)) {
+            // set the owning side to null (unless already changed)
+            if ($profesionalExperience->getStudent() === $this) {
+                $profesionalExperience->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Hobby>
+     */
+    public function getHobbies(): Collection
+    {
+        return $this->hobbies;
+    }
+
+    public function addHobby(Hobby $hobby): static
+    {
+        if (!$this->hobbies->contains($hobby)) {
+            $this->hobbies->add($hobby);
+            $hobby->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHobby(Hobby $hobby): static
+    {
+        if ($this->hobbies->removeElement($hobby)) {
+            // set the owning side to null (unless already changed)
+            if ($hobby->getStudent() === $this) {
+                $hobby->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+            $skill->addStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        if ($this->skills->removeElement($skill)) {
+            $skill->removeStudent($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LanguageStudent>
+     */
+    public function getLanguageStudents(): Collection
+    {
+        return $this->languageStudents;
+    }
+
+    public function addLanguageStudent(LanguageStudent $languageStudent): static
+    {
+        if (!$this->languageStudents->contains($languageStudent)) {
+            $this->languageStudents->add($languageStudent);
+            $languageStudent->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguageStudent(LanguageStudent $languageStudent): static
+    {
+        if ($this->languageStudents->removeElement($languageStudent)) {
+            // set the owning side to null (unless already changed)
+            if ($languageStudent->getStudent() === $this) {
+                $languageStudent->setStudent(null);
+            }
+        }
+
+        return $this;
     }
 }
