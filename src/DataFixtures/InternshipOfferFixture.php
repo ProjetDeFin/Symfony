@@ -51,7 +51,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             [
                 'name' => 'Offer 4',
                 'type' => 'Stage',
-                'company' => 'Company 4',
+                'company' => 'Company 2',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec.',
                 'jobProfiles' => ['Design', 'Marketing'],
                 'diplomaSearcheds' => ['BTS', 'LICENCE'],
@@ -63,7 +63,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             [
                 'name' => 'Offer 5',
                 'type' => 'Alternance',
-                'company' => 'Company 5',
+                'company' => 'Company 2',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec.',
                 'jobProfiles' => ['Design', 'Marketing'],
                 'diplomaSearcheds' => ['BTS', 'LICENCE'],
@@ -75,7 +75,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             [
                 'name' => 'Offer 6',
                 'type' => 'Stage',
-                'company' => 'Company 6',
+                'company' => 'Company 3',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec.',
                 'jobProfiles' => ['Design', 'Marketing'],
                 'diplomaSearcheds' => ['BTS', 'LICENCE'],
@@ -87,7 +87,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             [
                 'name' => 'Offer 7',
                 'type' => 'Alternance',
-                'company' => 'Company 7',
+                'company' => 'Company 1',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec.',
                 'jobProfiles' => ['Design', 'Marketing'],
                 'diplomaSearcheds' => ['BTS', 'LICENCE'],
@@ -99,7 +99,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             [
                 'name' => 'Offer 8',
                 'type' => 'Stage',
-                'company' => 'Company 8',
+                'company' => 'Company 2',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec.',
                 'jobProfiles' => ['Design', 'Marketing'],
                 'diplomaSearcheds' => ['BTS', 'LICENCE'],
@@ -111,7 +111,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             [
                 'name' => 'Offer 9',
                 'type' => 'Alternance',
-                'company' => 'Company 9',
+                'company' => 'Company 3',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec.',
                 'jobProfiles' => ['Design', 'Marketing'],
                 'diplomaSearcheds' => ['BTS', 'LICENCE'],
@@ -123,7 +123,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             [
                 'name' => 'Offer 10',
                 'type' => 'Stage',
-                'company' => 'Company 10',
+                'company' => 'Company 1',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec.',
                 'jobProfiles' => ['Design', 'Marketing'],
                 'diplomaSearcheds' => ['BTS', 'LICENCE'],

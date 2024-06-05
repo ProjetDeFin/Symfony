@@ -34,6 +34,8 @@ class DiplomaSeachedFixture extends Fixture
             $diploma = new DiplomaSearched();
             $diploma->setName($diplomaData['name']);
 
+            $this->addReference('diploma_searched_' . strtolower(str_replace(' ', '_', $diplomaData['name'])), $diploma);
+
             $manager->persist($diploma);
         }
 

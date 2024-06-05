@@ -153,6 +153,8 @@ class SkillFixture extends Fixture
             $skill = new Skill();
             $skill->setName($skillData['name']);
 
+            $this->addReference('skill_' . strtolower(str_replace(' ', '_', $skillData['name'])), $skill);
+
             $manager->persist($skill);
         }
 
