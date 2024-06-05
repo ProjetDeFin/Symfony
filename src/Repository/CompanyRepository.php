@@ -33,4 +33,16 @@ class CompanyRepository extends ServiceEntityRepository
 
         return (int) $qb->getSingleScalarResult(); // Ensures that the result is returned as an integer
     }
+
+
+    // Todo add sponsoring for company
+    public function findHome(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.createdAt', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

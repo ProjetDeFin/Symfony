@@ -28,7 +28,7 @@ class InternshipOfferController extends AbstractController
     ) {
     }
     #[Route(path: '/', name: 'list', methods: ['GET'])]
-    public function list(
+    public function index(
         Request $request,
     ): Response {
         $filters = $request->get('filters');
@@ -54,8 +54,8 @@ class InternshipOfferController extends AbstractController
         return $this->json($internshipOffer);
     }
 
-    #[Route(path: '/home', name: 'home', methods: ['GET'])]
-    public function listHome(): Response
+    #[Route(path: '/home', name: 'homeList', methods: ['GET'])]
+    public function homeList(): Response
     {
         $internshipOffer = $this->internshipOfferRepository->findHome();
         return $this->json($internshipOffer);

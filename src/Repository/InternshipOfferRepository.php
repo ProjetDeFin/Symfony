@@ -57,6 +57,11 @@ class InternshipOfferRepository extends ServiceEntityRepository
                 ->setParameter('diplomaSearcheds', $filters['diplomaSearcheds']);
         }
 
+        if (!empty($filters['type'])) {
+            $qb->andWhere('i.type = :type')
+                ->setParameter('type', $filters['type']);
+        }
+
         if (!empty($filters['duration'])) {
             switch ($filters['duration']) {
                 case 'lessThan2Month':

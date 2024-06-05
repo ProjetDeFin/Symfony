@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ResetPassword;
 use App\Entity\Student;
 use App\Model\ApplicationDTO;
+use App\Repository\ApplicationRepository;
 use App\Repository\InternshipOfferRepository;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\StudentRepository;
@@ -25,6 +26,7 @@ class ApplicationController extends AbstractController
 {
     public function __construct(
         private string $apiUrl,
+        private readonly ApplicationRepository $applicationRepository,
     ) {
     }
     #[Route(path: '/apply', name: 'new', methods: ['POST'])]
@@ -81,5 +83,13 @@ class ApplicationController extends AbstractController
         }
 
         return $response;
+    }
+
+    #[Route(path: '/home', name: 'homeList', methods: ['GET'])]
+    public function homeList(): Response
+    {
+        $applications = $this->applicationRepository->findHome();
+
+        return $this->json($applications, 200, [], ['groups' => 'application']);
     }
 }

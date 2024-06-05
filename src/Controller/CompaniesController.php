@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ResetPassword;
 use App\Entity\Student;
 use App\Model\ApplicationDTO;
+use App\Repository\CompanyRepository;
 use App\Repository\InternshipOfferRepository;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\StudentRepository;
@@ -20,13 +21,19 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
-#[Route('/api/applications', name: 'applications_')]
+#[Route('/api/companies', name: 'applications_')]
 class CompaniesController extends AbstractController
 {
     public function __construct(
+        private readonly CompanyRepository $companyRepository,
     ) {
     }
 
+    #[Route('/home', name: 'homeList', methods: ['GET'])]
+    public function homeList(): Response {
+        $companies = $this->companyRepository->findHome();
 
+        return $this->json($companies, 200, [], ['groups' => 'company']);
+    }
 
 }
