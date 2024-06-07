@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\HobbyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: HobbyRepository::class)]
+#[ORM\Table(name: 'hobby')]
 class Hobby
 {
     use TimestampableTrait;
@@ -15,12 +17,15 @@ class Hobby
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['hobby', 'home'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['hobby', 'home'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'hobbies')]
+    #[Groups(['hobby'])]
     private ?Student $student = null;
 
     public function getId(): ?int

@@ -6,22 +6,27 @@ use App\Repository\DiplomaSearchedRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DiplomaSearchedRepository::class)]
+#[ORM\Table(name: 'diploma_searched')]
 class DiplomaSearched
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['diploma_searched'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['diploma_searched', 'home'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, InternshipOffer>
      */
-    #[ORM\ManyToMany(targetEntity: InternshipOffer::class, inversedBy: 'diplomaSearcheds')]
+    #[ORM\ManyToMany(targetEntity: InternshipOffer::class, inversedBy: 'diploma_searched')]
+    #[Groups(['diploma_searched'])]
     private Collection $internshipOffer;
 
     public function __construct()

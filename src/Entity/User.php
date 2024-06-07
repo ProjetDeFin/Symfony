@@ -12,6 +12,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
@@ -28,15 +29,19 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
+    #[Groups(['user', 'home'])]
     private string $firstname;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
+    #[Groups(['user', 'home'])]
     private string $lastName;
 
     #[ORM\Column(type: Types::STRING, enumType: UserGenderEnum::class)]
+    #[Groups(['user', 'home'])]
     private ?UserGenderEnum $civility = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
+    #[Groups(['user', 'home'])]
     private string $email;
 
     #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
