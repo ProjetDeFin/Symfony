@@ -20,6 +20,7 @@ class DefaultController extends AbstractController
     ) {
     }
 
+    //todo fix application
     #[Route('/', name: 'home', methods: ['GET'])]
     public function index(SerializerInterface $serializer): Response {
         $companies = $this->companyRepository->findAll();

@@ -45,4 +45,40 @@ class CompanyRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findByFilter(array $filters, string $order, string $orderBy, int $page, int $limit): array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        if (!empty($filters['duration'])) {
+            switch ($filters['duration']) {
+                case 'lessThan2Month':
+                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) < :duration')
+                        ->setParameter('duration', '60');
+                    break;
+                case 'between2And6Month':
+                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) BETWEEN :betweenStart AND :betweenEnd')
+                        ->setParameter('betweenStart', '60')
+                        ->setParameter('betweenEnd', '180');
+                    break;
+                case 'between6And12Month':
+                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) BETWEEN :betweenStart AND :betweenEnd')
+                        ->setParameter('betweenStart', '180')
+                        ->setParameter('betweenEnd', '365');
+                    break;
+                case 'moreThan12Month':
+                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) > :duration')
+                        ->setParameter('duration', '365');
+                    break;
+                default:
+                    throw new \InvalidArgumentException("Durée de filtre invalide: " . $filters['duration']);
+            }
+        }
+
+        $qb->orderBy('c.' . $orderBy, $order)
+            ->setMaxResults($limit)
+            ->setFirstResult($page * $limit);
+
+        return $qb->getQuery()->getResult();
+    }
 }
