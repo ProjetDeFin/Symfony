@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ORM\Table(name: 'student')]
@@ -24,56 +25,63 @@ class Student
     private ?int $id = null;
 
     #[ORM\OneToOne(targetEntity: User::class)]
+    #[Groups(['student', 'home'])]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['student', 'home'])]
     private \DateTime $birthday;
 
     #[ORM\Column(type: Types::STRING, length: 10)]
+    #[Groups(['student', 'home'])]
     private ?string $mobile = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['student', 'home'])]
     private ?string $customCurriculumVitae = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['student', 'home'])]
     private ?string $photo = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['student', 'home'])]
     private ?string $cv = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['student', 'home'])]
     private ?string $motivation = null;
-
-    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'student')]
-    private Collection $applications;
 
     /**
      * @var Collection<int, ProfesionalExperience>
      */
     #[ORM\OneToMany(targetEntity: ProfesionalExperience::class, mappedBy: 'student')]
+    #[Groups(['student', 'home'])]
     private Collection $profesionalExperiences;
 
     /**
      * @var Collection<int, Hobby>
      */
     #[ORM\OneToMany(targetEntity: Hobby::class, mappedBy: 'student')]
+    #[Groups(['student', 'home'])]
     private Collection $hobbies;
 
     /**
      * @var Collection<int, Skill>
      */
     #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'student')]
+    #[Groups(['student', 'home'])]
     private Collection $skills;
 
     /**
      * @var Collection<int, LanguageStudent>
      */
     #[ORM\OneToMany(targetEntity: LanguageStudent::class, mappedBy: 'student')]
+    #[Groups(['student', 'home'])]
     private Collection $languageStudents;
 
     public function __construct()
     {
-        $this->applications = new ArrayCollection();
         $this->profesionalExperiences = new ArrayCollection();
         $this->skills = new ArrayCollection();
         $this->hobbies = new ArrayCollection();

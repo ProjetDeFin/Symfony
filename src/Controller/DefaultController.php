@@ -2,25 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\ResetPassword;
-use App\Entity\Student;
-use App\Model\ApplicationDTO;
 use App\Repository\ApplicationRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\InternshipOfferRepository;
-use App\Repository\ResetPasswordRepository;
-use App\Repository\StudentRepository;
-use App\Service\ApiResponseService;
-use App\Service\BrevoMailService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Application;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/home', name: 'home_')]
 class DefaultController extends AbstractController
@@ -32,14 +20,22 @@ class DefaultController extends AbstractController
     ) {
     }
 
+    //todo fix application
     #[Route('/', name: 'home', methods: ['GET'])]
-    public function index(): Response {
+    public function index(SerializerInterface $serializer): Response {
+        $companies = $this->companyRepository->findAll();
+        $applications = $this->applicationRepository->findAll();
+        $internshipOffers = $this->internshipOfferRepository->findAll();
+
         $homeResponse = [
-            'companies' => $this->companyRepository->findHome(),
-            'applications' => $this->applicationRepository->findHome(),
-            'internshipOffers' => $this->internshipOfferRepository->findHome(),
+            'companies' => $companies,
+            'applications' => $applications,
+            'offers' => $internshipOffers,
         ];
 
-        return $this->json($homeResponse, 200, [], ['groups' => 'company']);
+        $jsonContent = $serializer->serialize($homeResponse, 'json', ['groups' => 'home']);
+
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
+
 }

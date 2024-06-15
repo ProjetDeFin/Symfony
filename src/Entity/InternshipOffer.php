@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: InternshipOfferRepository::class)]
 #[ORM\Table(name: 'internship_offer')]
@@ -22,53 +24,60 @@ class InternshipOffer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups(['internship_offer'])]
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Groups(['internship_offer', 'home'])]
     private ?string $title;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['internship_offer', 'home'])]
     private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'internshipOffers')]
-    private Company $company;
-
-    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
-    private Collection $applications;
+    #[Groups(['internship_offer', 'home'])]
+    private ?Company $company = null;
 
     /**
      * @var Collection<int, JobProfile>
      */
     #[ORM\ManyToMany(targetEntity: JobProfile::class, mappedBy: 'internshipOffer')]
+    #[Groups(['internship_offer', 'home'])]
     private Collection $jobProfiles;
 
     /**
      * @var Collection<int, DiplomaSearched>
      */
     #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'internshipOffer')]
+    #[Groups(['internship_offer', 'home'])]
     private Collection $diplomaSearcheds;
 
     #[ORM\Column]
+    #[Groups(['internship_offer', 'home'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
+    #[Groups(['internship_offer', 'home'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column]
+    #[Groups(['internship_offer', 'home'])]
     private ?\DateTimeImmutable $endApplyDate = null;
 
     /**
      * @var Collection<int, Skill>
      */
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'internshipOffers')]
+    #[Groups(['internship_offer', 'home'])]
     private Collection $skill;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['internship_offer', 'home'])]
     private ?string $type = null;
 
     public function __construct()
     {
-        $this->applications = new ArrayCollection();
         $this->jobProfiles = new ArrayCollection();
         $this->diplomaSearcheds = new ArrayCollection();
         $this->skill = new ArrayCollection();

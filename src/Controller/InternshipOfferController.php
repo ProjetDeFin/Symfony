@@ -27,7 +27,7 @@ class InternshipOfferController extends AbstractController
         private readonly InternshipOfferRepository $internshipOfferRepository,
     ) {
     }
-    #[Route(path: '/', name: 'list', methods: ['GET'])]
+    #[Route(path: '/', name: 'list', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
     ): Response {

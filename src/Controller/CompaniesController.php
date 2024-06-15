@@ -25,6 +25,21 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 class CompaniesController extends AbstractController
 {
     public function __construct(
+        private readonly CompanyRepository $companyRepository,
     ) {
+    }
+
+    #[Route(path: '/', name: 'list', methods: ['GET', 'POST'])]
+    public function index(
+        Request $request,
+    ): Response {
+        $filters = $request->get('filters');
+        $order = $request->get('order');
+        $orderBy = $request->get('orderBy');
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 10);
+        $companies = $this->companyRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
+
+        return $this->json($companies);
     }
 }

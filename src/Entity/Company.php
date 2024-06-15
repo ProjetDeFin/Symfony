@@ -11,6 +11,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ORM\Table(name: 'company')]
@@ -24,60 +26,68 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['company'])]
     private ?int $id = null;
 
-    #[ORM\OneToMany(targetEntity: InternshipOffer::class, mappedBy: 'company')]
-    private Collection $internshipOffers;
-
     #[ORM\Column(type: Types::STRING, unique: true)]
+    #[Groups(['company', 'home'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::STRING)]
+    #[Groups(['company'])]
     private ?string $socialReason = null;
 
     #[ORM\Column(type: Types::BIGINT, unique: true)]
+    #[Groups(['company'])]
     private ?int $siret = null;
 
     #[ORM\Column(type: Types::STRING)]
+    #[Groups(['company'])]
     private ?string $workforce = null;
 
     #[ORM\Column(type: TYPES::FLOAT, options: ['default' => 0])]
+    #[Groups(['company'])]
     private float $sellFigure = 0;
 
     #[ORM\Column(type: 'date')]
+    #[Groups(['company', 'home'])]
     private ?\DateTimeInterface $creation = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'home'])]
     private ?string $logo = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
+    #[Groups(['company', 'home'])]
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
+    #[Groups(['company', 'home'])]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
     private ?string $websiteUrl = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
     private ?string $fax = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
     private ?string $linkedinUrl = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
     private ?string $facebookUrl = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
     private ?string $instagramUrl = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
     private ?string $xUrl = null;
-
-    public function __construct()
-    {
-        $this->internshipOffers = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {

@@ -6,6 +6,7 @@ use App\Repository\JobProfileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: JobProfileRepository::class)]
 class JobProfile
@@ -13,12 +14,15 @@ class JobProfile
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['job_profile'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['job_profile', 'home'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['job_profile', 'home'])]
     private ?string $color = null;
 
     /**

@@ -56,6 +56,7 @@ class AppFixtures extends Fixture
         $student->setZipCode('75000');
         $student->setCountry('France');
         $student->setMobile('0123456789');
+        $this->addReference('student1', $student);
         $manager->persist($student);
 
         $companyResponsableUser = new User();

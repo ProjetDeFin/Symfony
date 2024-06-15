@@ -5,15 +5,16 @@ namespace App\Entity\Traits;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 trait TimestampableTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Gedmo\Timestampable(on: 'create')]
+    #[Groups(['company', 'home'])]
     protected ?\DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Gedmo\Timestampable(on: 'update')]
+    #[Groups(['company', 'home'])]
     protected ?\DateTimeInterface $updatedAt;
 
     public function setCreatedAt(\DateTimeInterface $createdAt): static
