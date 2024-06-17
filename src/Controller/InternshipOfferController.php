@@ -2,43 +2,39 @@
 
 namespace App\Controller;
 
-use App\Entity\ResetPassword;
-use App\Entity\Student;
-use App\Model\ApplicationDTO;
 use App\Repository\InternshipOfferRepository;
-use App\Repository\ResetPasswordRepository;
-use App\Repository\StudentRepository;
-use App\Service\ApiResponseService;
-use App\Service\BrevoMailService;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Application;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/offers', name: 'applications_')]
 class InternshipOfferController extends AbstractController
 {
     public function __construct(
         private readonly InternshipOfferRepository $internshipOfferRepository,
-    ) {
+        private readonly SerializerInterface       $serializer
+    )
+    {
     }
+
     #[Route(path: '/', name: 'list', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
-    ): Response {
-        $filters = $request->get('filters');
-        $order = $request->get('order');
-        $orderBy = $request->get('orderBy');
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 10);
+    ): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $filters = $data['filters'];
+        $order = $data['order'];
+        $orderBy = $data['orderBy'];
+        $page = $data['page'];
+        $limit = $data['limit'];
+
         $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
-        return $this->json($internshipOffers);
+        $jsonContent = $this->serializer->serialize($internshipOffers, 'json', ['groups' => 'internship_offer']);
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 
     #[Route(path: '/{id}', name: 'show', methods: ['GET'])]
@@ -47,6 +43,8 @@ class InternshipOfferController extends AbstractController
     ): Response
     {
         $internshipOffer = $this->internshipOfferRepository->find($id);
-        return $this->json($internshipOffer);
+
+        $jsonContent = $this->serializer->serialize($internshipOffer, 'json', ['groups' => 'internship_offer']);
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 }
