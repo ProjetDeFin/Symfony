@@ -30,5 +30,5 @@ security:
             jwt: ~
 
     access_control:
-        - { path: ^/api/jwt/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/account, roles: IS_AUTHENTICATED_FULLY }
