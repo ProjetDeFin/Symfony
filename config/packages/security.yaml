@@ -15,10 +15,10 @@ security:
             security: false
 
         login:
-            pattern:  ^/api/jwt/login
+            pattern:  ^/api/login
             stateless: true
             json_login:
-                check_path: /api/jwt/login
+                check_path: /api/login
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
