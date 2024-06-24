@@ -30,6 +30,7 @@ security:
             jwt: ~
 
         main:
+            pattern: ^/
             form_login:
                 login_path: /login
                 check_path: /login
@@ -37,6 +38,7 @@ security:
             logout:
                 path: /logout
                 target: /
+            anonymous: true
 
     access_control:
         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
