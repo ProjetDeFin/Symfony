@@ -36,7 +36,7 @@ class InternshipOffer
     private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'internshipOffers')]
-    #[Groups(['internship_offer', 'home'])]
+    #[Groups(['home'])]
     private ?Company $company = null;
 
     /**

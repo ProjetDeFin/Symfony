@@ -38,4 +38,10 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+
+    #[Route(path: '/', name: 'admin_root_redirect')]
+    public function rootRedirect(): Response
+    {
+        return $this->redirectToRoute('app_login');
+    }
 }

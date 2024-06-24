@@ -11,7 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/jwt', name: 'api_jwt_')]
+#[Route('/api', name: 'api_jwt_')]
 class LoginController extends AbstractController
 {
     #[Route(path: '/login', name: 'login', methods: ['POST'])]

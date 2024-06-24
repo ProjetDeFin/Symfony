@@ -41,9 +41,10 @@ class InternshipOfferRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByFilter(array $filters, string $order, string $orderBy, int $page, int $limit): array
+    public function findByFilter(array $filters, ?string $order, ?string $orderBy, int $page, int $limit): array
     {
-        $qb = $this->createQueryBuilder('i');
+        $qb = $this->createQueryBuilder('i')
+            ->select('i');
 
         if (!empty($filters['jobProfiles'])) {
             $qb->join('i.jobProfiles', 'jp')
@@ -51,15 +52,15 @@ class InternshipOfferRepository extends ServiceEntityRepository
                 ->setParameter('jobProfiles', $filters['jobProfiles']);
         }
 
+        if (!empty($filters['type'])) {
+            $qb->andWhere('i.type = :type')
+                ->setParameter('type', $filters['type']);
+        }
+
         if (!empty($filters['diplomaSearcheds'])) {
             $qb->join('i.diplomaSearcheds', 'ds')
                 ->andWhere('ds.id IN (:diplomaSearcheds)')
                 ->setParameter('diplomaSearcheds', $filters['diplomaSearcheds']);
-        }
-
-        if (!empty($filters['type'])) {
-            $qb->andWhere('i.type = :type')
-                ->setParameter('type', $filters['type']);
         }
 
         if (!empty($filters['duration'])) {
@@ -87,9 +88,15 @@ class InternshipOfferRepository extends ServiceEntityRepository
             }
         }
 
-        $qb->orderBy('i.' . $orderBy, $order)
-            ->setMaxResults($limit)
-            ->setFirstResult($page * $limit);
+        if ($page > 1){
+            $qb->setFirstResult($page * $limit);
+        }
+
+        $qb->andWhere('i.endApplyDate > :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('i.'.$orderBy, $order)
+            ->setMaxResults($limit);
+
 
         return $qb->getQuery()->getResult();
     }
