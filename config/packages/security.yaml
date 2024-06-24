@@ -29,7 +29,18 @@ security:
             stateless: true
             jwt: ~
 
+        main:
+            anonymous: true
+            form_login:
+                login_path: /login
+                check_path: /login
+                default_target_path: /admin
+            logout:
+                path: /logout
+                target: /
+
     access_control:
         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin, roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/account, roles: IS_AUTHENTICATED_FULLY }
