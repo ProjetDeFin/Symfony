@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/api/offers', name: 'offers_')]
+#[Route('/api/account/offers', name: 'offers_')]
 class InternshipOfferController extends AbstractController
 {
     public function __construct(
