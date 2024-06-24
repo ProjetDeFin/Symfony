@@ -31,7 +31,7 @@ class CompaniesController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', name: 'list', methods: ['GET', 'POST'])]
+    #[Route(path: '/', name: 'list_companies', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
         CompanyRepository $companyRepository,
@@ -48,7 +48,7 @@ class CompaniesController extends AbstractController
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 
-    #[Route(path: '/{id}', name: 'show', methods: ['GET'])]
+    #[Route(path: '/{id}', name: 'show_company', methods: ['GET'])]
     public function show(
         int $id,
     ): Response {
