@@ -9,16 +9,22 @@ security:
                 class: App\Entity\User
                 property: email
 
+    role_hierarchy:
+        ROLE_USER:        []
+        ROLE_SUPER_ADMIN: [ ROLE_COMPANY_RESPONSIBLE, ROLE_STUDENT, ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_STUDENT: [ ROLE_USER ]
+        ROLE_COMPANY_RESPONSIBLE: [ ROLE_USER ]
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         login:
-            pattern:  ^/api/jwt/login
+            pattern:  ^/api/login
             stateless: true
             json_login:
-                check_path: /api/jwt/login
+                check_path: /api/login
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -39,7 +45,5 @@ security:
                 target: /
 
     access_control:
-        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/account, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/api/account, roles: ROLE_USER }
