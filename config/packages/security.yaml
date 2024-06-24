@@ -33,7 +33,6 @@ security:
         api:
             pattern:   ^/api
             stateless: true
-            provider: user
             jwt: ~
 
         main:
