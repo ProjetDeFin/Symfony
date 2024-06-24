@@ -24,12 +24,11 @@ class InternshipOfferController extends AbstractController
         Request $request,
     ): Response
     {
-        $data = json_decode($request->getContent(), true);
-        $filters = $data['filters'];
-        $order = $data['order'];
-        $orderBy = $data['orderBy'];
-        $page = $data['page'];
-        $limit = $data['limit'];
+        $filters = $request->get('filters');
+        $order = $request->get('order');
+        $orderBy = $request->get('orderBy');
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 10);
 
         $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 

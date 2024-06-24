@@ -31,19 +31,18 @@ class CompaniesController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/api/companies', name: 'list', methods: ['POST'])]
+    #[Route(path: '/', name: 'list', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
         CompanyRepository $companyRepository,
         SerializerInterface $serializer
     ): Response {
-        $filters = json_decode($request->getContent(), true)['filters'];
-        $order = json_decode($request->getContent(), true)['order'];
-        $orderBy = json_decode($request->getContent(), true)['orderBy'];
-        $page = json_decode($request->getContent(), true)['page'];
-        $limit = json_decode($request->getContent(), true)['limit'];
-
-        $companies = $companyRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
+        $filters = $request->get('filters');
+        $order = $request->get('order');
+        $orderBy = $request->get('orderBy');
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 10);
+        $companies = $this->companyRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
         $jsonContent = $serializer->serialize($companies, 'json', ['groups' => 'companies']);
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
