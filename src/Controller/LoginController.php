@@ -11,7 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api', name: 'api_jwt_')]
+#[Route('/api', name: 'api_')]
 class LoginController extends AbstractController
 {
     #[Route(path: '/login', name: 'login', methods: ['POST'])]
@@ -30,7 +30,7 @@ class LoginController extends AbstractController
 
         $user = $userProvider->loadUserByIdentifier($email);
         if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
             $response->setData(['error' => 'Invalid credentials']);
             return $response;
         }
