@@ -50,34 +50,60 @@ class CompanyRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        if (!empty($filters['duration'])) {
-            switch ($filters['duration']) {
-                case 'lessThan2Month':
-                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) < :duration')
-                        ->setParameter('duration', '60');
+        if (!empty($filters['sectors'])) {
+            $qb->andWhere('c.sector IN (:sectors)')
+                ->setParameter('sectors', $filters['sectors']);
+        }
+
+        if (!empty($filters['categories'])) {
+            $qb->andWhere('c.categories IN (:categories)')
+                ->setParameter('categories', $filters['categories']);
+        }
+
+        if (!empty($filters['size'])) {
+            switch ($filters['size']) {
+                case '1-9':
+                    $qb->andWhere('c.workforce BETWEEN :start AND :end')
+                        ->setParameter('start', '1')
+                        ->setParameter('start', '9');
                     break;
-                case 'between2And6Month':
-                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) BETWEEN :betweenStart AND :betweenEnd')
-                        ->setParameter('betweenStart', '60')
-                        ->setParameter('betweenEnd', '180');
+                case '10-49':
+                    $qb->andWhere('c.workforce BETWEEN :start AND :end')
+                        ->setParameter('start', '10')
+                        ->setParameter('start', '49');
                     break;
-                case 'between6And12Month':
-                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) BETWEEN :betweenStart AND :betweenEnd')
-                        ->setParameter('betweenStart', '180')
-                        ->setParameter('betweenEnd', '365');
+                case '50-99':
+                    $qb->andWhere('c.workforce BETWEEN :start AND :end')
+                        ->setParameter('start', '50')
+                        ->setParameter('start', '99');
                     break;
-                case 'moreThan12Month':
-                    $qb->andWhere('DATEDIFF(c.endAt, c.startAt) > :duration')
-                        ->setParameter('duration', '365');
+                case '100-249':
+                    $qb->andWhere('c.workforce BETWEEN :start AND :end')
+                        ->setParameter('start', '100')
+                        ->setParameter('start', '249');
+                    break;
+                case '250-999':
+                    $qb->andWhere('c.workforce BETWEEN :start AND :end')
+                        ->setParameter('start', '250')
+                        ->setParameter('start', '999');
+                    break;
+                case '1000+':
+                    $qb->andWhere('c.workforce >= :workforce')
+                        ->setParameter('workforce', '1000');
                     break;
                 default:
-                    throw new \InvalidArgumentException("Durée de filtre invalide: " . $filters['duration']);
+                    throw new \InvalidArgumentException("Filtre effectif invalide : " . $filters['size']);
             }
+        }
+
+        if (!empty($filters['size'])) {
+            $qb->andWhere('c.size IN (:size)')
+                ->setParameter('size', $filters['size']);
         }
 
         $qb->orderBy('c.' . $orderBy, $order)
             ->setMaxResults($limit)
-            ->setFirstResult($page * $limit);
+            ->setFirstResult(($page - 1) * $limit);
 
         return $qb->getQuery()->getResult();
     }

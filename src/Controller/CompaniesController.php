@@ -20,18 +20,22 @@ use App\Entity\Application;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/companies', name: 'applications_')]
 class CompaniesController extends AbstractController
 {
     public function __construct(
         private readonly CompanyRepository $companyRepository,
+        private readonly SerializerInterface $serializer
     ) {
     }
 
     #[Route(path: '/', name: 'list', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
+        CompanyRepository $companyRepository,
+        SerializerInterface $serializer
     ): Response {
         $filters = $request->get('filters');
         $order = $request->get('order');
@@ -40,6 +44,21 @@ class CompaniesController extends AbstractController
         $limit = $request->get('limit', 10);
         $companies = $this->companyRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
-        return $this->json($companies);
+        $jsonContent = $serializer->serialize($companies, 'json', ['groups' => 'companies']);
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
+    }
+
+    #[Route(path: '/{id}', name: 'show', methods: ['GET'])]
+    public function show(
+        int $id,
+    ): Response {
+        $company = $this->companyRepository->find($id);
+
+        if (!$company) {
+            return new Response('Company not found', 404);
+        }
+
+        $jsonContent = $this->serializer->serialize($company, 'json', ['groups' => 'company']);
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 }
