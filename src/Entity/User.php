@@ -50,6 +50,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $password = null;
 
+    #[ORM\Column(type: Types::STRING, length: 2048, nullable: true)]
+    private ?string $apiToken = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -149,6 +152,18 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function setCivility(UserGenderEnum $civility): static
     {
         $this->civility = $civility;
+
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): static
+    {
+        $this->apiToken = $apiToken;
 
         return $this;
     }
