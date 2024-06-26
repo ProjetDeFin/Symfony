@@ -15,8 +15,7 @@ final readonly class ApiResponseService
     {
         $response = new JsonResponse();
         // TODO: Change this to the front-end URL
-//        $response->headers->set('Access-Control-Allow-Origin', $this->frontUrl);
-        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Origin', $this->frontUrl);
         $response->headers->set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
         return $response;

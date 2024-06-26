@@ -41,7 +41,7 @@ class InternshipOfferRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByFilter(array $filters, ?string $order, ?string $orderBy, int $page, int $limit): array
+    public function findByFilter(array $filters, ?string $order, string $orderBy, int $page, int $limit): array
     {
         $qb = $this->createQueryBuilder('i')
             ->select('i');
@@ -88,13 +88,10 @@ class InternshipOfferRepository extends ServiceEntityRepository
             }
         }
 
-        if ($page > 1){
-            $qb->setFirstResult($page * $limit);
-        }
-
         $qb->andWhere('i.endApplyDate > :now')
             ->setParameter('now', new \DateTime())
             ->orderBy('i.'.$orderBy, $order)
+            ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 
 

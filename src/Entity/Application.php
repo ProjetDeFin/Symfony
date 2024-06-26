@@ -31,7 +31,7 @@ class Application
 
     #[ORM\ManyToOne(targetEntity: Student::class)]
     #[Ignore]
-    #[Groups(['application', 'home'])]
+    #[Groups(['application'])]
     private Student $student;
 
     #[ORM\Column(type: Types::STRING, enumType: ApplicationStatusEnum::class, options: ['default' => ApplicationStatusEnum::PENDING])]
@@ -147,5 +147,35 @@ class Application
             ->setStatus(ApplicationStatusEnum::PENDING)
         ;
         return $application;
+    }
+
+    #[Groups(['home'])]
+    public function getStudentFullName(): string
+    {
+        return $this->student->getUser()->getFullName();
+    }
+
+    #[Groups(['home'])]
+    public function getStudentPicture(): string
+    {
+        return $this->student->getPhoto();
+    }
+
+    #[Groups(['home'])]
+    public function getStudentAge(): string
+    {
+        return $this->student->getBirthday()->diff(new \DateTime())->y;
+    }
+
+    #[Groups(['home'])]
+    public function getStudentCity(): string
+    {
+        return $this->student->getCity();
+    }
+
+    #[Groups(['home'])]
+    public function getPeriod(): string
+    {
+        return $this->startAt->format('d/m/Y') . ' - ' . $this->endAt->format('d/m/Y');
     }
 }

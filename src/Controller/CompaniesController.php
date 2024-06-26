@@ -37,11 +37,11 @@ class CompaniesController extends AbstractController
         CompanyRepository $companyRepository,
         SerializerInterface $serializer
     ): Response {
-        $filters = $request->get('filters');
+        $filters = json_decode($request->get('filters'), true);
         $order = $request->get('order');
         $orderBy = $request->get('orderBy');
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 10);
+        $page = json_decode($request->get('page', 1), true);
+        $limit = json_decode($request->get('limit', 10), true);
         $companies = $this->companyRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
         $jsonContent = $serializer->serialize($companies, 'json', ['groups' => 'companies']);

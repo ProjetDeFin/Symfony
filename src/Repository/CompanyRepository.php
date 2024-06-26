@@ -50,7 +50,7 @@ class CompanyRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        if (!empty($filters['sectors'])) {
+        if (!empty($filters['sectors'] && $filters['sectors'] !== 'all')) {
             $qb->andWhere('c.sector IN (:sectors)')
                 ->setParameter('sectors', $filters['sectors']);
         }
@@ -65,27 +65,27 @@ class CompanyRepository extends ServiceEntityRepository
                 case '1-9':
                     $qb->andWhere('c.workforce BETWEEN :start AND :end')
                         ->setParameter('start', '1')
-                        ->setParameter('start', '9');
+                        ->setParameter('end', '9');
                     break;
                 case '10-49':
                     $qb->andWhere('c.workforce BETWEEN :start AND :end')
                         ->setParameter('start', '10')
-                        ->setParameter('start', '49');
+                        ->setParameter('end', '49');
                     break;
                 case '50-99':
                     $qb->andWhere('c.workforce BETWEEN :start AND :end')
                         ->setParameter('start', '50')
-                        ->setParameter('start', '99');
+                        ->setParameter('end', '99');
                     break;
                 case '100-249':
                     $qb->andWhere('c.workforce BETWEEN :start AND :end')
                         ->setParameter('start', '100')
-                        ->setParameter('start', '249');
+                        ->setParameter('end', '249');
                     break;
                 case '250-999':
                     $qb->andWhere('c.workforce BETWEEN :start AND :end')
                         ->setParameter('start', '250')
-                        ->setParameter('start', '999');
+                        ->setParameter('end', '999');
                     break;
                 case '1000+':
                     $qb->andWhere('c.workforce >= :workforce')
@@ -94,11 +94,6 @@ class CompanyRepository extends ServiceEntityRepository
                 default:
                     throw new \InvalidArgumentException("Filtre effectif invalide : " . $filters['size']);
             }
-        }
-
-        if (!empty($filters['size'])) {
-            $qb->andWhere('c.size IN (:size)')
-                ->setParameter('size', $filters['size']);
         }
 
         $qb->orderBy('c.' . $orderBy, $order)

@@ -24,56 +24,44 @@ class InternshipOffer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offer',  'internship_offers'])]
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Groups(['internship_offer', 'home'])]
+    #[Groups(['internship_offer', 'home',  'internship_offers'])]
     private ?string $title;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['internship_offer', 'home'])]
+    #[Groups(['internship_offer', 'home',  'internship_offers'])]
     private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'internshipOffers')]
     #[Groups(['home'])]
     private ?Company $company = null;
 
-    /**
-     * @var Collection<int, JobProfile>
-     */
     #[ORM\ManyToMany(targetEntity: JobProfile::class, mappedBy: 'internshipOffer')]
-    #[Groups(['internship_offer', 'home'])]
+    #[Groups(['internship_offer', 'home', 'internship_offers'])]
     private Collection $jobProfiles;
 
-    /**
-     * @var Collection<int, DiplomaSearched>
-     */
     #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'internshipOffer')]
-    #[Groups(['internship_offer', 'home'])]
+    #[Groups(['internship_offer'])]
     private Collection $diplomaSearcheds;
 
     #[ORM\Column]
-    #[Groups(['internship_offer', 'home'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
-    #[Groups(['internship_offer', 'home'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column]
-    #[Groups(['internship_offer', 'home'])]
     private ?\DateTimeImmutable $endApplyDate = null;
 
-    /**
-     * @var Collection<int, Skill>
-     */
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'internshipOffers')]
-    #[Groups(['internship_offer', 'home'])]
+    #[Groups(['internship_offer'])]
     private Collection $skill;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['internship_offer', 'home'])]
+    #[Groups(['internship_offer',  'internship_offers', 'home'])]
     private ?string $type = null;
 
     public function __construct()
@@ -248,5 +236,53 @@ class InternshipOffer
         $this->type = $type;
 
         return $this;
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyLogo(): ?string
+    {
+        return $this->company->getLogo();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyName(): ?string
+    {
+        return $this->company->getName();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyCity(): ?string
+    {
+        return $this->company->getCity();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getRestDay(): ?string
+    {
+        return $this->startAt->diff($this->endAt)->format('%a');
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getPeriod(): ?string
+    {
+        return $this->startAt->format('d/m/Y') . ' - ' . $this->endAt->format('d/m/Y');
+    }
+
+    #[Groups(['internship_offer'])]
+    public function getFormatedEndApplyDate(): string
+    {
+        return $this->endApplyDate->format('d/m/Y');
+    }
+
+    #[Groups(['internship_offer'])]
+    public function getFormatedStartAt(): string
+    {
+        return $this->startAt->format('d/m/Y');
+    }
+
+    #[Groups(['internship_offer'])]
+    public function getFormatedEndAt(): string
+    {
+        return $this->endAt->format('d/m/Y');
     }
 }
