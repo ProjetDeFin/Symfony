@@ -14,8 +14,10 @@ final readonly class ApiResponseService
     public function getResponse(): JsonResponse
     {
         $response = new JsonResponse();
-        $response->headers->set('Access-Control-Allow-Origin', $this->frontUrl);
-        $response->headers->set('Access-Control-Allow-Methods', 'POST, GET');
+        // TODO: Change this to the front-end URL
+//        $response->headers->set('Access-Control-Allow-Origin', $this->frontUrl);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
         return $response;
     }
