@@ -31,7 +31,7 @@ class ResetPasswordController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', methods: ['GET'], name: '')]
+    #[Route(path: '/', name: '', methods: ['GET'])]
     public function showResetPassword(): Response
     {
         return $this->render('app/email-reset.html.twig', [

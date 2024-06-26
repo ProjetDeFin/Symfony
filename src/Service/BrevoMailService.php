@@ -16,6 +16,7 @@ final readonly class BrevoMailService
 
     public function sendMail(string $to, string $subject, array $params): void
     {
+//        dd($this->apiUrl, $this->apiKey, $this->accountSenderEmail, $to, $subject, $params);
         try {
             $response = $this->client->request('POST', $this->apiUrl, [
                 'headers' => [
@@ -39,10 +40,6 @@ final readonly class BrevoMailService
                     'params' => $params,
                 ],
             ]);
-
-            if ($response->getStatusCode() !== 200) {
-                throw new \Exception('Failed to send email');
-            }
         } catch (\Exception $e) {
             // Handle exceptions or log errors
             error_log('Error sending mail: ' . $e->getMessage());
