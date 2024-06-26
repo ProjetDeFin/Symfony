@@ -14,11 +14,10 @@ final readonly class BrevoMailService
     ) {
     }
 
-    public function sendMail(string $to, string $subject, array $params): void
+    public function sendMail(string $to, int $templateId, array $params): void
     {
-//        dd($this->apiUrl, $this->apiKey, $this->accountSenderEmail, $to, $subject, $params);
         try {
-            $response = $this->client->request('POST', $this->apiUrl, [
+            $this->client->request('POST', $this->apiUrl, [
                 'headers' => [
                     'Api-Key' => $this->apiKey,
                     'Content-Type' => 'application/json',
@@ -35,8 +34,7 @@ final readonly class BrevoMailService
                             'email' => $to,
                         ],
                     ],
-                    'templateId' => 1,
-                    'subject' => $subject,
+                    'templateId' => $templateId,
                     'params' => $params,
                 ],
             ]);

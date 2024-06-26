@@ -63,12 +63,8 @@ class ApplicationController extends AbstractController
                 }
 
                 $entityManager->persist($resetPassword);
-                $brevoMailService->sendMail($student->getUser()->getEmail(), 'Account creation', [
-                    'title' => 'Account creation',
-                    'description' => 'Thank you for you account creation ! Click the link below to confirm your account creation.',
+                $brevoMailService->sendMail($student->getUser()->getEmail(), 3, [
                     'link' => $router->generate('app_reset_password_reset', ['token' => $resetPassword->getToken(), 'domain' => $this->apiUrl], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'linkTitle' => 'Create password',
-                    'buttonContent' => 'Create password',
                 ]);
             }
             $entityManager->flush();

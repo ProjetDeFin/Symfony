@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 #[Route(path: '/reset_password', name: 'app_reset_password')]
@@ -65,13 +66,9 @@ class ResetPasswordController extends AbstractController
             $this->entityManager->persist($resetPassword);
             $this->entityManager->flush();
 
-            $this->mailService->sendMail($email, 'Reset password',
+            $this->mailService->sendMail($email, 1,
                 [
-                    'title' => 'Reset password',
-                    'description' => 'Click the link below to reset your password',
-                    'link' => $this->generateUrl('app_reset_password_reset', ['token' => $resetPassword->getToken()]),
-                    'linkTitle' => 'Reset password',
-                    'buttonContent' => 'Reset password',
+                    'link' => $this->generateUrl('app_reset_password_reset', ['token' => $resetPassword->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
                 ],
             );
 
@@ -90,7 +87,11 @@ class ResetPasswordController extends AbstractController
     }
 
     #[Route(path: '/reset/{token}', name: '_reset', methods: ['GET', 'POST'])]
-    public function resetPasswordForm(string $token, ResetPasswordRepository $resetPasswordRepository): Response
+    public function resetPasswordForm(
+        string $token,
+        ResetPasswordRepository $resetPasswordRepository,
+        Request $request,
+    ): Response
     {
         $resetPassword = $resetPasswordRepository->findOneBy(['token' => $token]);
 
@@ -99,6 +100,8 @@ class ResetPasswordController extends AbstractController
         }
 
         $form = $this->createForm(ResetPasswordType::class, null, ['token' => $token]);
+        $form->handleRequest($request);
+        $message = '';
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
@@ -116,9 +119,17 @@ class ResetPasswordController extends AbstractController
                 }
             } else {
                 $this->addFlash('error', 'Invalid form data.');
+                $errors = $form->getErrors(true);
+                foreach ($errors as $error) {
+                    $message .= $error->getMessage() . '<br>';
+                }
             }
         }
 
-        return $this->render('/admin/password-reset.html.twig', ['form' => $form->createView()]);
+        return $this->render('/admin/password-reset.html.twig', [
+            'form' => $form->createView(),
+            'message' => $message,
+            'token' => $token,
+        ]);
     }
 }

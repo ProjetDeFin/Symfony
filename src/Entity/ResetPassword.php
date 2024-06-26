@@ -16,7 +16,7 @@ class ResetPassword
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
     private ?User $user = null;
 
     #[ORM\Column(type: 'string')]
