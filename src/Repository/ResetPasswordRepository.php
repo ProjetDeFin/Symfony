@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<User>
+ * @extends ServiceEntityRepository<ResetPassword>
  *
  * @method ResetPassword|null find($id, $lockMode = null, $lockVersion = null)
  * @method ResetPassword|null findOneBy(array $criteria, array $orderBy = null)
