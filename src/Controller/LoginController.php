@@ -23,23 +23,23 @@ class LoginController extends AbstractController
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
         JWTTokenManagerInterface $JWTTokenManager,
-        ApiResponseService $apiResponseService,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ApiResponseService $apiResponseService,
     ): JsonResponse
     {
-        $response = $apiResponseService->getResponse();
-
         $email = $request->get('email');
         $password = $request->get('password');
 
+        $response = $apiResponseService->getResponse();
+
         if (!$email || !$password) {
-            return $this->createErrorResponse($response, Response::HTTP_BAD_REQUEST, 'Email and password are required');
+            return $this->json(['error' => 'Email and password are required'], Response::HTTP_BAD_REQUEST);
         }
 
         $user = $userRepository->findOneBy(['email' => $email]);
         if (null === $user || !$passwordHasher->isPasswordValid($user, $password)) {
-            return $this->createErrorResponse($response, Response::HTTP_FORBIDDEN, 'Invalid credentials');
+            return $this->json(['error' => 'Invalid credentials'], Response::HTTP_FORBIDDEN);
         }
 
         try {
@@ -48,32 +48,27 @@ class LoginController extends AbstractController
                 'lastName' => $user->getLastName(),
                 'id' => $user->getId(),
             ]);
+            if (0 === strlen($token)) {
+                throw new \Exception('Token generation failed');
+            }
             $logger->info('Token generated: ' . $token);
+            $user->setApiToken($token);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $response->setData([
+                'token' => $token,
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'id' => $user->getId(),
+            ]);
         } catch (\Exception $e) {
             $logger->error('Error generating token: ' . $e->getMessage());
-            return $this->createErrorResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR, 'An error occurred while generating the token');
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setData(['error' => 'An error occurred while generating the token']);
         }
 
-        $user->setApiToken($token);
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        // Return token in the response
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData([
-            'token' => $token,
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName(),
-            'id' => $user->getId(),
-        ]);
-        return $response;
-    }
-
-    private function createErrorResponse(JsonResponse $response, int $statusCode, string $message): JsonResponse
-    {
-        $response->setStatusCode($statusCode);
-        $response->setData(['error' => $message]);
         return $response;
     }
 }
