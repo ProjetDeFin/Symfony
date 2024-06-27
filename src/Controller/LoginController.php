@@ -46,21 +46,19 @@ class LoginController extends AbstractController
             $response->setData(['error' => 'Invalid credentials']);
             return $response;
         }
-        dump('là');
         try {
-            dump(1);
-            $token = $JWTTokenManager->create($user);
+            $token = $JWTTokenManager->createFromPayload($user, [
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'id' => $user->getId(),
+            ]);
             $logger->info('Token generated: ' . $token);
-            dump(2);
         } catch (\Exception $e) {
-            dump(3);
             $logger->error('Error generating token: ' . $e->getMessage());
             $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
             $response->setData(['error' => 'An error occurred while generating the token']);
             return $response;
         }
-
-        dump(4);
 
         $user->setApiToken($token);
 
@@ -70,7 +68,6 @@ class LoginController extends AbstractController
         // Return token in the response
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(['token' => $token]);
-        dump('ici');
         return $response;
     }
 }
