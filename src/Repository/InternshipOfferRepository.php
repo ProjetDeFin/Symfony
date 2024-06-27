@@ -43,13 +43,12 @@ class InternshipOfferRepository extends ServiceEntityRepository
 
     public function findByFilter(array $filters, ?string $order, string $orderBy, int $page, int $limit): array
     {
-        $qb = $this->createQueryBuilder('i')
-            ->select('i');
+        $qb = $this->createQueryBuilder('i');
 
-        if (!empty($filters['jobProfiles'])) {
-            $qb->join('i.jobProfiles', 'jp')
-                ->andWhere('jp.id IN (:jobProfiles)')
-                ->setParameter('jobProfiles', $filters['jobProfiles']);
+        if (!empty($filters['profiles'])) {
+            $qb->join('i.jobProfiles', 'jp',)
+                ->andWhere('jp.name IN (:jobProfiles)')
+                ->setParameter('jobProfiles', $filters['profiles']);
         }
 
         if (!empty($filters['type'])) {
@@ -57,36 +56,41 @@ class InternshipOfferRepository extends ServiceEntityRepository
                 ->setParameter('type', $filters['type']);
         }
 
-        if (!empty($filters['diplomaSearcheds'])) {
+        if (!empty($filters['levels'])) {
             $qb->join('i.diplomaSearcheds', 'ds')
-                ->andWhere('ds.id IN (:diplomaSearcheds)')
-                ->setParameter('diplomaSearcheds', $filters['diplomaSearcheds']);
+                ->andWhere('ds.name IN (:diplomaSearcheds)')
+                ->setParameter('diplomaSearcheds', $filters['levels']);
         }
 
         if (!empty($filters['duration'])) {
-            switch ($filters['duration']) {
-                case 'lessThan2Month':
-                    $qb->andWhere('DATEDIFF(i.endAt, i.startAt) < :duration')
-                        ->setParameter('duration', '60');
-                    break;
-                case 'between2And6Month':
-                    $qb->andWhere('DATEDIFF(i.endAt, i.startAt) BETWEEN :betweenStart AND :betweenEnd')
-                        ->setParameter('betweenStart', '60')
-                        ->setParameter('betweenEnd', '180');
-                    break;
-                case 'between6And12Month':
-                    $qb->andWhere('DATEDIFF(i.endAt, i.startAt) BETWEEN :betweenStart AND :betweenEnd')
-                        ->setParameter('betweenStart', '180')
-                        ->setParameter('betweenEnd', '365');
-                    break;
-                case 'moreThan12Month':
-                    $qb->andWhere('DATEDIFF(i.endAt, i.startAt) > :duration')
-                        ->setParameter('duration', '365');
-                    break;
-                default:
-                    throw new \InvalidArgumentException("Durée de filtre invalide: " . $filters['duration']);
+            $orX = $qb->expr()->orX();
+            foreach ($filters['duration'] as $duration) {
+                switch ($duration) {
+                    case 'Moins de 2 mois':
+                        $orX->add($qb->expr()->lt('DATE_DIFF(i.endAt, i.startAt)', ':lessThan2Month'));
+                        $qb->setParameter('lessThan2Month', 60);
+                        break;
+                    case 'Entre 2 et 6 mois':
+                        $orX->add($qb->expr()->between('DATE_DIFF(i.endAt, i.startAt)', ':between2And6MonthStart', ':between2And6MonthEnd'));
+                        $qb->setParameter('between2And6MonthStart', 60)
+                            ->setParameter('between2And6MonthEnd', 180);
+                        break;
+                    case 'Entre 6 et 12 mois':
+                        $orX->add($qb->expr()->between('DATE_DIFF(i.endAt, i.startAt)', ':between6And12MonthStart', ':between6And12MonthEnd'));
+                        $qb->setParameter('between6And12MonthStart', 180)
+                            ->setParameter('between6And12MonthEnd', 365);
+                        break;
+                    case 'Plus de 12 mois':
+                        $orX->add($qb->expr()->gt('DATE_DIFF(i.endAt, i.startAt)', ':moreThan12Month'));
+                        $qb->setParameter('moreThan12Month', 365);
+                        break;
+                    default:
+                        throw new \InvalidArgumentException("Durée de filtre invalide: " . $duration);
+                }
             }
+            $qb->andWhere($orX);
         }
+
 
         $qb->andWhere('i.endApplyDate > :now')
             ->setParameter('now', new \DateTime())

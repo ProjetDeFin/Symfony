@@ -26,11 +26,11 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company', 'home', 'internship_offer', 'internship_offers'])]
+    #[Groups(['company', 'companies', 'home', 'internship_offer', 'internship_offers'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['company', 'home', 'internship_offer', 'internship_offers'])]
+    #[Groups(['company', 'companies','home', 'internship_offer', 'internship_offers'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::STRING)]
@@ -54,7 +54,7 @@ class Company
     private ?\DateTimeInterface $creation = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
     private ?string $logo = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
@@ -88,6 +88,20 @@ class Company
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['company'])]
     private ?string $xUrl = null;
+
+    /**
+     * @var Collection<int, Sector>
+     */
+    #[ORM\ManyToMany(targetEntity: Sector::class, mappedBy: 'company')]
+    private Collection $sectors;
+
+    #[ORM\ManyToOne(inversedBy: 'companies')]
+    private ?CompaniesCategory $categories = null;
+
+    public function __construct()
+    {
+        $this->sectors = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -270,6 +284,45 @@ class Company
     public function setXUrl(string $xUrl): static
     {
         $this->xUrl = $xUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sector>
+     */
+    public function getSectors(): Collection
+    {
+        return $this->sectors;
+    }
+
+    public function addSector(Sector $sector): static
+    {
+        if (!$this->sectors->contains($sector)) {
+            $this->sectors->add($sector);
+            $sector->addCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSector(Sector $sector): static
+    {
+        if ($this->sectors->removeElement($sector)) {
+            $sector->removeCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function getCategories(): ?CompaniesCategory
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(?CompaniesCategory $categories): static
+    {
+        $this->categories = $categories;
 
         return $this;
     }

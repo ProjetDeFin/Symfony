@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Application;
-use App\Entity\Company;
 use App\Enum\ApplicationStatusEnum;
 use App\Enum\TypeEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -13,7 +12,6 @@ class ApplicationFixture extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-
         $applications = [
             [
                 'status' => ApplicationStatusEnum::APPLICATION,
@@ -60,7 +58,7 @@ class ApplicationFixture extends Fixture
     public function getDependencies(): array
     {
         return [
-            AppFixtures::class,
+            UserFixtures::class,
         ];
     }
 }

@@ -51,12 +51,14 @@ class CompanyRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c');
 
         if (!empty($filters['sectors'] && $filters['sectors'] !== 'all')) {
-            $qb->andWhere('c.sector IN (:sectors)')
-                ->setParameter('sectors', $filters['sectors']);
+            $qb->join('c.sectors', 's')
+            ->andWhere('s.name IN (:sectors)')
+            ->setParameter('sectors', $filters['sectors']);
         }
 
         if (!empty($filters['categories'])) {
-            $qb->andWhere('c.categories IN (:categories)')
+            $qb->join('c.categories', 'cc')
+                ->andWhere('cc.name IN (:categories)')
                 ->setParameter('categories', $filters['categories']);
         }
 
