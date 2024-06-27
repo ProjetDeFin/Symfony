@@ -24,14 +24,11 @@ class LoginController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         JWTTokenManagerInterface $JWTTokenManager,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger,
-        ApiResponseService $apiResponseService,
+        LoggerInterface $logger
     ): JsonResponse
     {
         $email = $request->get('email');
         $password = $request->get('password');
-
-        $response = $apiResponseService->getResponse();
 
         if (!$email || !$password) {
             return $this->json(['error' => 'Email and password are required'], Response::HTTP_BAD_REQUEST);
@@ -48,26 +45,28 @@ class LoginController extends AbstractController
                 'lastName' => $user->getLastName(),
                 'id' => $user->getId(),
             ]);
-            if (0 === strlen($token)) {
-                throw new \Exception('Token generation failed');
-            }
             $logger->info('Token generated: ' . $token);
-            $user->setApiToken($token);
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $response->setData([
-                'token' => $token,
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'id' => $user->getId(),
-            ]);
         } catch (\Exception $e) {
             $logger->error('Error generating token: ' . $e->getMessage());
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $response->setData(['error' => 'An error occurred while generating the token']);
+            return $this->json(['error' => 'An error occurred while generating the token'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        $user->setApiToken($token);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        // Ensure response includes all necessary data
+        $response = new JsonResponse([
+            'token' => $token,
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'id' => $user->getId(),
+        ], Response::HTTP_OK);
+
+        // Disable caching
+        $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
 
         return $response;
     }
