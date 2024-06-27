@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api', name: 'api_')]
@@ -35,17 +34,14 @@ class LoginController extends AbstractController
         $password = $request->get('password');
 
         if (!$email || !$password) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Email and password are required']);
-            return $response;
+            return $this->createErrorResponse($response, Response::HTTP_BAD_REQUEST, 'Email and password are required');
         }
 
         $user = $userRepository->findOneBy(['email' => $email]);
         if (null === $user || !$passwordHasher->isPasswordValid($user, $password)) {
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            $response->setData(['error' => 'Invalid credentials']);
-            return $response;
+            return $this->createErrorResponse($response, Response::HTTP_FORBIDDEN, 'Invalid credentials');
         }
+
         try {
             $token = $JWTTokenManager->createFromPayload($user, [
                 'firstName' => $user->getFirstName(),
@@ -55,9 +51,7 @@ class LoginController extends AbstractController
             $logger->info('Token generated: ' . $token);
         } catch (\Exception $e) {
             $logger->error('Error generating token: ' . $e->getMessage());
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $response->setData(['error' => 'An error occurred while generating the token']);
-            return $response;
+            return $this->createErrorResponse($response, Response::HTTP_INTERNAL_SERVER_ERROR, 'An error occurred while generating the token');
         }
 
         $user->setApiToken($token);
@@ -67,13 +61,19 @@ class LoginController extends AbstractController
 
         // Return token in the response
         $response->setStatusCode(Response::HTTP_OK);
-
         $response->setData([
             'token' => $token,
             'firstName' => $user->getFirstName(),
             'lastName' => $user->getLastName(),
             'id' => $user->getId(),
         ]);
+        return $response;
+    }
+
+    private function createErrorResponse(JsonResponse $response, int $statusCode, string $message): JsonResponse
+    {
+        $response->setStatusCode($statusCode);
+        $response->setData(['error' => $message]);
         return $response;
     }
 }
