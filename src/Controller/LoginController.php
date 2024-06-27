@@ -27,6 +27,7 @@ class LoginController extends AbstractController
         EntityManagerInterface $entityManager
     ): JsonResponse
     {
+        $logger = $this->get('logger');
         $response = $apiResponseService->getResponse();
 
         $email = $request->get('email');
@@ -44,7 +45,15 @@ class LoginController extends AbstractController
             $response->setData(['error' => 'Invalid credentials']);
             return $response;
         }
-        $token = $JWTTokenManager->create($user);
+        try {
+            $token = $JWTTokenManager->create($user);
+            $logger->info('Token generated: ' . $token);
+        } catch (\Exception $e) {
+            $logger->error('Error generating token: ' . $e->getMessage());
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setData(['error' => 'An error occurred while generating the token']);
+            return $response;
+        }
 
         $user->setApiToken($token);
 
