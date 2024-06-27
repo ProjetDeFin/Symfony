@@ -26,11 +26,11 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company'])]
+    #[Groups(['company', 'home', 'internship_offer', 'internship_offers'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company', 'home', 'internship_offer', 'internship_offers'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::STRING)]
@@ -54,15 +54,15 @@ class Company
     private ?\DateTimeInterface $creation = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company', 'home', 'internship_offer',  'internship_offers'])]
     private ?string $logo = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company'])]
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company'])]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
@@ -74,7 +74,7 @@ class Company
     private ?string $fax = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company'])]
+    #[Groups(['company', 'internship_offer'])]
     private ?string $linkedinUrl = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]

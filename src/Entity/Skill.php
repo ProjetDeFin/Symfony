@@ -14,11 +14,11 @@ class Skill
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['skill'])]
+    #[Groups(['internship_offer', 'internship_offers'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['skill', 'home'])]
+    #[Groups(['internship_offer', 'internship_offers'])]
     private ?string $name = null;
 
     /**

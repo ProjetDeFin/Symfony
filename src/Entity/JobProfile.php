@@ -14,15 +14,15 @@ class JobProfile
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['job_profile'])]
+    #[Groups(['home', 'internship_offer', 'internship_offers'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['job_profile', 'home'])]
+    #[Groups(['home', 'internship_offer', 'internship_offers'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['job_profile', 'home'])]
+    #[Groups(['home', 'internship_offer', 'internship_offers'])]
     private ?string $color = null;
 
     /**

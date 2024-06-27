@@ -31,11 +31,14 @@ class DefaultController extends AbstractController
             'companies' => $companies,
             'applications' => $applications,
             'offers' => $internshipOffers,
+            'internshipsOffersCount' => count($this->internshipOfferRepository->findBy(['type'=> 'Stage'])),
+            'apprenticeshipsOffersCount' => count($this->internshipOfferRepository->findBy(['type'=> 'Alternance'])),
         ];
 
         $jsonContent = $serializer->serialize($homeResponse, 'json', ['groups' => 'home']);
 
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
+
 
 }

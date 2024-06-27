@@ -15,18 +15,17 @@ class DiplomaSearched
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['diploma_searched'])]
+    #[Groups(['internship_offer'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['diploma_searched', 'home'])]
+    #[Groups(['internship_offer'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, InternshipOffer>
      */
     #[ORM\ManyToMany(targetEntity: InternshipOffer::class, inversedBy: 'diploma_searched')]
-    #[Groups(['diploma_searched'])]
     private Collection $internshipOffer;
 
     public function __construct()

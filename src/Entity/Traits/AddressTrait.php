@@ -8,15 +8,15 @@ use Symfony\Component\Serializer\Attribute\Groups;
 trait AddressTrait
 {
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company', 'home', 'internship_offer'])]
     protected ?string $address1 = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company', 'internship_offer'])]
     protected ?string $address2 = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company', 'home', 'internship_offer'])]
     protected ?string $city = null;
 
     #[ORM\Column(type: 'string', length: 255)]
