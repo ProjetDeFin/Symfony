@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use App\Service\ApiResponseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,8 @@ class LoginController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         JWTTokenManagerInterface $JWTTokenManager,
         ApiResponseService $apiResponseService,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
     ): JsonResponse
     {
         $response = $apiResponseService->getResponse();
@@ -44,7 +46,19 @@ class LoginController extends AbstractController
             $response->setData(['error' => 'Invalid credentials']);
             return $response;
         }
-        $token = $JWTTokenManager->create($user);
+        try {
+            $token = $JWTTokenManager->createFromPayload($user, [
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'id' => $user->getId(),
+            ]);
+            $logger->info('Token generated: ' . $token);
+        } catch (\Exception $e) {
+            $logger->error('Error generating token: ' . $e->getMessage());
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setData(['error' => 'An error occurred while generating the token']);
+            return $response;
+        }
 
         $user->setApiToken($token);
 
