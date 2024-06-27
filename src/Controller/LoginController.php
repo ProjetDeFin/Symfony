@@ -67,7 +67,13 @@ class LoginController extends AbstractController
 
         // Return token in the response
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['token' => $token]);
+
+        $response->setData([
+            'token' => $token,
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'id' => $user->getId(),
+        ]);
         return $response;
     }
 }
