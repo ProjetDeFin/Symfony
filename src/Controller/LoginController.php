@@ -65,4 +65,27 @@ class LoginController extends AbstractController
 
         return $response;
     }
+
+    #[Route(path: '/login/details/{email}', name: 'details', methods: ['GET'])]
+    public function details(
+        UserRepository $userRepository,
+        ApiResponseService $apiResponseService,
+        string $email,
+    ): JsonResponse
+    {
+        $response = $apiResponseService->getResponse();
+        $user = $userRepository->findOneBy(['email' => $email]);
+        if (null === $user) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setContent(json_encode(['error' => 'Invalid token']));
+            return $response;
+        }
+        $response->setContent(json_encode([
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'id' => $user->getId(),
+        ]));
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
 }
