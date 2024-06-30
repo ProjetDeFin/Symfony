@@ -28,6 +28,13 @@ class DiplomaSearched
     #[ORM\ManyToMany(targetEntity: InternshipOffer::class, inversedBy: 'diploma_searched')]
     private Collection $internshipOffer;
 
+    /**
+     * @var Collection<int, Student>
+     */
+    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'diploma_searched')]
+    private Collection $students;
+
+
     public function __construct()
     {
         $this->internshipOffer = new ArrayCollection();
@@ -70,6 +77,30 @@ class DiplomaSearched
     public function removeInternshipOffer(InternshipOffer $internshipOffer): static
     {
         $this->internshipOffer->removeElement($internshipOffer);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Student>
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): static
+    {
+        if (!$this->students->contains($student)) {
+            $this->students->add($student);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): static
+    {
+        $this->students->removeElement($student);
 
         return $this;
     }

@@ -54,6 +54,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $student->setZipCode('75000');
         $student->setCountry('France');
         $student->setMobile('0123456789');
+        $student->setSchoolName('Université de Paris');
+        $student->setStudyLevel($this->getReference(StudyLevelFixture::$studyLevelsReference . 5));
         $this->addReference('student1', $student);
         $manager->persist($student);
 
@@ -73,6 +75,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             CompanyFixture::class,
+            StudyLevelFixture::class,
         ];
     }
 }

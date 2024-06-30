@@ -3,18 +3,21 @@
 namespace App\Model;
 
 use App\Entity\DiplomaSearched;
+use App\Entity\StudyLevel;
 use App\Repository\DiplomaSearchedRepository;
+use App\Repository\StudyLevelRepository;
 
 class StudentRegisterDTO
 {
     private int $phone;
-    private int $studyLevel;
+    private StudyLevel $studyLevel;
     private DiplomaSearched $diplomaSearched;
     private string $schoolName;
 
     public function __construct(
         array $data,
         DiplomaSearchedRepository $diplomaSearchedRepository,
+        StudyLevelRepository $studyLevelRepository,
     ){
         $phone = $data['phone'];
         $studyLevel = $data['studyLevel'];
@@ -43,6 +46,11 @@ class StudentRegisterDTO
             throw new \InvalidArgumentException('Diploma searched not found');
         }
 
+        $studyLevel = $studyLevelRepository->findOneBy(['level' => $studyLevel]);
+        if (null === $studyLevel) {
+            throw new \InvalidArgumentException('Study level not found');
+        }
+
         $this->phone = $phone;
         $this->studyLevel = $studyLevel;
         $this->diplomaSearched = $diplomaSearched;
@@ -54,7 +62,7 @@ class StudentRegisterDTO
         return $this->phone;
     }
 
-    public function getStudyLevel(): int
+    public function getStudyLevel(): StudyLevel
     {
         return $this->studyLevel;
     }

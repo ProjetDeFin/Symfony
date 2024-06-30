@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Model\ApplicationDTO;
+use App\Model\StudentRegisterDTO;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -45,13 +46,13 @@ class Student
     #[Groups(['student'])]
     private ?string $photo = null;
 
-    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['student'])]
-    private ?string $cv = null;
+    private ?string $motivation = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['student'])]
-    private ?string $motivation = null;
+    private ?string $schoolName = null;
 
     /**
      * @var Collection<int, ProfesionalExperience>
@@ -74,6 +75,17 @@ class Student
     #[Groups(['student'])]
     private Collection $skills;
 
+    #[ORM\ManyToOne(targetEntity: StudyLevel::class, inversedBy: 'students')]
+    #[Groups(['student'])]
+    private ?StudyLevel $studyLevel = null;
+
+    /**
+     * @var Collection<int, DiplomaSearched>
+     */
+    #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'student')]
+    #[Groups(['student'])]
+    private Collection $diplomasSearched;
+
     /**
      * @var Collection<int, LanguageStudent>
      */
@@ -86,6 +98,7 @@ class Student
         $this->profesionalExperiences = new ArrayCollection();
         $this->skills = new ArrayCollection();
         $this->hobbies = new ArrayCollection();
+        $this->diplomasSearched = new ArrayCollection();
         $this->languageStudents = new ArrayCollection();
     }
 
@@ -150,6 +163,42 @@ class Student
     public function setPhoto(string $photo): static
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getMotivation(): ?string
+    {
+        return $this->motivation;
+    }
+
+    public function setMotivation(string $motivation): static
+    {
+        $this->motivation = $motivation;
+
+        return $this;
+    }
+
+    public function getSchoolName(): ?string
+    {
+        return $this->schoolName;
+    }
+
+    public function setSchoolName(string $schoolName): static
+    {
+        $this->schoolName = $schoolName;
+
+        return $this;
+    }
+
+    public function getStudyLevel(): ?StudyLevel
+    {
+        return $this->studyLevel;
+    }
+
+    public function setStudyLevel(?StudyLevel $studyLevel): static
+    {
+        $this->studyLevel = $studyLevel;
 
         return $this;
     }
@@ -263,6 +312,33 @@ class Student
     }
 
     /**
+     * @return Collection<int, DiplomaSearched>
+     */
+    public function getDiplomasSearched(): Collection
+    {
+        return $this->diplomasSearched;
+    }
+
+    public function addDiplomaSearched(DiplomaSearched $diplomaSearched): static
+    {
+        if (!$this->diplomasSearched->contains($diplomaSearched)) {
+            $this->diplomasSearched->add($diplomaSearched);
+            $diplomaSearched->addStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiplomaSearched(DiplomaSearched $diplomaSearched): static
+    {
+        if ($this->diplomasSearched->removeElement($diplomaSearched)) {
+            $diplomaSearched->removeStudent($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection<int, LanguageStudent>
      */
     public function getLanguageStudents(): Collection
@@ -290,5 +366,18 @@ class Student
         }
 
         return $this;
+    }
+
+    public function fromDTO(StudentRegisterDTO $studentDTO): Student
+    {
+        $student = new self();
+        $student
+            ->setMobile($studentDTO->getPhone())
+            ->addDiplomaSearched($studentDTO->getDiplomaSearched())
+            ->setSchoolName($studentDTO->getSchoolName())
+            ->setStudyLevel($studentDTO->getStudyLevel())
+        ;
+
+        return $student;
     }
 }

@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Student;
 use App\Entity\User;
 use App\Model\CompanyRegisterDTO;
 use App\Model\StudentRegisterDTO;
 use App\Model\UserRegisterDTO;
+use App\Repository\CategoryRepository;
+use App\Repository\CompanyRepository;
 use App\Repository\DiplomaSearchedRepository;
+use App\Repository\SectorRepository;
 use App\Repository\UserRepository;
 use App\Service\ApiResponseService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,6 +34,9 @@ class RegistrationController extends AbstractController
         ApiResponseService $apiResponseService,
         EntityManagerInterface $entityManager,
         DiplomaSearchedRepository $diplomaSearchedRepository,
+        CompanyRepository $companyRepository,
+        CategoryRepository $categoryRepository,
+        SectorRepository $sectorRepository,
     ): JsonResponse
     {
         $data = $request->request->all();
@@ -41,8 +48,9 @@ class RegistrationController extends AbstractController
 
         if (true === $data['isStudent']) {
             $studentDTO = new StudentRegisterDTO($data, $diplomaSearchedRepository);
+            $student = Student::fromDTO($studentDTO);
         } elseif (true === $data['isCompany']) {
-            $companyDTO = new CompanyRegisterDTO($data);
+            $companyDTO = new CompanyRegisterDTO($data, $companyRepository, $categoryRepository, $sectorRepository);
         }
 
         $entityManager->persist($user);

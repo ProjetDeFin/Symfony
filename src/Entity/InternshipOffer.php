@@ -45,7 +45,7 @@ class InternshipOffer
 
     #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'internshipOffer')]
     #[Groups(['internship_offer'])]
-    private Collection $diplomaSearcheds;
+    private Collection $diplomasSearched;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
@@ -67,7 +67,7 @@ class InternshipOffer
     public function __construct()
     {
         $this->jobProfiles = new ArrayCollection();
-        $this->diplomaSearcheds = new ArrayCollection();
+        $this->diplomasSearched = new ArrayCollection();
         $this->skill = new ArrayCollection();
     }
 
@@ -142,15 +142,15 @@ class InternshipOffer
     /**
      * @return Collection<int, DiplomaSearched>
      */
-    public function getDiplomaSearcheds(): Collection
+    public function getDiplomasSearched(): Collection
     {
-        return $this->diplomaSearcheds;
+        return $this->diplomasSearched;
     }
 
     public function addDiplomaSearched(DiplomaSearched $diplomaSearched): static
     {
-        if (!$this->diplomaSearcheds->contains($diplomaSearched)) {
-            $this->diplomaSearcheds->add($diplomaSearched);
+        if (!$this->diplomasSearched->contains($diplomaSearched)) {
+            $this->diplomasSearched->add($diplomaSearched);
             $diplomaSearched->addInternshipOffer($this);
         }
 
@@ -159,7 +159,7 @@ class InternshipOffer
 
     public function removeDiplomaSearched(DiplomaSearched $diplomaSearched): static
     {
-        if ($this->diplomaSearcheds->removeElement($diplomaSearched)) {
+        if ($this->diplomasSearched->removeElement($diplomaSearched)) {
             $diplomaSearched->removeInternshipOffer($this);
         }
 
