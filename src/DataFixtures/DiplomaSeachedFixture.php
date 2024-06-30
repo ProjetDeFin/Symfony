@@ -14,10 +14,13 @@ class DiplomaSeachedFixture extends Fixture
     {
         $diplomas = [
             [
-                'name' => 'BAC',
+                'name' => 'BREVET',
             ],
             [
                 'name' => 'CAP',
+            ],
+            [
+                'name' => 'BAC',
             ],
             [
                 'name' => 'BTS',
@@ -28,6 +31,9 @@ class DiplomaSeachedFixture extends Fixture
             [
                 'name' => 'MASTER',
             ],
+            [
+                'name' => 'DOCTORAT',
+            ]
         ];
 
         foreach ($diplomas as $diplomaData) {

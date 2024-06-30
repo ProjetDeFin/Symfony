@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Company;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class CompanyFixture extends Fixture
+class CompanyFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -31,6 +32,12 @@ class CompanyFixture extends Fixture
                 'facebookUrl' => 'https://www.facebook.com/company1',
                 'instagramUrl' => 'https://www.instagram.com/company1',
                 'xUrl' => 'https://www.x.com/company1',
+                'latitude' => 48.856614,
+                'longitude' => 2.3522219,
+                'categories' => [
+                    $this->getReference('category_0'),
+                    $this->getReference('category_1'),
+                ],
             ],
             [
                 'name' => 'Company 2',
@@ -52,6 +59,11 @@ class CompanyFixture extends Fixture
                 'facebookUrl' => 'https://www.facebook.com/company2',
                 'instagramUrl' => 'https://www.instagram.com/company2',
                 'xUrl' => 'https://www.x.com/company2',
+                'latitude' => 48.856614,
+                'longitude' => 2.3522219,
+                'categories' => [
+                    $this->getReference('category_1'),
+                ],
             ],
             [
                 'name' => 'Company 3',
@@ -73,6 +85,13 @@ class CompanyFixture extends Fixture
                 'facebookUrl' => 'https://www.facebook.com/company3',
                 'instagramUrl' => 'https://www.instagram.com/company3',
                 'xUrl' => 'https://www.x.com/company3',
+                'latitude' => 48.856614,
+                'longitude' => 2.3522219,
+                'categories' => [
+                    $this->getReference('category_2'),
+                    $this->getReference('category_4'),
+                    $this->getReference('category_5'),
+                ],
             ],
         ];
 
@@ -97,6 +116,12 @@ class CompanyFixture extends Fixture
             $company->setFacebookUrl($companyData['facebookUrl']);
             $company->setInstagramUrl($companyData['instagramUrl']);
             $company->setXUrl($companyData['xUrl']);
+            $company->setLatitude($companyData['latitude']);
+            $company->setLongitude($companyData['longitude']);
+            foreach ($companyData['categories'] as $category) {
+                // TODO: fix this
+//                $company->addCategory($category);
+            }
 
             $this->addReference('company_' . strtolower(str_replace(' ', '_', $companyData['name'])), $company);
 
@@ -104,5 +129,12 @@ class CompanyFixture extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            CategoryFixture::class,
+        ];
     }
 }

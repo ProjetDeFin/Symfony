@@ -12,7 +12,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ORM\Table(name: 'company')]
@@ -95,12 +94,13 @@ class Company
     #[ORM\ManyToMany(targetEntity: Sector::class, mappedBy: 'company')]
     private Collection $sectors;
 
-    #[ORM\ManyToOne(inversedBy: 'companies')]
-    private ?CompaniesCategory $categories = null;
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'companies')]
+    private Collection $categories;
 
     public function __construct()
     {
         $this->sectors = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -315,14 +315,29 @@ class Company
         return $this;
     }
 
-    public function getCategories(): ?CompaniesCategory
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function setCategories(?CompaniesCategory $categories): static
+    public function addCategory(Category $category): static
     {
-        $this->categories = $categories;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeCompany($this);
+        }
 
         return $this;
     }

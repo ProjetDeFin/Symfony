@@ -7,6 +7,7 @@ use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Enum\UserGenderEnum;
 use App\Model\ApplicationDTO;
+use App\Model\UserRegisterDTO;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -179,7 +180,20 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function __toString(): string
     {
-        // Choose a property that represents the object clearly, for example, the email or name
         return $this->email;
+    }
+
+    public static function fromDTO(UserRegisterDTO $userDTO): User
+    {
+        $user = new self();
+        $user
+            ->setFirstname($userDTO->getFirstName())
+            ->setLastName($userDTO->getLastName())
+            ->setEmail($userDTO->getEmail())
+            ->setCivility($userDTO->getGender())
+            ->setRoles([$userDTO->getRole()])
+        ;
+
+        return $user;
     }
 }

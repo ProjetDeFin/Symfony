@@ -34,7 +34,7 @@ class SectorFixture extends Fixture
             $sector->setName($name);
             $sector->setColor($color);
 
-            $this->addReference('sector_' . strtolower(str_replace(' ', '_', $name)), $jobProfile);
+            $this->addReference('sector_' . strtolower(str_replace(' ', '_', $name)), $sector);
 
             $manager->persist($sector);
         }

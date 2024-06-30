@@ -6,9 +6,10 @@ use App\Entity\Application;
 use App\Enum\ApplicationStatusEnum;
 use App\Enum\TypeEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ApplicationFixture extends Fixture
+class ApplicationFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {

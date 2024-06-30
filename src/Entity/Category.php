@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\CompaniesCategoryRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-#[ORM\Entity(repositoryClass: CompaniesCategoryRepository::class)]
-class CompaniesCategory
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,7 +24,7 @@ class CompaniesCategory
     /**
      * @var Collection<int, Company>
      */
-    #[ORM\OneToMany(targetEntity: Company::class, mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'categories')]
     private Collection $companies;
 
     public function __construct()
