@@ -25,19 +25,20 @@ class DiplomaSearched
     /**
      * @var Collection<int, InternshipOffer>
      */
-    #[ORM\ManyToMany(targetEntity: InternshipOffer::class, inversedBy: 'diploma_searched')]
+    #[ORM\ManyToMany(targetEntity: InternshipOffer::class, inversedBy: 'diplomasSearched')]
     private Collection $internshipOffer;
 
     /**
      * @var Collection<int, Student>
      */
-    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'diploma_searched')]
+    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'diplomasSearched')]
     private Collection $students;
 
 
     public function __construct()
     {
         $this->internshipOffer = new ArrayCollection();
+        $this->students = new ArrayCollection();
     }
 
     public function getId(): ?int

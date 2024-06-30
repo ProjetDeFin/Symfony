@@ -22,6 +22,12 @@ class Skill
     private ?string $name = null;
 
     /**
+     * @var Collection<int, InternshipOffer>
+     */
+    #[ORM\ManyToMany(targetEntity: InternshipOffer::class, inversedBy: 'skills')]
+    private Collection $internshipOffers;
+
+    /**
      * @var Collection<int, Student>
      */
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'skills')]
@@ -29,6 +35,7 @@ class Skill
 
     public function __construct()
     {
+        $this->internshipOffers = new ArrayCollection();
         $this->student = new ArrayCollection();
     }
 
@@ -45,6 +52,30 @@ class Skill
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InternshipOffer>
+     */
+    public function getInternshipOffers(): Collection
+    {
+        return $this->internshipOffers;
+    }
+
+    public function addInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        if (!$this->internshipOffers->contains($internshipOffer)) {
+            $this->internshipOffers->add($internshipOffer);
+        }
+
+        return $this;
+    }
+
+    public function removeInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        $this->internshipOffers->removeElement($internshipOffer);
 
         return $this;
     }

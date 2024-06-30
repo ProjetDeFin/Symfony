@@ -28,7 +28,7 @@ class Sector
     /**
      * @var Collection<int, Company>
      */
-    #[ORM\ManyToMany(targetEntity: Company::class, inversedBy: 'sectors')]
+    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'sectors')]
     private Collection $company;
 
     public function __construct()

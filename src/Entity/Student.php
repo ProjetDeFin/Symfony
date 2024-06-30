@@ -82,7 +82,7 @@ class Student
     /**
      * @var Collection<int, DiplomaSearched>
      */
-    #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'student')]
+    #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'students')]
     #[Groups(['student'])]
     private Collection $diplomasSearched;
 

@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: InternshipOfferRepository::class)]
 #[ORM\Table(name: 'internship_offer')]
@@ -47,6 +46,10 @@ class InternshipOffer
     #[Groups(['internship_offer'])]
     private Collection $diplomasSearched;
 
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
+    #[Groups(['internship_offer'])]
+    private Collection $applications;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
 
@@ -56,9 +59,9 @@ class InternshipOffer
     #[ORM\Column]
     private ?\DateTimeImmutable $endApplyDate = null;
 
-    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'internshipOffers')]
+    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'internshipOffers')]
     #[Groups(['internship_offer'])]
-    private Collection $skill;
+    private Collection $skills;
 
     #[ORM\Column(length: 255)]
     #[Groups(['internship_offer',  'internship_offers', 'home'])]
@@ -68,7 +71,8 @@ class InternshipOffer
     {
         $this->jobProfiles = new ArrayCollection();
         $this->diplomasSearched = new ArrayCollection();
-        $this->skill = new ArrayCollection();
+        $this->applications = new ArrayCollection();
+        $this->skills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,7 +109,7 @@ class InternshipOffer
         return $this->company;
     }
 
-    public function setCompany(Company $company): static
+    public function setCompany(?Company $company): static
     {
         $this->company = $company;
 
@@ -166,6 +170,33 @@ class InternshipOffer
         return $this;
     }
 
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            $application->setOffer(null);
+        }
+
+        return $this;
+    }
+
     public function getStartAt(): ?\DateTimeImmutable
     {
         return $this->startAt;
@@ -205,15 +236,15 @@ class InternshipOffer
     /**
      * @return Collection<int, Skill>
      */
-    public function getSkill(): Collection
+    public function getSkills(): Collection
     {
-        return $this->skill;
+        return $this->skills;
     }
 
     public function addSkill(Skill $skill): static
     {
-        if (!$this->skill->contains($skill)) {
-            $this->skill->add($skill);
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
         }
 
         return $this;
@@ -221,7 +252,7 @@ class InternshipOffer
 
     public function removeSkill(Skill $skill): static
     {
-        $this->skill->removeElement($skill);
+        $this->skills->removeElement($skill);
 
         return $this;
     }

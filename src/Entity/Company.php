@@ -98,6 +98,9 @@ class Company
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'companies')]
     private Collection $categories;
 
+    #[ORM\OneToMany(targetEntity: InternshipOffer::class, mappedBy: 'company')]
+    private Collection $internshipOffers;
+
     public function __construct()
     {
         $this->sectors = new ArrayCollection();
@@ -338,6 +341,33 @@ class Company
     {
         if ($this->categories->removeElement($category)) {
             $category->removeCompany($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InternshipOffer>
+     */
+    public function getInternshipOffers(): Collection
+    {
+        return $this->internshipOffers;
+    }
+
+    public function addInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        if (!$this->internshipOffers->contains($internshipOffer)) {
+            $this->internshipOffers->add($internshipOffer);
+            $internshipOffer->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        if ($this->internshipOffers->removeElement($internshipOffer)) {
+            $internshipOffer->setCompany(null);
         }
 
         return $this;
