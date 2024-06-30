@@ -6,6 +6,7 @@ use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\EnabledTrait;
 use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
+use App\Model\CompanyRegisterDTO;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -340,5 +341,27 @@ class Company
         }
 
         return $this;
+    }
+
+    public static function fromDTO(CompanyRegisterDTO $companyRegisterDTO): self
+    {
+        $company = new self();
+        $company->setName($companyRegisterDTO->getCompanyName());
+        $company->setSiret($companyRegisterDTO->getSiret());
+        $company->setPhone($companyRegisterDTO->getCompanyPhone());
+        $company->setAddress1($companyRegisterDTO->getAddress());
+        $company->setAddress2($companyRegisterDTO->getAddressComplement());
+        $company->setZipCode($companyRegisterDTO->getZipCode());
+        $company->setCity($companyRegisterDTO->getCity());
+
+        foreach ($companyRegisterDTO->getCategories() as $category) {
+            $company->addCategory($category);
+        }
+
+        foreach ($companyRegisterDTO->getSectors() as $sector) {
+            $company->addSector($sector);
+        }
+
+        return $company;
     }
 }

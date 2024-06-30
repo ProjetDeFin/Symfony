@@ -368,7 +368,7 @@ class Student
         return $this;
     }
 
-    public function fromDTO(StudentRegisterDTO $studentDTO): Student
+    public static function fromDTO(StudentRegisterDTO $studentDTO): Student
     {
         $student = new self();
         $student
