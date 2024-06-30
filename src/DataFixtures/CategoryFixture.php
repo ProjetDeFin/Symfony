@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class CategoryFixture extends Fixture
 {
+    public static string $categoryReference = 'category_';
     public function load(ObjectManager $manager): void
     {
         $categories = [
@@ -23,7 +24,7 @@ class CategoryFixture extends Fixture
             $category = new Category();
             $category->setName($name);
 
-            $this->addReference('category_'.$index, $category);
+            $this->addReference($this::$categoryReference.$index, $category);
 
             $manager->persist($category);
         }

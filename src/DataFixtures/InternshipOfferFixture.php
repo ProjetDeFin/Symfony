@@ -246,6 +246,8 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
 
             $offer->setCompany($offerData['company']);
 
+            $this->addReference($this::$offerReference.$index, $offer);
+
             $manager->persist($offer);
         }
 

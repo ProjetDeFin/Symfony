@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class SectorFixture extends Fixture
 {
+    public static string $sectorReference = 'sector_';
     public function load(ObjectManager $manager): void
     {
         $sectors = [
@@ -35,7 +36,7 @@ class SectorFixture extends Fixture
             $sector->setName($name);
             $sector->setColor($color);
 
-            $this->addReference('sector_'.$index, $sector);
+            $this->addReference($this::$sectorReference.$index, $sector);
 
             ++$index;
             $manager->persist($sector);
