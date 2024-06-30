@@ -27,7 +27,10 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager
     ): JsonResponse
     {
+        $data = $request->request->all();
         $response = $apiResponseService->getResponse();
+
+        dd($data);
 
         $firstName = $request->get('first_name');
         $lastName = $request->get('last_name');

@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\ResetPassword;
 use App\Entity\Student;
 use App\Model\ApplicationDTO;
-use App\Repository\ApplicationRepository;
 use App\Repository\InternshipOfferRepository;
 use App\Repository\ResetPasswordRepository;
 use App\Repository\StudentRepository;
@@ -25,7 +24,7 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 class ApplicationController extends AbstractController
 {
     public function __construct(
-        private string $apiUrl,
+        private readonly string $apiUrl,
     ) {
     }
     #[Route(path: '/apply', name: 'new', methods: ['POST'])]
