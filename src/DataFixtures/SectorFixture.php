@@ -29,13 +29,15 @@ class SectorFixture extends Fixture
             'Autre' => '#56CDAD',
         ];
 
+        $index = 0;
         foreach ($sectors as $name => $color) {
             $sector = new Sector();
             $sector->setName($name);
             $sector->setColor($color);
 
-            $this->addReference('sector_' . strtolower(str_replace(' ', '_', $name)), $sector);
+            $this->addReference('sector_'.$index, $sector);
 
+            ++$index;
             $manager->persist($sector);
         }
 

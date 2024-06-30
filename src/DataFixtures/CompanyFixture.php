@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class CompanyFixture extends Fixture implements DependentFixtureInterface
 {
+    public static string $companyReference = 'company_';
     public function load(ObjectManager $manager): void
     {
         $companies = [
@@ -38,6 +39,9 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                     $this->getReference('category_0'),
                     $this->getReference('category_1'),
                 ],
+                'sectors' => [
+                    $this->getReference('sector_0'),
+                ],
             ],
             [
                 'name' => 'Company 2',
@@ -63,6 +67,10 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'longitude' => 2.3522219,
                 'categories' => [
                     $this->getReference('category_1'),
+                ],
+                'sectors' => [
+                    $this->getReference('sector_2'),
+                    $this->getReference('sector_3'),
                 ],
             ],
             [
@@ -92,10 +100,15 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                     $this->getReference('category_4'),
                     $this->getReference('category_5'),
                 ],
+                'sectors' => [
+                    $this->getReference('sector_4'),
+                    $this->getReference('sector_5'),
+                    $this->getReference('sector_6'),
+                ],
             ],
         ];
 
-        foreach ($companies as $companyData) {
+        foreach ($companies as $index => $companyData) {
             $company = new Company();
             $company->setName($companyData['name']);
             $company->setSocialReason($companyData['socialReason']);
@@ -119,11 +132,13 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             $company->setLatitude($companyData['latitude']);
             $company->setLongitude($companyData['longitude']);
             foreach ($companyData['categories'] as $category) {
-                // TODO: fix this
-//                $company->addCategory($category);
+                $company->addCategory($category);
+            }
+            foreach ($companyData['sectors'] as $sector) {
+                $company->addSector($sector);
             }
 
-            $this->addReference('company_' . strtolower(str_replace(' ', '_', $companyData['name'])), $company);
+            $this->addReference($this::$companyReference.$index, $company);
 
             $manager->persist($company);
         }
@@ -135,6 +150,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
     {
         return [
             CategoryFixture::class,
+            SectorFixture::class,
         ];
     }
 }

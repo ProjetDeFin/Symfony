@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\BlameableTrait;
+use App\Entity\Traits\TimestampableTrait;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,6 +13,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -61,7 +65,7 @@ class Category
     {
         if (!$this->companies->contains($company)) {
             $this->companies->add($company);
-            $company->setCategories($this);
+            $company->addCategory($this);
         }
 
         return $this;
@@ -71,8 +75,8 @@ class Category
     {
         if ($this->companies->removeElement($company)) {
             // set the owning side to null (unless already changed)
-            if ($company->getCategories() === $this) {
-                $company->setCategories(null);
+            if ($company->getCategories()->contains($this)) {
+                $company->removeCategory($this);
             }
         }
 
