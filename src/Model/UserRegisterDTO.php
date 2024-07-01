@@ -60,10 +60,6 @@ class UserRegisterDTO
             throw new \InvalidArgumentException('Password must contain at least one number');
         }
 
-        if (!is_numeric($data['phone']) || strlen($data['phone']) !== 10) {
-            throw new \InvalidArgumentException("The provided phone number is not a valid.");
-        }
-
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
