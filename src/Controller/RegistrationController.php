@@ -64,12 +64,14 @@ class RegistrationController extends AbstractController
                 $user->setRoles(['ROLE_STUDENT']);
                 $studentDTO = new StudentRegisterDTO($data, $diplomaSearchedRepository, $studyLevelRepository);
                 $student = Student::fromDTO($studentDTO);
+                $student->setUser($user);
                 $entityManager->persist($student);
             } elseif ('true' === $data['isCompany']) {
                 $user->setRoles(['ROLE_COMPANY_RESPONSIBLE']);
                 $companyDTO = new CompanyRegisterDTO($data, $companyRepository, $categoryRepository, $sectorRepository);
                 $company = Company::fromDTO($companyDTO);
                 $companyResponsible = CompanyResponsible::fromDTO($companyDTO, $user, $company);
+                $companyResponsible->setUser($user);
                 $entityManager->persist($companyResponsible);
                 $entityManager->persist($company);
             }

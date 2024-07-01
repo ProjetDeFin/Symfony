@@ -35,7 +35,7 @@ class DashboardController extends AbstractController
             return new JsonResponse('Invalid token', 400);
         }
         if ($role === 'ROLE_STUDENT') {
-            $student = $studentRepository->getFromUser($user);
+            $student = $studentRepository->findOneBy(['user' => $user]);
             $toSerialize = [
                 'role' => $student,
                 'user' => $user,

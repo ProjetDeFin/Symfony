@@ -21,12 +21,4 @@ class StudentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Student::class);
     }
-
-    public function getFromUser(User $user) {
-        return $this->createQueryBuilder('s')
-            ->where('s.user = :user')
-            ->setParameter('user_id', $user->getId())
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
 }
