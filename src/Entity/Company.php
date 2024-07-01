@@ -97,7 +97,7 @@ class Company
     #[Groups(['company'])]
     private ?string $phone = null;
 
-    #[ORM\Column(type: Types::STRING, unique: true)]
+    #[ORM\Column(type: Types::STRING, unique: true, nullable: true)]
     #[Groups(['company'])]
     private ?string $email = null;
 
