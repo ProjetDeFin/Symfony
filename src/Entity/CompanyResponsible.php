@@ -7,6 +7,7 @@ use App\Model\CompanyRegisterDTO;
 use App\Repository\CompanyResponsibleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompanyResponsibleRepository::class)]
 #[ORM\Table(name: 'company_responsible')]
@@ -26,9 +27,11 @@ class CompanyResponsible
     private ?Company $company = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Groups(['profile'])]
     private ?string $position = null;
 
     #[ORM\Column(type: Types::STRING, length: 10)]
+    #[Groups(['profile'])]
     private ?string $phone = null;
 
     public function getId(): ?int

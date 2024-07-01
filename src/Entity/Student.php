@@ -27,66 +27,66 @@ class Student
     private ?int $id = null;
 
     #[ORM\OneToOne(targetEntity: User::class)]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private \DateTime $birthday;
 
     #[ORM\Column(type: Types::STRING, length: 10)]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private ?string $mobile = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private ?string $customCurriculumVitae = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private ?string $motivation = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private ?string $schoolName = null;
 
     /**
      * @var Collection<int, ProfesionalExperience>
      */
     #[ORM\OneToMany(targetEntity: ProfesionalExperience::class, mappedBy: 'student')]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private Collection $profesionalExperiences;
 
     /**
      * @var Collection<int, Hobby>
      */
     #[ORM\OneToMany(targetEntity: Hobby::class, mappedBy: 'student')]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private Collection $hobbies;
 
     /**
      * @var Collection<int, Skill>
      */
     #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'student')]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private Collection $skills;
 
     #[ORM\ManyToOne(targetEntity: StudyLevel::class, inversedBy: 'students')]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private ?StudyLevel $studyLevel = null;
 
     /**
      * @var Collection<int, DiplomaSearched>
      */
     #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'students')]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private Collection $diplomasSearched;
 
     /**
      * @var Collection<int, LanguageStudent>
      */
     #[ORM\OneToMany(targetEntity: LanguageStudent::class, mappedBy: 'student')]
-    #[Groups(['student'])]
+    #[Groups(['student', 'profile'])]
     private Collection $languageStudents;
 
     public function __construct()

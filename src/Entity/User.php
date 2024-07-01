@@ -30,23 +30,23 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    #[Groups(['user'])]
+    #[Groups(['user', 'profile'])]
     private string $firstname;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    #[Groups(['user'])]
+    #[Groups(['user', 'profile'])]
     private string $lastName;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['user'])]
+    #[Groups(['user', 'profile'])]
     private ?string $picture = null;
 
     #[ORM\Column(type: Types::STRING, enumType: UserGenderEnum::class)]
-    #[Groups(['user'])]
+    #[Groups(['user', 'profile'])]
     private ?UserGenderEnum $civility = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    #[Groups(['user'])]
+    #[Groups(['user', 'profile'])]
     private string $email;
 
     #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]

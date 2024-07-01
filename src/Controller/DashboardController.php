@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\CompanyResponsibleRepository;
+use App\Repository\StudentRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,17 +19,33 @@ class DashboardController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/profile', name: 'profile', methods: ['GET'])]
+    #[Route(path: '/profile/{role}', name: 'profile', methods: ['GET'])]
     public function login(
         Request $request,
         UserRepository $userRepository,
+        StudentRepository $studentRepository,
+        CompanyResponsibleRepository $companyResponsableRepository,
+        string $role,
     ): JsonResponse
     {
         $data = $request->headers->get('Authorization');
         $token = str_replace('Bearer ', '', $data);
         $user = $userRepository->findOneBy(['apiToken' => $token]);
-        $serialized = $this->serializer->serialize($user, 'json', ['groups' => 'user']);
+        if ($role === 'ROLE_STUDENT') {
+            $student = $studentRepository->findOneBy(['user' => $user]);
+            $toSerialized = [
+                'role' => $student,
+                'user' => $user,
+            ];
+        } elseif ($role === 'ROLE_COMPANY') {
+            $companyResponsible = $companyResponsableRepository->findOneBy(['user' => $user]);
+            $toSerialized = [
+                'role' => $companyResponsible,
+                'user' => $user,
+            ];
+        }
 
+        $serialized = $this->serializer->serialize($toSerialized, 'json', ['groups' => 'profile']);
         return new JsonResponse($serialized, 200, ['Content-Type' => 'application/json']);
     }
 }
