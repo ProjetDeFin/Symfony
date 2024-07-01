@@ -29,7 +29,7 @@ class CompanyRegisterDTO {
         SectorRepository $sectorRepository,
     ) {
         $function = $data['function'];
-        $phone = $data['phone'];
+        $phone = $data['mobile'];
         $companyName = $data['companyName'];
         $siret = $data['siret'];
         $categories = $data['categories'];
