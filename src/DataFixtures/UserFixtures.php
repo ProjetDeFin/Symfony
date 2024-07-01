@@ -17,7 +17,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $superAdmin = new User();
         $superAdmin
             ->setEmail('superadmin@test.fr')
-            ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setPicture('/uploads/profil-picture/avatar.jpg')
+            ->setRoles(['ROLE_SUPER_ADMIN', 'ROLE_COMPANY_RESPONSIBLE'])
             ->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w')
             ->setFirstname('Super')
             ->setLastName('Admin')
@@ -29,6 +30,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $superAdmin
             ->setEmail('paul.lecuisinier@gmail.com')
             ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setPicture('/uploads/profil-picture/avatar.jpg')
             ->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w')
             ->setFirstname('Paul')
             ->setLastName('Cuisinier')
@@ -39,6 +41,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $studentUser = new User();
         $studentUser->setEmail('student@example.com');
         $studentUser->setRoles(['ROLE_STUDENT']);
+        $studentUser->setPicture('/uploads/profil-picture/avatar.jpg');
         $studentUser->setFirstname('Student');
         $studentUser->setLastName('User');
         $studentUser->setCivility(UserGenderEnum::OTHER);
@@ -62,6 +65,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $companyResponsableUser = new User();
         $companyResponsableUser->setEmail('company.admin@example.com');
         $companyResponsableUser->setRoles(['ROLE_COMPANY_RESPONSIBLE']);
+        $companyResponsableUser->setPicture('/uploads/profil-picture/avatar.jpg');
         $companyResponsableUser->setFirstname('Company');
         $companyResponsableUser->setLastName('Admin');
         $companyResponsableUser->setCivility(UserGenderEnum::OTHER);

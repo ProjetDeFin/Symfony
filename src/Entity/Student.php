@@ -42,10 +42,6 @@ class Student
     #[Groups(['student'])]
     private ?string $customCurriculumVitae = null;
 
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['student'])]
-    private ?string $photo = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['student'])]
     private ?string $motivation = null;
@@ -151,18 +147,6 @@ class Student
     public function setCustomCurriculumVitae(string $customCurriculumVitae): static
     {
         $this->customCurriculumVitae = $customCurriculumVitae;
-
-        return $this;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(string $photo): static
-    {
-        $this->photo = $photo;
 
         return $this;
     }

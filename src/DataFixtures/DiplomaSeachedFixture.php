@@ -18,19 +18,19 @@ class DiplomaSeachedFixture extends Fixture
                 'name' => 'BREVET',
             ],
             [
-                'name' => 'CAP',
+                'name' => 'CAP, BEP',
             ],
             [
                 'name' => 'BAC',
             ],
             [
-                'name' => 'BTS',
+                'name' => 'BTS, DUT, BUT',
             ],
             [
-                'name' => 'LICENCE',
+                'name' => 'Licence',
             ],
             [
-                'name' => 'MASTER',
+                'name' => 'Master, DEA, DESS',
             ],
             [
                 'name' => 'DOCTORAT',

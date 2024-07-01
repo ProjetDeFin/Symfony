@@ -158,7 +158,7 @@ class Application
     #[Groups(['home'])]
     public function getStudentPicture(): string
     {
-        return $this->student->getPhoto();
+        return $this->student->getUser()->getPicture();
     }
 
     #[Groups(['home'])]

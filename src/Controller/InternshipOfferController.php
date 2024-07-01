@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\DiplomaSearchedRepository;
 use App\Repository\InternshipOfferRepository;
+use App\Repository\JobProfileRepository;
+use Proxies\__CG__\App\Entity\DiplomaSearched;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +17,9 @@ class InternshipOfferController extends AbstractController
 {
     public function __construct(
         private readonly InternshipOfferRepository $internshipOfferRepository,
-        private readonly SerializerInterface       $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly DiplomaSearchedRepository $diplomaSearchedRepository,
+        private readonly JobProfileRepository $jobProfileRepository,
     )
     {
     }
@@ -31,6 +36,12 @@ class InternshipOfferController extends AbstractController
         $limit = json_decode($request->get('limit', 10), true);
 
         $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
+
+        $internshipOffers = [
+            'offers' => $internshipOffers,
+            'diplomas' => $this->diplomaSearchedRepository->findAll(),
+            'jobProfiles' => $this->jobProfileRepository->findAll(),
+        ];
 
         $jsonContent = $this->serializer->serialize($internshipOffers, 'json', ['groups' => 'internship_offers']);
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);

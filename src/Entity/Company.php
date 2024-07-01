@@ -61,6 +61,38 @@ class Company
     #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
     private ?string $logo = null;
 
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $photo1 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $photo2 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $photo3 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $photo4 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $photo5 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $detail1 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $detail2 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    private ?string $detail3 = null;
+
     #[ORM\Column(type: Types::STRING, unique: true)]
     #[Groups(['company'])]
     private ?string $phone = null;
@@ -419,5 +451,101 @@ class Company
     public function getAge(): int
     {
         return $this->creation->diff(new \DateTime())->y;
+    }
+
+    public function getPhoto1(): ?string
+    {
+        return $this->photo1;
+    }
+
+    public function setPhoto1(string $photo1): static
+    {
+        $this->photo1 = $photo1;
+
+        return $this;
+    }
+
+    public function getPhoto2(): ?string
+    {
+        return $this->photo2;
+    }
+
+    public function setPhoto2(string $photo2): static
+    {
+        $this->photo2 = $photo2;
+
+        return $this;
+    }
+
+    public function getPhoto3(): ?string
+    {
+        return $this->photo3;
+    }
+
+    public function setPhoto3(string $photo3): static
+    {
+        $this->photo3 = $photo3;
+
+        return $this;
+    }
+
+    public function getPhoto4(): ?string
+    {
+        return $this->photo4;
+    }
+
+    public function setPhoto4(string $photo4): static
+    {
+        $this->photo4 = $photo4;
+
+        return $this;
+    }
+
+    public function getPhoto5(): ?string
+    {
+        return $this->photo5;
+    }
+
+    public function setPhoto5(string $photo5): static
+    {
+        $this->photo5 = $photo5;
+
+        return $this;
+    }
+
+    public function getDetail1(): ?string
+    {
+        return $this->detail1;
+    }
+
+    public function setDetail1(string $detail1): static
+    {
+        $this->detail1 = $detail1;
+
+        return $this;
+    }
+
+    public function getDetail2(): ?string
+    {
+        return $this->detail2;
+    }
+
+    public function setDetail2(string $detail2): static
+    {
+        $this->detail2 = $detail2;
+
+        return $this;
+    }
+
+    public function getDetail3(): ?string
+    {
+        return $this->detail3;
+    }
+
+    public function setDetail3(string $detail3): static
+    {
+        $this->detail3 = $detail3;
+
+        return $this;
     }
 }

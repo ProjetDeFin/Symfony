@@ -57,7 +57,7 @@ class InternshipOfferRepository extends ServiceEntityRepository
         }
 
         if (!empty($filters['levels'])) {
-            $qb->join('i.diplomaSearcheds', 'ds')
+            $qb->join('i.diplomasSearched', 'ds')
                 ->andWhere('ds.name IN (:diplomaSearcheds)')
                 ->setParameter('diplomaSearcheds', $filters['levels']);
         }
@@ -112,8 +112,6 @@ class InternshipOfferRepository extends ServiceEntityRepository
             ->setMaxResults(3)
             ->andWhere('i.endApplyDate > :now')
             ->setParameter('now', new \DateTime())
-            ->andWhere('i.company = :company')
-            ->setParameter('company', $internshipOffer->getCompany())
             ->getQuery()
             ->getResult()
         ;

@@ -56,6 +56,7 @@ class LoginController extends AbstractController
             'token' => $token,
             'firstName' => $user->getFirstName(),
             'lastName' => $user->getLastName(),
+            'picture' => $user->getPicture(),
             'id' => $user->getId(),
         ], Response::HTTP_OK);
 
@@ -85,6 +86,7 @@ class LoginController extends AbstractController
         $response->setContent(json_encode([
             'firstName' => $user->getFirstName(),
             'lastName' => $user->getLastName(),
+            'picture' => $user->getPicture(),
             'id' => $user->getId(),
         ]));
         $response->setStatusCode(Response::HTTP_OK);

@@ -57,6 +57,9 @@ class InternshipOffer
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column]
+    private ?\DateTimeImmutable $startApplyDate = null;
+
+    #[ORM\Column]
     private ?\DateTimeImmutable $endApplyDate = null;
 
     #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'internshipOffers')]
@@ -233,6 +236,18 @@ class InternshipOffer
         return $this;
     }
 
+    public function getStartApplyDate(): ?\DateTimeImmutable
+    {
+        return $this->startApplyDate;
+    }
+
+    public function setStartApplyDate(\DateTimeImmutable $startApplyDate): static
+    {
+        $this->startApplyDate = $startApplyDate;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Skill>
      */
@@ -290,13 +305,19 @@ class InternshipOffer
     #[Groups(['internship_offers', 'internship_offer'])]
     public function getRestDay(): ?string
     {
-        return $this->startAt->diff($this->endAt)->format('%a');
+        return $this->startApplyDate->diff($this->endApplyDate)->format('%a');
     }
 
     #[Groups(['internship_offers', 'company', 'internship_offer'])]
     public function getPeriod(): ?string
     {
         return $this->startAt->format('d/m/Y') . ' - ' . $this->endAt->format('d/m/Y');
+    }
+
+    #[Groups(['internship_offers', 'company', 'internship_offer'])]
+    public function getDuration(): ?string
+    {
+        return $this->startAt->diff($this->endAt)->format('%a');
     }
 
     #[Groups(['internship_offer'])]
