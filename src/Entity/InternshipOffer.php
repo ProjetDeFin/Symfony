@@ -23,11 +23,11 @@ class InternshipOffer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['internship_offer',  'internship_offers', 'company', 'home'])]
+    #[Groups(['internship_offer', 'internship_offers', 'company', 'home'])]
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Groups(['internship_offer', 'home', 'company', 'internship_offers'])]
+    #[Groups(['internship_offer', 'home', 'company', 'internship_offers', 'internship_offers_admin'])]
     private ?string $title;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -47,7 +47,7 @@ class InternshipOffer
     private Collection $diplomasSearched;
 
     #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offer', 'internship_offers_admin'])]
     private Collection $applications;
 
     #[ORM\Column]
@@ -67,7 +67,7 @@ class InternshipOffer
     private Collection $skills;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['internship_offer', 'internship_offers', 'company', 'home', 'companies'])]
+    #[Groups(['internship_offer', 'internship_offers', 'company', 'home', 'companies', 'internship_offers_admin'])]
     private ?string $type = null;
 
     public function __construct()
@@ -320,13 +320,13 @@ class InternshipOffer
         return $this->startAt->diff($this->endAt)->format('%a');
     }
 
-    #[Groups(['internship_offers', 'internship_offer'])]
+    #[Groups(['internship_offers', 'internship_offer', 'internship_offers_admin'])]
     public function getFormatedEndApplyDate(): string
     {
         return $this->endApplyDate->format('d/m/Y');
     }
 
-    #[Groups(['internship_offers', 'internship_offer'])]
+    #[Groups(['internship_offers', 'internship_offer', 'internship_offers_admin'])]
     public function getFormatedStartApplyDate(): string
     {
         return $this->startApplyDate->format('d/m/Y');

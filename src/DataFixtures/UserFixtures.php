@@ -83,6 +83,14 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $companyResponsableUser->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w');
         $manager->persist($companyResponsableUser);
 
+        $companyResponsable = new CompanyResponsible();
+        $companyResponsable->setUser($companyResponsableUser);
+        $companyResponsable->setPosition('Responsable RH');
+        $companyResponsable->setPhone('0123456789');
+        $companyResponsable->setCompany($this->getReference(CompanyFixture::$companyReference . 1));
+        $this->addReference('companyResponsible1', $companyResponsable);
+        $manager->persist($companyResponsable);
+
         $manager->flush();
     }
 

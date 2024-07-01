@@ -5,10 +5,12 @@ namespace App\Entity\Traits;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 trait SoftDeleteTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['internship_offers_admin'])]
     #[Gedmo\Timestampable(on: 'create')]
     protected ?\DateTimeInterface $deletedAt = null;
 

@@ -53,4 +53,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return (int)$qb->getQuery()->getSingleScalarResult();
     }
+
+    public function findCompanyByUser(string $id): Company
+    {
+        return $this->createQueryBuilder('u')
+            ->select('c')
+            ->join(CompanyResponsible::class, 'cr', 'WITH', 'cr.user = u')
+            ->join(Company::class, 'c', 'WITH', 'c = cr.company')
+            ->where('u.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

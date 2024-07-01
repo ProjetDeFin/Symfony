@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Application;
+use App\Entity\Company;
 use App\Entity\InternshipOffer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -26,16 +28,6 @@ class InternshipOfferRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->orderBy('i.createdAt', 'DESC')
             ->setMaxResults(8)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    public function findByCompany($company): array
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.company = :company')
-            ->setParameter('company', $company)
             ->getQuery()
             ->getResult()
         ;
@@ -112,6 +104,17 @@ class InternshipOfferRepository extends ServiceEntityRepository
             ->setMaxResults(3)
             ->andWhere('i.endApplyDate > :now')
             ->setParameter('now', new \DateTime())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByCompany(Company $company): array
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i')
+            ->andWhere('i.company = :company')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult()
         ;
