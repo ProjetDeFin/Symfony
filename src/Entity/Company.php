@@ -33,6 +33,10 @@ class Company
     #[Groups(['company', 'companies','home', 'internship_offer', 'internship_offers'])]
     private ?string $name = null;
 
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['company', 'companies'])]
+    private ?string $description = null;
+
     #[ORM\Column(type: Types::STRING)]
     #[Groups(['company'])]
     private ?string $socialReason = null;
@@ -93,18 +97,22 @@ class Company
      * @var Collection<int, Sector>
      */
     #[ORM\ManyToMany(targetEntity: Sector::class, inversedBy: 'company')]
+    #[Groups(['company', 'companies'])]
     private Collection $sectors;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'companies')]
+    #[Groups(['company', 'companies'])]
     private Collection $categories;
 
     #[ORM\OneToMany(targetEntity: InternshipOffer::class, mappedBy: 'company')]
+    #[Groups(['company'])]
     private Collection $internshipOffers;
 
     public function __construct()
     {
         $this->sectors = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->internshipOffers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -393,5 +401,23 @@ class Company
         }
 
         return $company;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    #[Groups(['company'])]
+    public function getAge(): int
+    {
+        return $this->creation->diff(new \DateTime())->y;
     }
 }

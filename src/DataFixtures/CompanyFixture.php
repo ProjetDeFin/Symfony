@@ -16,6 +16,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             [
                 'name' => 'Company 1',
                 'socialReason' => 'Social Reason1',
+                'description' => 'Description1',
                 'siret' => 123412341234123,
                 'workforce' => '100',
                 'sellFigure' => 1000.0,
@@ -24,7 +25,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'city' => 'Paris',
                 'postalCode' => '75000',
                 'country' => 'France',
-                'logo' => 'logo1.png',
+                'logo' => 'intel.svg',
                 'phone' => '0121567892',
                 'email' => 'company1@example.com',
                 'websiteUrl' => 'https://www.company1.com',
@@ -46,6 +47,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             [
                 'name' => 'Company 2',
                 'socialReason' => 'Social Reason2',
+                'description' => 'Description1',
                 'siret' => 12345678401235,
                 'workforce' => '200',
                 'sellFigure' => 2000.0,
@@ -54,7 +56,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'city' => 'Paris',
                 'postalCode' => '75000',
                 'country' => 'France',
-                'logo' => 'logo2.png',
+                'logo' => 'amd.svg',
                 'phone' => '0123456789',
                 'email' => 'company2@example.com',
                 'websiteUrl' => 'https://www.company2.com',
@@ -75,6 +77,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             ],
             [
                 'name' => 'Company 3',
+                'description' => 'Description3',
                 'socialReason' => 'Social Reason3',
                 'siret' => 123123123123123,
                 'workforce' => '300',
@@ -84,7 +87,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'city' => 'Paris',
                 'postalCode' => '75000',
                 'country' => 'France',
-                'logo' => 'logo3.png',
+                'logo' => 'talkit.svg',
                 'phone' => '0123123123',
                 'email' => 'company3@example.com',
                 'websiteUrl' => 'https://www.company3.com',
@@ -111,6 +114,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
         foreach ($companies as $index => $companyData) {
             $company = new Company();
             $company->setName($companyData['name']);
+            $company->setDescription($companyData['description']);
             $company->setSocialReason($companyData['socialReason']);
             $company->setSiret($companyData['siret']);
             $company->setWorkforce($companyData['workforce']);
