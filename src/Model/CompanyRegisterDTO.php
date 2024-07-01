@@ -25,10 +25,10 @@ class CompanyRegisterDTO
     private string $companyPhone;
 
     public function __construct(
-        array              $data,
-        CompanyRepository  $companyRepository,
+        array $data,
+        CompanyRepository $companyRepository,
         CategoryRepository $categoryRepository,
-        SectorRepository   $sectorRepository,
+        SectorRepository $sectorRepository,
     )
     {
         $function = $data['position'];

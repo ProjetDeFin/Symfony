@@ -51,24 +51,17 @@ class RegistrationController extends AbstractController
         $data = $request->request->all();
         $response = $apiResponseService->getResponse();
 
-        dump($data);
-
         try {
             $userDTO = new UserRegisterDTO($data, $userRepository);
             $user = User::fromDTO($userDTO);
             $user->setPassword($passwordHasher->hashPassword($user, $userDTO->getPassword()));
 
-            dump($data['isStudent']);
-            dump($data['isCompany']);
-
             if ('true' === $data['isStudent']) {
-                dump('student');
                 $user->setRoles(['ROLE_STUDENT']);
                 $studentDTO = new StudentRegisterDTO($data, $diplomaSearchedRepository, $studyLevelRepository);
                 $student = Student::fromDTO($studentDTO);
                 $entityManager->persist($student);
             } elseif ('true' === $data['isCompany']) {
-                dump('company');
                 $user->setRoles(['ROLE_COMPANY_RESPONSIBLE']);
                 $companyDTO = new CompanyRegisterDTO($data, $companyRepository, $categoryRepository, $sectorRepository);
                 $company = Company::fromDTO($companyDTO);
