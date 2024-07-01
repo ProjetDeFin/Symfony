@@ -45,6 +45,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastName('Rulleau')
             ->setCivility(UserGenderEnum::MAN);
 
+        $manager->persist($superAdmin);
+
         $studentUser = new User();
         $studentUser->setEmail('student@example.com');
         $studentUser->setRoles(['ROLE_STUDENT']);
