@@ -33,11 +33,11 @@ class Company
     #[Groups(['company', 'companies','home', 'internship_offer', 'internship_offers'])]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['company', 'companies'])]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['company'])]
     private ?string $socialReason = null;
 
@@ -45,7 +45,7 @@ class Company
     #[Groups(['company'])]
     private ?int $siret = null;
 
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['company'])]
     private ?string $workforce = null;
 
@@ -53,7 +53,7 @@ class Company
     #[Groups(['company'])]
     private float $sellFigure = 0;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'date', nullable: true)]
     #[Groups(['company', 'home'])]
     private ?\DateTimeInterface $creation = null;
 
