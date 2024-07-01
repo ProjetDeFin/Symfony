@@ -52,7 +52,7 @@ class DashboardController extends AbstractController
     ): JsonResponse
     {
         $data = $request->headers->get('Authorization');
-        dd($data);
+        dd(str_replace('Bearer ', '', $data));
 
     }
 
