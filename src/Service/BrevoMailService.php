@@ -14,7 +14,7 @@ final readonly class BrevoMailService
     ) {
     }
 
-    public function sendMail(string $to, int $templateId, array $params): void
+    public function sendMail(string $to, int $templateId, array $params = []): void
     {
         try {
             $this->client->request('POST', $this->apiUrl, [

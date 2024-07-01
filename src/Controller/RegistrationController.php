@@ -25,17 +25,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/api', name: 'api_')]
 class RegistrationController extends AbstractController
 {
+    public function __construct(private readonly string $frontUrl)
+    {
+    }
+
     #[Route(path: '/register', name: 'register', methods: ['POST'])]
     public function login(
         Request $request,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
-        JWTTokenManagerInterface $JWTTokenManager,
         ApiResponseService $apiResponseService,
         EntityManagerInterface $entityManager,
         DiplomaSearchedRepository $diplomaSearchedRepository,
@@ -69,9 +71,9 @@ class RegistrationController extends AbstractController
 
             $entityManager->flush();
 
-            $mailService->sendMail($user->getEmail(), 1,
+            $mailService->sendMail($user->getEmail(), 3,
                 [
-//                    'link' => $this->generateUrl('app_register_confirm', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'link' => $this->frontUrl.'/profil/validation/'.$user->getId(),
                 ],
             );
 
@@ -83,7 +85,7 @@ class RegistrationController extends AbstractController
         return $response;
     }
 
-    #[Route(path: '/register/confirm/{id}', name: 'register_confirm', methods: ['POST'])]
+    #[Route(path: '/register/confirm/{id}', name: 'register_confirm', methods: ['GET'])]
     public function confirm(
         UserRepository $userRepository,
         JWTTokenManagerInterface $JWTTokenManager,
