@@ -15,11 +15,11 @@ class DiplomaSearched
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['internship_offer', 'internship_offers', 'selectsRegisterStudent'])]
+    #[Groups(['internship_offer', 'internship_offers', 'selectsRegisterStudent', 'profile'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['internship_offer', 'internship_offers', 'selectsRegisterStudent'])]
+    #[Groups(['internship_offer', 'internship_offers', 'selectsRegisterStudent', 'profile'])]
     private ?string $name = null;
 
     /**

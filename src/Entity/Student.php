@@ -86,7 +86,7 @@ class Student
      * @var Collection<int, LanguageStudent>
      */
     #[ORM\OneToMany(targetEntity: LanguageStudent::class, mappedBy: 'student')]
-    #[Groups(['student', 'profile'])]
+    #[Groups(['student'])]
     private Collection $languageStudents;
 
     public function __construct()

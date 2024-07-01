@@ -17,11 +17,11 @@ class Hobby
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['hobby', 'home'])]
+    #[Groups(['hobby', 'home', 'profile'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['hobby', 'home'])]
+    #[Groups(['hobby', 'home', 'profile'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'hobbies')]
