@@ -38,11 +38,7 @@ class LoginController extends AbstractController
         }
 
         try {
-            $token = $JWTTokenManager->createFromPayload($user, [
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'id' => $user->getId(),
-            ]);
+            $token = $JWTTokenManager->create($user);
         } catch (\Exception $e) {
             return $this->json(['error' => 'An error occurred while generating the token'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -51,13 +47,8 @@ class LoginController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        // Ensure response includes all necessary data
         $response = new JsonResponse([
             'token' => $token,
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName(),
-            'picture' => $user->getPicture(),
-            'id' => $user->getId(),
         ], Response::HTTP_OK);
 
         // Disable caching
@@ -88,6 +79,7 @@ class LoginController extends AbstractController
             'lastName' => $user->getLastName(),
             'picture' => $user->getPicture(),
             'id' => $user->getId(),
+            'token' => $user->getApiToken(),
         ]));
         $response->setStatusCode(Response::HTTP_OK);
         return $response;
