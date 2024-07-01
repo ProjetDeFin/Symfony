@@ -48,7 +48,7 @@ class StudentRegisterDTO
             throw new \InvalidArgumentException('Diploma searched not found');
         }
 
-        $studyLevel = $studyLevelRepository->findOneBy(['level' => $studyLevel]);
+        $studyLevel = $studyLevelRepository->find($studyLevel);
         if (null === $studyLevel) {
             throw new \InvalidArgumentException('Study level not found');
         }
