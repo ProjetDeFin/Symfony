@@ -71,13 +71,13 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($company);
             }
 
+            $entityManager->flush();
+
             $mailService->sendMail($user->getEmail(), 3,
                 [
                     'link' => $this->frontUrl.'/profil/validation/'.$user->getId(),
                 ],
             );
-
-            $entityManager->flush();
 
             $response->setStatusCode(Response::HTTP_OK);
         } catch (\Exception $e) {
