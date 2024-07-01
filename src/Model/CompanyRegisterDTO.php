@@ -30,7 +30,7 @@ class CompanyRegisterDTO {
     ) {
         $function = $data['position'];
         $phone = $data['mobile'];
-        $companyName = $data['companyName'];
+        $companyName = $data['organizationName'];
         $siret = $data['siret'];
         $categories = $data['categories'];
         $sectors = $data['sectors'];
