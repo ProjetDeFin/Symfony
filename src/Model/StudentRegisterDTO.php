@@ -19,7 +19,7 @@ class StudentRegisterDTO
         DiplomaSearchedRepository $diplomaSearchedRepository,
         StudyLevelRepository $studyLevelRepository,
     ){
-        $phone = $data['phone'];
+        $phone = $data['mobile'];
         $studyLevel = $data['studyLevel'];
         $diplomaSearched = $data['diplomaSearched'];
         $schoolName = $data['schoolName'];
@@ -29,15 +29,15 @@ class StudentRegisterDTO
             throw new \InvalidArgumentException('Phone, study level, diploma searched and school name are required');
         }
 
-        if (!is_numeric($data['mobile']) || strlen($data['mobile']) !== 10) {
+        if (!is_numeric($phone) || strlen($phone) !== 10) {
             throw new \InvalidArgumentException("The provided phone number is not a valid.");
         }
 
-        if (!is_numeric($data['studyLevel'])) {
+        if (!is_numeric($studyLevel)) {
             throw new \InvalidArgumentException("The provided study level is not a valid.");
         }
 
-        if (!is_numeric($data['diploma'])) {
+        if (!is_numeric($diplomaSearched)) {
             throw new \InvalidArgumentException("The provided diploma id is not a valid.");
         }
 
