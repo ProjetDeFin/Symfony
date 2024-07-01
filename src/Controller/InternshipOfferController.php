@@ -43,7 +43,16 @@ class InternshipOfferController extends AbstractController
     {
         $internshipOffer = $this->internshipOfferRepository->find($id);
 
-        $jsonContent = $this->serializer->serialize($internshipOffer, 'json', ['groups' => 'internship_offer']);
+        $similarOffers = $this->internshipOfferRepository->findSimilarOffers($internshipOffer);
+
+        $internshipOffer = [
+            'offer' => $internshipOffer,
+            'similarOffers' => $similarOffers
+        ];
+
+        $jsonContent = $this->serializer->serialize($internshipOffer, 'json', ['groups' => 'internship_offers']);
+
+
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 

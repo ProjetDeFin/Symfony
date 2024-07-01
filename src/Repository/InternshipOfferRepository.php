@@ -101,4 +101,21 @@ class InternshipOfferRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findSimilarOffers(InternshipOffer $internshipOffer): array
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.type = :type')
+            ->setParameter('type', $internshipOffer->getType())
+            ->andWhere('i.id != :id')
+            ->setParameter('id', $internshipOffer->getId())
+            ->setMaxResults(3)
+            ->andWhere('i.endApplyDate > :now')
+            ->setParameter('now', new \DateTime())
+            ->andWhere('i.company = :company')
+            ->setParameter('company', $internshipOffer->getCompany())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

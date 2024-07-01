@@ -1,7 +1,8 @@
 .idea
 vendor/
 var/**/
-public/
+public/index.php
+public/bundles/
 supervisord.log
 supervisord.pid
 node_modules/

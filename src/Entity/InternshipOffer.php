@@ -23,15 +23,15 @@ class InternshipOffer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['internship_offer',  'internship_offers'])]
+    #[Groups(['internship_offer',  'internship_offers', 'company', 'home'])]
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Groups(['internship_offer', 'home',  'internship_offers'])]
+    #[Groups(['internship_offer', 'home', 'company', 'internship_offers'])]
     private ?string $title;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['internship_offer', 'home',  'internship_offers'])]
+    #[Groups(['internship_offer', 'home', 'company', 'internship_offers'])]
     private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'internshipOffers')]
@@ -39,11 +39,11 @@ class InternshipOffer
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: JobProfile::class, mappedBy: 'internshipOffer')]
-    #[Groups(['internship_offer', 'home', 'internship_offers'])]
+    #[Groups(['internship_offer', 'home', 'company', 'internship_offers'])]
     private Collection $jobProfiles;
 
     #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'internshipOffer')]
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offer', 'company'])]
     private Collection $diplomasSearched;
 
     #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
@@ -60,11 +60,11 @@ class InternshipOffer
     private ?\DateTimeImmutable $endApplyDate = null;
 
     #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'internshipOffers')]
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offer', 'company'])]
     private Collection $skills;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['internship_offer',  'internship_offers', 'home'])]
+    #[Groups(['internship_offer', 'internship_offers', 'company', 'home'])]
     private ?string $type = null;
 
     public function __construct()
@@ -293,7 +293,7 @@ class InternshipOffer
         return $this->startAt->diff($this->endAt)->format('%a');
     }
 
-    #[Groups(['internship_offers', 'internship_offer'])]
+    #[Groups(['internship_offers', 'company', 'internship_offer'])]
     public function getPeriod(): ?string
     {
         return $this->startAt->format('d/m/Y') . ' - ' . $this->endAt->format('d/m/Y');
