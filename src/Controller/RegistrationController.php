@@ -108,11 +108,7 @@ class RegistrationController extends AbstractController
             }
             $user->setEnabled(true);
 
-            $token = $JWTTokenManager->createFromPayload($user, [
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'id' => $user->getId(),
-            ]);
+            $token = $JWTTokenManager->create($user);
 
             $user->setApiToken($token);
 
