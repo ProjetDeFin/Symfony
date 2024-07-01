@@ -66,6 +66,7 @@ class LoginController extends AbstractController
         return $response;
     }
 
+    // TODO: change this to /account/details/{email} to add security
     #[Route(path: '/login/details/{email}', name: 'details', methods: ['GET'])]
     public function details(
         UserRepository $userRepository,
