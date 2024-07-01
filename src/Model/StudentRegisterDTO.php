@@ -26,7 +26,7 @@ class StudentRegisterDTO
 
         dump($data);
 
-        if ( null !== $phone || !$schoolName)
+        if (!$phone || !$schoolName)
         {
             throw new \InvalidArgumentException('Phone and school name are required');
         }
