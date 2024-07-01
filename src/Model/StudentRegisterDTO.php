@@ -21,7 +21,7 @@ class StudentRegisterDTO
     ){
         $phone = $data['mobile'];
         $studyLevel = $data['studyLevel'];
-        $diplomaSearched = $data['diplomaSearched'];
+        $diplomaSearched = $data['diploma'];
         $schoolName = $data['schoolName'];
 
         if (!$phone || !$studyLevel || !$diplomaSearched || !$schoolName)
