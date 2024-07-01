@@ -4,18 +4,20 @@ namespace App\Model;
 
 use App\Entity\Category;
 use App\Entity\Company;
+use App\Entity\Sector;
 use App\Enum\UserGenderEnum;
 use App\Repository\CategoryRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\SectorRepository;
 
-class CompanyRegisterDTO {
+class CompanyRegisterDTO
+{
     private string $function;
     private string $phone;
     private string $companyName;
     private string $siret;
-    private array $categories = [];
-    private array $sectors = [];
+    private Category $category;
+    private Sector $sector;
     private string $address;
     private string $addressComplement;
     private string $zipCode;
@@ -23,24 +25,25 @@ class CompanyRegisterDTO {
     private string $companyPhone;
 
     public function __construct(
-        array $data,
-        CompanyRepository $companyRepository,
+        array              $data,
+        CompanyRepository  $companyRepository,
         CategoryRepository $categoryRepository,
-        SectorRepository $sectorRepository,
-    ) {
+        SectorRepository   $sectorRepository,
+    )
+    {
         $function = $data['position'];
         $phone = $data['mobile'];
         $companyName = $data['organizationName'];
         $siret = $data['siret'];
-        $categories = $data['categories'];
-        $sectors = $data['sectors'];
+        $category = $data['category'];
+        $sector = $data['activity'];
         $address = $data['address'];
         $addressComplement = $data['addressComplement'];
         $zipCode = $data['zipCode'];
         $city = $data['city'];
         $companyPhone = $data['companyPhone'];
 
-        if (!$function || !$phone || !$companyName || !$siret || !$categories || !$sectors || !$address || !$zipCode || !$city || !$companyPhone) {
+        if (!$function || !$phone || !$companyName || !$siret || !$category || !$sector || !$address || !$zipCode || !$city || !$companyPhone) {
             throw new \InvalidArgumentException('Function, phone, company name, siret, category, sector, address, zip code, city and company phone are required');
         }
 
@@ -61,27 +64,23 @@ class CompanyRegisterDTO {
             throw new \InvalidArgumentException('Company already exists');
         }
 
-        foreach ($categories as $category) {
-            if (!is_numeric($category)) {
-                throw new \InvalidArgumentException("The provided category id is not a valid.");
-            }
-            $category = $categoryRepository->find($category);
-            if (null === $category) {
-                throw new \InvalidArgumentException('Category not found');
-            }
-            $this->categories[] = $category;
+        if (!is_numeric($category)) {
+            throw new \InvalidArgumentException("The provided category id is not a valid.");
         }
+        $category = $categoryRepository->find($category);
+        if (null === $category) {
+            throw new \InvalidArgumentException('Category not found');
+        }
+        $this->category = $category;
 
-        foreach ($sectors as $sector) {
-            if (!is_numeric($sector)) {
-                throw new \InvalidArgumentException("The provided sector id is not a valid.");
-            }
-            $sector = $sectorRepository->find($sector);
-            if (null === $sector) {
-                throw new \InvalidArgumentException('Sector not found');
-            }
-            $this->sectors[] = $sector;
+        if (!is_numeric($sector)) {
+            throw new \InvalidArgumentException("The provided sector id is not a valid.");
         }
+        $sector = $sectorRepository->find($sector);
+        if (null === $sector) {
+            throw new \InvalidArgumentException('Sector not found');
+        }
+        $this->sector = $sector;
 
         $this->function = $function;
         $this->phone = $phone;
@@ -114,14 +113,14 @@ class CompanyRegisterDTO {
         return $this->siret;
     }
 
-    public function getCategories(): array
+    public function getCategory(): Category
     {
-        return $this->categories;
+        return $this->category;
     }
 
-    public function getSectors(): array
+    public function getSector(): Sector
     {
-        return $this->sectors;
+        return $this->sector;
     }
 
     public function getAddress(): string
