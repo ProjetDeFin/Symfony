@@ -71,7 +71,7 @@ class RegistrationController extends AbstractController
 
             $mailService->sendMail($user->getEmail(), 1,
                 [
-                    'link' => $this->generateUrl('app_register_confirm', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+//                    'link' => $this->generateUrl('app_register_confirm', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
                 ],
             );
 

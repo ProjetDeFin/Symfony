@@ -36,6 +36,15 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($superAdmin);
 
+        $superAdmin = new User();
+        $superAdmin
+            ->setEmail('quentin.rulleau@yahoo.com')
+            ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w')
+            ->setFirstname('Quentin')
+            ->setLastName('Rulleau')
+            ->setCivility(UserGenderEnum::MAN);
+
         $studentUser = new User();
         $studentUser->setEmail('student@example.com');
         $studentUser->setRoles(['ROLE_STUDENT']);
