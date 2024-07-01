@@ -113,7 +113,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $response->setContent($token);
+            $response->setData(['token' => $token]);
             $response->setStatusCode(Response::HTTP_OK);
         } catch (\Exception $e) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
