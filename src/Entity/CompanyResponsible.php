@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
+use App\Model\CompanyRegisterDTO;
 use App\Repository\CompanyResponsibleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -81,5 +82,14 @@ class CompanyResponsible
         $this->phone = $phone;
 
         return $this;
+    }
+
+    public static function fromDTO(CompanyRegisterDTO $companyResponsibleDTO, User $user, Company $company): self
+    {
+        $companyResponsible = new self();
+        $companyResponsible->setPosition($companyResponsibleDTO->getFunction());
+        $companyResponsible->setPhone($companyResponsibleDTO->getPhone());
+
+        return $companyResponsible;
     }
 }

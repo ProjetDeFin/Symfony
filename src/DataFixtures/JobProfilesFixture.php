@@ -8,6 +8,8 @@ use Doctrine\Persistence\ObjectManager;
 
 class JobProfilesFixture extends Fixture
 {
+    public static string $jobProfileReference = 'job_profile_';
+
     public function load(ObjectManager $manager): void
     {
         $jobProfiles = [
@@ -21,13 +23,15 @@ class JobProfilesFixture extends Fixture
             'Informatique' => '#FF6550',
         ];
 
+        $index = 0;
         foreach ($jobProfiles as $name => $color) {
             $jobProfile = new JobProfile();
             $jobProfile->setName($name);
             $jobProfile->setColor($color);
 
-            $this->addReference('job_profile_' . strtolower(str_replace(' ', '_', $name)), $jobProfile);
+            $this->addReference($this::$jobProfileReference.$index, $jobProfile);
 
+            ++$index;
             $manager->persist($jobProfile);
         }
 

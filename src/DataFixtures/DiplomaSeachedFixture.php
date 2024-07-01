@@ -10,14 +10,18 @@ use Doctrine\Persistence\ObjectManager;
 
 class DiplomaSeachedFixture extends Fixture
 {
+    public static string $diplomaReference = 'diploma_';
     public function load(ObjectManager $manager): void
     {
         $diplomas = [
             [
-                'name' => 'BAC',
+                'name' => 'BREVET',
             ],
             [
                 'name' => 'CAP',
+            ],
+            [
+                'name' => 'BAC',
             ],
             [
                 'name' => 'BTS',
@@ -28,13 +32,16 @@ class DiplomaSeachedFixture extends Fixture
             [
                 'name' => 'MASTER',
             ],
+            [
+                'name' => 'DOCTORAT',
+            ]
         ];
 
-        foreach ($diplomas as $diplomaData) {
+        foreach ($diplomas as $index => $diplomaData) {
             $diploma = new DiplomaSearched();
             $diploma->setName($diplomaData['name']);
 
-            $this->addReference('diploma_searched_' . strtolower(str_replace(' ', '_', $diplomaData['name'])), $diploma);
+            $this->addReference($this::$diplomaReference.$index, $diploma);
 
             $manager->persist($diploma);
         }

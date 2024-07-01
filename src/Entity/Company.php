@@ -6,13 +6,13 @@ use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\EnabledTrait;
 use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
+use App\Model\CompanyRegisterDTO;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ORM\Table(name: 'company')]
@@ -26,12 +26,16 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company', 'home', 'internship_offer', 'internship_offers'])]
+    #[Groups(['company', 'companies', 'home', 'internship_offer', 'internship_offers'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['company', 'home', 'internship_offer', 'internship_offers'])]
+    #[Groups(['company', 'companies','home', 'internship_offer', 'internship_offers'])]
     private ?string $name = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['company', 'companies'])]
+    private ?string $description = null;
 
     #[ORM\Column(type: Types::STRING)]
     #[Groups(['company'])]
@@ -54,7 +58,7 @@ class Company
     private ?\DateTimeInterface $creation = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
     private ?string $logo = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
@@ -88,6 +92,28 @@ class Company
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['company'])]
     private ?string $xUrl = null;
+
+    /**
+     * @var Collection<int, Sector>
+     */
+    #[ORM\ManyToMany(targetEntity: Sector::class, inversedBy: 'company')]
+    #[Groups(['company', 'companies'])]
+    private Collection $sectors;
+
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'companies')]
+    #[Groups(['company', 'companies'])]
+    private Collection $categories;
+
+    #[ORM\OneToMany(targetEntity: InternshipOffer::class, mappedBy: 'company')]
+    #[Groups(['company'])]
+    private Collection $internshipOffers;
+
+    public function __construct()
+    {
+        $this->sectors = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->internshipOffers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -272,5 +298,126 @@ class Company
         $this->xUrl = $xUrl;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Sector>
+     */
+    public function getSectors(): Collection
+    {
+        return $this->sectors;
+    }
+
+    public function addSector(Sector $sector): static
+    {
+        if (!$this->sectors->contains($sector)) {
+            $this->sectors->add($sector);
+            $sector->addCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSector(Sector $sector): static
+    {
+        if ($this->sectors->removeElement($sector)) {
+            $sector->removeCompany($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeCompany($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InternshipOffer>
+     */
+    public function getInternshipOffers(): Collection
+    {
+        return $this->internshipOffers;
+    }
+
+    public function addInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        if (!$this->internshipOffers->contains($internshipOffer)) {
+            $this->internshipOffers->add($internshipOffer);
+            $internshipOffer->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        if ($this->internshipOffers->removeElement($internshipOffer)) {
+            $internshipOffer->setCompany(null);
+        }
+
+        return $this;
+    }
+
+    public static function fromDTO(CompanyRegisterDTO $companyRegisterDTO): self
+    {
+        $company = new self();
+        $company->setName($companyRegisterDTO->getCompanyName());
+        $company->setSiret($companyRegisterDTO->getSiret());
+        $company->setPhone($companyRegisterDTO->getCompanyPhone());
+        $company->setAddress1($companyRegisterDTO->getAddress());
+        $company->setAddress2($companyRegisterDTO->getAddressComplement());
+        $company->setZipCode($companyRegisterDTO->getZipCode());
+        $company->setCity($companyRegisterDTO->getCity());
+
+        foreach ($companyRegisterDTO->getCategories() as $category) {
+            $company->addCategory($category);
+        }
+
+        foreach ($companyRegisterDTO->getSectors() as $sector) {
+            $company->addSector($sector);
+        }
+
+        return $company;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    #[Groups(['company'])]
+    public function getAge(): int
+    {
+        return $this->creation->diff(new \DateTime())->y;
     }
 }

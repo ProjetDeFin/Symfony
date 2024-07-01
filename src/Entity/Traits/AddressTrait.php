@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 trait AddressTrait
 {
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['company', 'home', 'internship_offer'])]
+    #[Groups(['company', 'companies', 'home', 'internship_offer'])]
     protected ?string $address1 = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -16,16 +16,24 @@ trait AddressTrait
     protected ?string $address2 = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['company', 'home', 'internship_offer'])]
+    #[Groups(['company', 'companies', 'home', 'internship_offer'])]
     protected ?string $city = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company', 'companies'])]
     protected ?string $zipCode = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['company', 'home'])]
+    #[Groups(['company'])]
     protected ?string $country = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['company'])]
+    protected ?string $latitude = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['company'])]
+    protected ?string $longitude = null;
 
     public function getAddress1(): ?string
     {
@@ -83,6 +91,30 @@ trait AddressTrait
     public function setCountry(string $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(string $latitude): static
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(string $longitude): static
+    {
+        $this->longitude = $longitude;
 
         return $this;
     }

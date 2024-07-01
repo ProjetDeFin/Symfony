@@ -1,5 +1,4 @@
 <?php
-
 namespace App\DataFixtures;
 
 use App\Entity\Company;
@@ -8,9 +7,10 @@ use App\Entity\Student;
 use App\Entity\User;
 use App\Enum\UserGenderEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class AppFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -21,8 +21,7 @@ class AppFixtures extends Fixture
             ->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w')
             ->setFirstname('Super')
             ->setLastName('Admin')
-            ->setCivility(UserGenderEnum::OTHER)
-        ;
+            ->setCivility(UserGenderEnum::OTHER);
 
         $manager->persist($superAdmin);
 
@@ -33,8 +32,7 @@ class AppFixtures extends Fixture
             ->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w')
             ->setFirstname('Paul')
             ->setLastName('Cuisinier')
-            ->setCivility(UserGenderEnum::MAN)
-        ;
+            ->setCivility(UserGenderEnum::MAN);
 
         $manager->persist($superAdmin);
 
@@ -56,6 +54,8 @@ class AppFixtures extends Fixture
         $student->setZipCode('75000');
         $student->setCountry('France');
         $student->setMobile('0123456789');
+        $student->setSchoolName('Université de Paris');
+        $student->setStudyLevel($this->getReference(StudyLevelFixture::$studyLevelsReference . 5));
         $this->addReference('student1', $student);
         $manager->persist($student);
 
@@ -68,7 +68,6 @@ class AppFixtures extends Fixture
         $companyResponsableUser->setPassword('$argon2i$v=19$m=12,t=3,p=1$YjE5MjhzenFjaGEwMDAwMA$jkh9yVJgBqsHw0Wb93jS8w');
         $manager->persist($companyResponsableUser);
 
-
         $manager->flush();
     }
 
@@ -76,6 +75,7 @@ class AppFixtures extends Fixture
     {
         return [
             CompanyFixture::class,
+            StudyLevelFixture::class,
         ];
     }
 }

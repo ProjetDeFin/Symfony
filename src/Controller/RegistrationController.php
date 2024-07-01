@@ -2,9 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
+use App\Entity\CompanyResponsible;
+use App\Entity\Student;
 use App\Entity\User;
+use App\Model\CompanyRegisterDTO;
+use App\Model\StudentRegisterDTO;
+use App\Model\UserRegisterDTO;
+use App\Repository\CategoryRepository;
+use App\Repository\CompanyRepository;
+use App\Repository\DiplomaSearchedRepository;
+use App\Repository\SectorRepository;
+use App\Repository\StudyLevelRepository;
 use App\Repository\UserRepository;
 use App\Service\ApiResponseService;
+use App\Service\BrevoMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/api', name: 'api_')]
 class RegistrationController extends AbstractController
@@ -24,73 +37,87 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         JWTTokenManagerInterface $JWTTokenManager,
         ApiResponseService $apiResponseService,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        DiplomaSearchedRepository $diplomaSearchedRepository,
+        CompanyRepository $companyRepository,
+        CategoryRepository $categoryRepository,
+        SectorRepository $sectorRepository,
+        StudyLevelRepository $studyLevelRepository,
+        BrevoMailService $mailService,
+    ): JsonResponse
+    {
+        $data = $request->request->all();
+        $response = $apiResponseService->getResponse();
+
+        try {
+            $userDTO = new UserRegisterDTO($data, $userRepository);
+            $user = User::fromDTO($userDTO);
+            $user->setPassword($passwordHasher->hashPassword($user, $userDTO->getPassword()));
+            $entityManager->persist($user);
+
+            if (true === $data['isStudent']) {
+                $studentDTO = new StudentRegisterDTO($data, $diplomaSearchedRepository, $studyLevelRepository);
+                $student = Student::fromDTO($studentDTO);
+                $entityManager->persist($student);
+            } elseif (true === $data['isCompany']) {
+                $companyDTO = new CompanyRegisterDTO($data, $companyRepository, $categoryRepository, $sectorRepository);
+                $company = Company::fromDTO($companyDTO);
+                $companyResponsible = CompanyResponsible::fromDTO($companyDTO, $user, $company);
+                $entityManager->persist($companyResponsible);
+                $entityManager->persist($company);
+            }
+
+            $entityManager->flush();
+
+            $mailService->sendMail($user->getEmail(), 1,
+                [
+                    'link' => $this->generateUrl('app_register_confirm', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                ],
+            );
+
+            $response->setStatusCode(Response::HTTP_OK);
+        } catch (\Exception $e) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setContent($e->getMessage());
+        }
+        return $response;
+    }
+
+    #[Route(path: '/register/confirm/{id}', name: 'register_confirm', methods: ['POST'])]
+    public function confirm(
+        UserRepository $userRepository,
+        JWTTokenManagerInterface $JWTTokenManager,
+        ApiResponseService $apiResponseService,
+        EntityManagerInterface $entityManager,
+        int $id,
     ): JsonResponse
     {
         $response = $apiResponseService->getResponse();
+        try {
+            $user = $userRepository->find($id);
+            if (null === $user) {
+                throw new \InvalidArgumentException('User not found');
+            }
+            $user->setEnabled(true);
 
-        $firstName = $request->get('first_name');
-        $lastName = $request->get('last_name');
-        $email = $request->get('email');
-        $password = $request->get('password');
-        $confirmPassword = $request->get('confirm_password');
+            $token = $JWTTokenManager->createFromPayload($user, [
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'id' => $user->getId(),
+            ]);
 
-        if (!$firstName || !$lastName || !$email || !$password || !$confirmPassword) {
+            $user->setApiToken($token);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $response->setContent($token);
+            $response->setStatusCode(Response::HTTP_OK);
+        } catch (\Exception $e) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Email and password are required']);
-            return $response;
+            $response->setContent($e->getMessage());
         }
 
-        $user = $userRepository->findOneBy(['email' => $email]);
-        if (null !== $user) {
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            $response->setData(['error' => 'User already exists']);
-            return $response;
-        }
-
-        if ($password !== $confirmPassword) {
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            $response->setData(['error' => 'Passwords do not match']);
-            return $response;
-        }
-
-        if (strlen($password) < 8) {
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            $response->setData(['error' => 'Password must be at least 8 characters long']);
-            return $response;
-        }
-
-        if (!preg_match('/[A-Z]/', $password)) {
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            $response->setData(['error' => 'Password must contain at least one uppercase letter']);
-            return $response;
-        }
-
-        if (!preg_match('/[a-z]/', $password)) {
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            $response->setData(['error' => 'Password must contain at least one lowercase letter']);
-            return $response;
-        }
-
-        if (!preg_match('/[0-9]/', $password)) {
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-            $response->setData(['error' => 'Password must contain at least one number']);
-            return $response;
-        }
-
-        $user = new User;
-        $user
-            ->setFirstName($firstName)
-            ->setLastName($lastName)
-            ->setEmail($email)
-            ->setPassword($passwordHasher->hashPassword($user, $password))
-        ;
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        // Return token in the response
-        $response->setStatusCode(Response::HTTP_OK);
         return $response;
     }
 }
