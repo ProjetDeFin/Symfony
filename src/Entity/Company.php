@@ -6,13 +6,13 @@ use App\Entity\Traits\AddressTrait;
 use App\Entity\Traits\EnabledTrait;
 use App\Entity\Traits\SoftDeleteTrait;
 use App\Entity\Traits\TimestampableTrait;
+use App\Model\CompanyRegisterDTO;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ORM\Table(name: 'company')]
@@ -32,6 +32,10 @@ class Company
     #[ORM\Column(type: Types::STRING, unique: true)]
     #[Groups(['company', 'companies','home', 'internship_offer', 'internship_offers'])]
     private ?string $name = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['company', 'companies'])]
+    private ?string $description = null;
 
     #[ORM\Column(type: Types::STRING)]
     #[Groups(['company'])]
@@ -92,15 +96,23 @@ class Company
     /**
      * @var Collection<int, Sector>
      */
-    #[ORM\ManyToMany(targetEntity: Sector::class, mappedBy: 'company')]
+    #[ORM\ManyToMany(targetEntity: Sector::class, inversedBy: 'company')]
+    #[Groups(['company', 'companies'])]
     private Collection $sectors;
 
-    #[ORM\ManyToOne(inversedBy: 'companies')]
-    private ?CompaniesCategory $categories = null;
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'companies')]
+    #[Groups(['company', 'companies'])]
+    private Collection $categories;
+
+    #[ORM\OneToMany(targetEntity: InternshipOffer::class, mappedBy: 'company')]
+    #[Groups(['company'])]
+    private Collection $internshipOffers;
 
     public function __construct()
     {
         $this->sectors = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->internshipOffers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -315,15 +327,97 @@ class Company
         return $this;
     }
 
-    public function getCategories(): ?CompaniesCategory
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function setCategories(?CompaniesCategory $categories): static
+    public function addCategory(Category $category): static
     {
-        $this->categories = $categories;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addCompany($this);
+        }
 
         return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeCompany($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InternshipOffer>
+     */
+    public function getInternshipOffers(): Collection
+    {
+        return $this->internshipOffers;
+    }
+
+    public function addInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        if (!$this->internshipOffers->contains($internshipOffer)) {
+            $this->internshipOffers->add($internshipOffer);
+            $internshipOffer->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInternshipOffer(InternshipOffer $internshipOffer): static
+    {
+        if ($this->internshipOffers->removeElement($internshipOffer)) {
+            $internshipOffer->setCompany(null);
+        }
+
+        return $this;
+    }
+
+    public static function fromDTO(CompanyRegisterDTO $companyRegisterDTO): self
+    {
+        $company = new self();
+        $company->setName($companyRegisterDTO->getCompanyName());
+        $company->setSiret($companyRegisterDTO->getSiret());
+        $company->setPhone($companyRegisterDTO->getCompanyPhone());
+        $company->setAddress1($companyRegisterDTO->getAddress());
+        $company->setAddress2($companyRegisterDTO->getAddressComplement());
+        $company->setZipCode($companyRegisterDTO->getZipCode());
+        $company->setCity($companyRegisterDTO->getCity());
+
+        foreach ($companyRegisterDTO->getCategories() as $category) {
+            $company->addCategory($category);
+        }
+
+        foreach ($companyRegisterDTO->getSectors() as $sector) {
+            $company->addSector($sector);
+        }
+
+        return $company;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    #[Groups(['company'])]
+    public function getAge(): int
+    {
+        return $this->creation->diff(new \DateTime())->y;
     }
 }

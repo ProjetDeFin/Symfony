@@ -2,15 +2,20 @@
 
 namespace App\Entity;
 
-use App\Repository\CompaniesCategoryRepository;
+use App\Entity\Traits\BlameableTrait;
+use App\Entity\Traits\TimestampableTrait;
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-#[ORM\Entity(repositoryClass: CompaniesCategoryRepository::class)]
-class CompaniesCategory
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ORM\Table(name: 'category')]
+class Category
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -24,7 +29,7 @@ class CompaniesCategory
     /**
      * @var Collection<int, Company>
      */
-    #[ORM\OneToMany(targetEntity: Company::class, mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'categories')]
     private Collection $companies;
 
     public function __construct()
@@ -61,7 +66,7 @@ class CompaniesCategory
     {
         if (!$this->companies->contains($company)) {
             $this->companies->add($company);
-            $company->setCategories($this);
+            $company->addCategory($this);
         }
 
         return $this;
@@ -71,8 +76,8 @@ class CompaniesCategory
     {
         if ($this->companies->removeElement($company)) {
             // set the owning side to null (unless already changed)
-            if ($company->getCategories() === $this) {
-                $company->setCategories(null);
+            if ($company->getCategories()->contains($this)) {
+                $company->removeCategory($this);
             }
         }
 

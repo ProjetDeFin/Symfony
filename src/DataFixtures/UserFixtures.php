@@ -7,9 +7,10 @@ use App\Entity\Student;
 use App\Entity\User;
 use App\Enum\UserGenderEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -53,6 +54,8 @@ class UserFixtures extends Fixture
         $student->setZipCode('75000');
         $student->setCountry('France');
         $student->setMobile('0123456789');
+        $student->setSchoolName('Université de Paris');
+        $student->setStudyLevel($this->getReference(StudyLevelFixture::$studyLevelsReference . 5));
         $this->addReference('student1', $student);
         $manager->persist($student);
 
@@ -72,6 +75,7 @@ class UserFixtures extends Fixture
     {
         return [
             CompanyFixture::class,
+            StudyLevelFixture::class,
         ];
     }
 }

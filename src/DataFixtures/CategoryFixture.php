@@ -2,15 +2,16 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\JobProfile;
+use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class CategoriesFixture extends Fixture
+class CategoryFixture extends Fixture
 {
+    public static string $categoryReference = 'category_';
     public function load(ObjectManager $manager): void
     {
-        $jobProfiles = [
+        $categories = [
             'Services aux particuliers',
             'Services aux entreprises',
             'Mairie, collectivité',
@@ -19,14 +20,13 @@ class CategoriesFixture extends Fixture
             'Autres'
         ];
 
-        foreach ($jobProfiles as $name => $color) {
-            $jobProfile = new JobProfile();
-            $jobProfile->setName($name);
-            $jobProfile->setColor($color);
+        foreach ($categories as $index => $name) {
+            $category = new Category();
+            $category->setName($name);
 
-            $this->addReference('job_profile_' . strtolower(str_replace(' ', '_', $name)), $jobProfile);
+            $this->addReference($this::$categoryReference.$index, $category);
 
-            $manager->persist($jobProfile);
+            $manager->persist($category);
         }
 
         $manager->flush();

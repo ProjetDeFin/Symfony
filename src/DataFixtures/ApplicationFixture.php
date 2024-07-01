@@ -6,10 +6,12 @@ use App\Entity\Application;
 use App\Enum\ApplicationStatusEnum;
 use App\Enum\TypeEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ApplicationFixture extends Fixture
+class ApplicationFixture extends Fixture implements DependentFixtureInterface
 {
+    public static string $applicationReference = 'application_';
     public function load(ObjectManager $manager): void
     {
         $applications = [
@@ -39,7 +41,7 @@ class ApplicationFixture extends Fixture
             ],
         ];
 
-        foreach ($applications as $applicationData) {
+        foreach ($applications as $index => $applicationData) {
             $application = new Application();
             $application->setTitle($applicationData['title']);
             $application->setStartAt(new \DateTimeImmutable($applicationData['startAt']));
@@ -48,6 +50,8 @@ class ApplicationFixture extends Fixture
             $application->setStatus($applicationData['status']);
 
             $application->setStudent($applicationData['student']);
+
+            $this->addReference($this::$applicationReference.$index, $application);
 
             $manager->persist($application);
         }

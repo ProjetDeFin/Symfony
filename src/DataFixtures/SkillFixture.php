@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class SkillFixture extends Fixture
 {
+    public static string $skillReference = 'skill_';
     public function load(ObjectManager $manager): void
     {
         $skills = [
@@ -149,11 +150,11 @@ class SkillFixture extends Fixture
             ],
         ];
 
-        foreach ($skills as $skillData) {
+        foreach ($skills as $index => $skillData) {
             $skill = new Skill();
             $skill->setName($skillData['name']);
 
-            $this->addReference('skill_' . strtolower(str_replace(' ', '_', $skillData['name'])), $skill);
+            $this->addReference($this::$skillReference.$index, $skill);
 
             $manager->persist($skill);
         }

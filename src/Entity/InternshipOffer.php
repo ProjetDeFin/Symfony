@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: InternshipOfferRepository::class)]
 #[ORM\Table(name: 'internship_offer')]
@@ -24,15 +23,15 @@ class InternshipOffer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['internship_offer',  'internship_offers'])]
+    #[Groups(['internship_offer',  'internship_offers', 'company', 'home'])]
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Groups(['internship_offer', 'home',  'internship_offers'])]
+    #[Groups(['internship_offer', 'home', 'company', 'internship_offers'])]
     private ?string $title;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['internship_offer', 'home',  'internship_offers'])]
+    #[Groups(['internship_offer', 'home', 'company', 'internship_offers'])]
     private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'internshipOffers')]
@@ -40,12 +39,16 @@ class InternshipOffer
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: JobProfile::class, mappedBy: 'internshipOffer')]
-    #[Groups(['internship_offer', 'home', 'internship_offers'])]
+    #[Groups(['internship_offer', 'home', 'company', 'internship_offers'])]
     private Collection $jobProfiles;
 
     #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'internshipOffer')]
+    #[Groups(['internship_offer', 'company'])]
+    private Collection $diplomasSearched;
+
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
     #[Groups(['internship_offer'])]
-    private Collection $diplomaSearcheds;
+    private Collection $applications;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
@@ -56,19 +59,20 @@ class InternshipOffer
     #[ORM\Column]
     private ?\DateTimeImmutable $endApplyDate = null;
 
-    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'internshipOffers')]
-    #[Groups(['internship_offer'])]
-    private Collection $skill;
+    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'internshipOffers')]
+    #[Groups(['internship_offer', 'company'])]
+    private Collection $skills;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['internship_offer',  'internship_offers', 'home'])]
+    #[Groups(['internship_offer', 'internship_offers', 'company', 'home'])]
     private ?string $type = null;
 
     public function __construct()
     {
         $this->jobProfiles = new ArrayCollection();
-        $this->diplomaSearcheds = new ArrayCollection();
-        $this->skill = new ArrayCollection();
+        $this->diplomasSearched = new ArrayCollection();
+        $this->applications = new ArrayCollection();
+        $this->skills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,7 +109,7 @@ class InternshipOffer
         return $this->company;
     }
 
-    public function setCompany(Company $company): static
+    public function setCompany(?Company $company): static
     {
         $this->company = $company;
 
@@ -142,15 +146,15 @@ class InternshipOffer
     /**
      * @return Collection<int, DiplomaSearched>
      */
-    public function getDiplomaSearcheds(): Collection
+    public function getDiplomasSearched(): Collection
     {
-        return $this->diplomaSearcheds;
+        return $this->diplomasSearched;
     }
 
     public function addDiplomaSearched(DiplomaSearched $diplomaSearched): static
     {
-        if (!$this->diplomaSearcheds->contains($diplomaSearched)) {
-            $this->diplomaSearcheds->add($diplomaSearched);
+        if (!$this->diplomasSearched->contains($diplomaSearched)) {
+            $this->diplomasSearched->add($diplomaSearched);
             $diplomaSearched->addInternshipOffer($this);
         }
 
@@ -159,8 +163,35 @@ class InternshipOffer
 
     public function removeDiplomaSearched(DiplomaSearched $diplomaSearched): static
     {
-        if ($this->diplomaSearcheds->removeElement($diplomaSearched)) {
+        if ($this->diplomasSearched->removeElement($diplomaSearched)) {
             $diplomaSearched->removeInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            $application->setOffer(null);
         }
 
         return $this;
@@ -205,15 +236,15 @@ class InternshipOffer
     /**
      * @return Collection<int, Skill>
      */
-    public function getSkill(): Collection
+    public function getSkills(): Collection
     {
-        return $this->skill;
+        return $this->skills;
     }
 
     public function addSkill(Skill $skill): static
     {
-        if (!$this->skill->contains($skill)) {
-            $this->skill->add($skill);
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
         }
 
         return $this;
@@ -221,7 +252,7 @@ class InternshipOffer
 
     public function removeSkill(Skill $skill): static
     {
-        $this->skill->removeElement($skill);
+        $this->skills->removeElement($skill);
 
         return $this;
     }
@@ -262,7 +293,7 @@ class InternshipOffer
         return $this->startAt->diff($this->endAt)->format('%a');
     }
 
-    #[Groups(['internship_offers', 'internship_offer'])]
+    #[Groups(['internship_offers', 'company', 'internship_offer'])]
     public function getPeriod(): ?string
     {
         return $this->startAt->format('d/m/Y') . ' - ' . $this->endAt->format('d/m/Y');
