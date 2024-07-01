@@ -28,7 +28,7 @@ class CompanyRegisterDTO {
         CategoryRepository $categoryRepository,
         SectorRepository $sectorRepository,
     ) {
-        $function = $data['function'];
+        $function = $data['position'];
         $phone = $data['mobile'];
         $companyName = $data['companyName'];
         $siret = $data['siret'];
