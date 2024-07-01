@@ -24,7 +24,9 @@ class StudentRegisterDTO
         $diplomaSearched = $data['diploma'];
         $schoolName = $data['schoolName'];
 
-        if (!$phone || !$studyLevel || !$diplomaSearched || !$schoolName)
+        dump($data);
+
+        if ( null !== $phone || !$schoolName)
         {
             throw new \InvalidArgumentException('Phone, study level, diploma searched and school name are required');
         }
