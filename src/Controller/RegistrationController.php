@@ -51,6 +51,8 @@ class RegistrationController extends AbstractController
         $data = $request->request->all();
         $response = $apiResponseService->getResponse();
 
+        dump($data);
+
         try {
             $userDTO = new UserRegisterDTO($data, $userRepository);
             $user = User::fromDTO($userDTO);
