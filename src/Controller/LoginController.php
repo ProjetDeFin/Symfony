@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
-use App\Service\ApiResponseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +22,6 @@ class LoginController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         JWTTokenManagerInterface $JWTTokenManager,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger
     ): JsonResponse
     {
         $email = $request->get('email');
@@ -45,9 +42,7 @@ class LoginController extends AbstractController
                 'lastName' => $user->getLastName(),
                 'id' => $user->getId(),
             ]);
-            $logger->info('Token generated: ' . $token);
         } catch (\Exception $e) {
-            $logger->error('Error generating token: ' . $e->getMessage());
             return $this->json(['error' => 'An error occurred while generating the token'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
