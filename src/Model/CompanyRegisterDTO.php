@@ -44,7 +44,7 @@ class CompanyRegisterDTO
         $companyPhone = $data['organizationPhone'];
 
         if (!$function || !$phone || !$companyName || !$siret || !$address || !$zipCode || !$city || !$companyPhone) {
-            throw new \InvalidArgumentException('Function, phone, company name, siret, category, sector, address, zip code, city and company phone are required');
+            throw new \InvalidArgumentException('Function, phone, company name, siret, address, zip code, city and company phone are required');
         }
 
         if (!is_numeric($phone) || strlen($phone) !== 10) {

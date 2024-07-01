@@ -28,7 +28,7 @@ class StudentRegisterDTO
 
         if ( null !== $phone || !$schoolName)
         {
-            throw new \InvalidArgumentException('Phone, study level, diploma searched and school name are required');
+            throw new \InvalidArgumentException('Phone and school name are required');
         }
 
         if (!is_numeric($phone) || strlen($phone) !== 10) {
