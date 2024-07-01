@@ -41,7 +41,7 @@ class CompanyRegisterDTO
         $addressComplement = $data['addressComplement'];
         $zipCode = $data['postalCode'];
         $city = $data['city'];
-        $companyPhone = $data['companyPhone'];
+        $companyPhone = $data['organizationPhone'];
 
         if (!$function || !$phone || !$companyName || !$siret || !$category || !$sector || !$address || !$zipCode || !$city || !$companyPhone) {
             throw new \InvalidArgumentException('Function, phone, company name, siret, category, sector, address, zip code, city and company phone are required');
