@@ -33,6 +33,7 @@ class RegistrationController extends AbstractController
 {
     public function __construct(
         private readonly SerializerInterface $serializer,
+        private readonly string $frontUrl
     ) {
     }
 
@@ -41,7 +42,6 @@ class RegistrationController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
-        JWTTokenManagerInterface $JWTTokenManager,
         ApiResponseService $apiResponseService,
         EntityManagerInterface $entityManager,
         DiplomaSearchedRepository $diplomaSearchedRepository,
@@ -59,13 +59,14 @@ class RegistrationController extends AbstractController
             $userDTO = new UserRegisterDTO($data, $userRepository);
             $user = User::fromDTO($userDTO);
             $user->setPassword($passwordHasher->hashPassword($user, $userDTO->getPassword()));
-            $entityManager->persist($user);
 
-            if (true === $data['isStudent']) {
+            if ('true' === $data['isStudent']) {
+                $user->setRoles(['ROLE_STUDENT']);
                 $studentDTO = new StudentRegisterDTO($data, $diplomaSearchedRepository, $studyLevelRepository);
                 $student = Student::fromDTO($studentDTO);
                 $entityManager->persist($student);
-            } elseif (true === $data['isCompany']) {
+            } elseif ('true' === $data['isCompany']) {
+                $user->setRoles(['ROLE_COMPANY_RESPONSIBLE']);
                 $companyDTO = new CompanyRegisterDTO($data, $companyRepository, $categoryRepository, $sectorRepository);
                 $company = Company::fromDTO($companyDTO);
                 $companyResponsible = CompanyResponsible::fromDTO($companyDTO, $user, $company);
@@ -73,11 +74,12 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($company);
             }
 
+            $entityManager->persist($user);
             $entityManager->flush();
 
-            $mailService->sendMail($user->getEmail(), 1,
+            $mailService->sendMail($user->getEmail(), 3,
                 [
-                    'link' => $this->generateUrl('app_register_confirm', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'link' => $this->frontUrl.'/profil/validation/'.$user->getId(),
                 ],
             );
 
@@ -89,7 +91,7 @@ class RegistrationController extends AbstractController
         return $response;
     }
 
-    #[Route(path: '/register/confirm/{id}', name: 'register_confirm', methods: ['POST'])]
+    #[Route(path: '/register/confirm/{id}', name: 'register_confirm', methods: ['GET'])]
     public function confirm(
         UserRepository $userRepository,
         JWTTokenManagerInterface $JWTTokenManager,
@@ -117,7 +119,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $response->setContent($token);
+            $response->setData(['token' => $token]);
             $response->setStatusCode(Response::HTTP_OK);
         } catch (\Exception $e) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);

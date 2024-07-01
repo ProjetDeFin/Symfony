@@ -423,14 +423,8 @@ class Company
         $company->setAddress2($companyRegisterDTO->getAddressComplement());
         $company->setZipCode($companyRegisterDTO->getZipCode());
         $company->setCity($companyRegisterDTO->getCity());
-
-        foreach ($companyRegisterDTO->getCategories() as $category) {
-            $company->addCategory($category);
-        }
-
-        foreach ($companyRegisterDTO->getSectors() as $sector) {
-            $company->addSector($sector);
-        }
+        $company->addCategory($companyRegisterDTO->getCategory());
+        $company->addSector($companyRegisterDTO->getSector());
 
         return $company;
     }
