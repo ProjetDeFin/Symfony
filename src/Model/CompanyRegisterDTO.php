@@ -39,7 +39,7 @@ class CompanyRegisterDTO
         $sector = $data['activity'];
         $address = $data['address'];
         $addressComplement = $data['addressComplement'];
-        $zipCode = $data['zipCode'];
+        $zipCode = $data['postalCode'];
         $city = $data['city'];
         $companyPhone = $data['companyPhone'];
 
