@@ -32,6 +32,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 ],
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
             ],
             [
@@ -55,6 +56,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 3',
@@ -75,6 +77,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 4',
@@ -94,6 +97,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 5',
@@ -115,6 +119,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 6',
@@ -136,6 +141,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 7',
@@ -157,6 +163,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 8',
@@ -178,6 +185,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 9',
@@ -199,6 +207,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
             [
                 'name' => 'Offer 10',
@@ -220,6 +229,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'startAt' => new \DateTimeImmutable('2025-01-01'),
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
             ],
         ];
 
@@ -231,6 +241,7 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
             $offer->setStartAt($offerData['startAt']);
             $offer->setEndAt($offerData['endAt']);
             $offer->setEndApplyDate($offerData['endApplyDate']);
+            $offer->setStartApplyDate($offerData['startApplyDate']);
 
             foreach ($offerData['jobProfiles'] as $jobProfile) {
                 $offer->addJobProfile($jobProfile);

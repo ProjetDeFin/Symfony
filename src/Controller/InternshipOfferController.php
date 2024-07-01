@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Repository\DiplomaSearchedRepository;
 use App\Repository\InternshipOfferRepository;
+use App\Repository\JobProfileRepository;
+use App\Repository\SkillRepository;
+use Proxies\__CG__\App\Entity\DiplomaSearched;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +18,10 @@ class InternshipOfferController extends AbstractController
 {
     public function __construct(
         private readonly InternshipOfferRepository $internshipOfferRepository,
-        private readonly SerializerInterface       $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly DiplomaSearchedRepository $diplomaSearchedRepository,
+        private readonly JobProfileRepository $jobProfileRepository,
+        private readonly SkillRepository $skillRepository
     )
     {
     }
@@ -32,6 +39,12 @@ class InternshipOfferController extends AbstractController
 
         $internshipOffers = $this->internshipOfferRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
+        $internshipOffers = [
+            'offers' => $internshipOffers,
+            'diplomas' => $this->diplomaSearchedRepository->findAll(),
+            'jobProfiles' => $this->jobProfileRepository->findAll(),
+        ];
+
         $jsonContent = $this->serializer->serialize($internshipOffers, 'json', ['groups' => 'internship_offers']);
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
@@ -42,12 +55,11 @@ class InternshipOfferController extends AbstractController
     ): Response
     {
         $internshipOffer = $this->internshipOfferRepository->find($id);
-
         $similarOffers = $this->internshipOfferRepository->findSimilarOffers($internshipOffer);
 
         $internshipOffer = [
             'offer' => $internshipOffer,
-            'similarOffers' => $similarOffers
+            'similarOffers' => $similarOffers,
         ];
 
         $jsonContent = $this->serializer->serialize($internshipOffer, 'json', ['groups' => 'internship_offers']);

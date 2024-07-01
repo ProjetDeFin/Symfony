@@ -37,6 +37,10 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[Groups(['user'])]
     private string $lastName;
 
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['user'])]
+    private ?string $picture = null;
+
     #[ORM\Column(type: Types::STRING, enumType: UserGenderEnum::class)]
     #[Groups(['user'])]
     private ?UserGenderEnum $civility = null;
@@ -195,5 +199,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         ;
 
         return $user;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(string $picture): static
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 }

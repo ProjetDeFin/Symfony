@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\SectorRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,15 +16,15 @@ class CompaniesController extends AbstractController
 {
     public function __construct(
         private readonly CompanyRepository $companyRepository,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly SectorRepository $sectorRepository,
+        private readonly CategoryRepository $categoryRepository
     ) {
     }
 
     #[Route(path: '/', name: 'list_companies', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
-        CompanyRepository $companyRepository,
-        SerializerInterface $serializer
     ): Response {
         $filters = json_decode($request->get('filters'), true);
         $order = $request->get('order');
@@ -31,7 +33,13 @@ class CompaniesController extends AbstractController
         $limit = json_decode($request->get('limit', 10), true);
         $companies = $this->companyRepository->findByFilter($filters, $order, $orderBy, $page, $limit);
 
-        $jsonContent = $serializer->serialize($companies, 'json', ['groups' => 'companies']);
+        $companies = [
+            'companies' => $companies,
+            'sectors' => $this->sectorRepository->findAll(),
+            'categories' => $this->categoryRepository->findAll()
+        ];
+
+        $jsonContent = $this->serializer->serialize($companies, 'json', ['groups' => 'companies']);
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 
