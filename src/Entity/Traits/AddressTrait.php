@@ -27,11 +27,11 @@ trait AddressTrait
     #[Groups(['company'])]
     protected ?string $country = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'float', length: 255, nullable: true)]
     #[Groups(['company'])]
     protected ?string $latitude = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'float', length: 255, nullable: true)]
     #[Groups(['company'])]
     protected ?string $longitude = null;
 
@@ -95,24 +95,24 @@ trait AddressTrait
         return $this;
     }
 
-    public function getLatitude(): ?string
+    public function getLatitude(): ?float
     {
         return $this->latitude;
     }
 
-    public function setLatitude(string $latitude): static
+    public function setLatitude(float $latitude): static
     {
         $this->latitude = $latitude;
 
         return $this;
     }
 
-    public function getLongitude(): ?string
+    public function getLongitude(): ?float
     {
         return $this->longitude;
     }
 
-    public function setLongitude(string $longitude): static
+    public function setLongitude(float $longitude): static
     {
         $this->longitude = $longitude;
 

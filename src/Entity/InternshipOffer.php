@@ -357,13 +357,13 @@ class InternshipOffer
     }
 
     #[Groups(['internship_offers', 'internship_offer'])]
-    public function getCompanyLat(): string
+    public function getCompanyLat(): float
     {
         return $this->company->getLatitude();
     }
 
     #[Groups(['internship_offers', 'internship_offer'])]
-    public function getCompanyLng(): string
+    public function getCompanyLng(): float
     {
         return $this->company->getLongitude();
     }
@@ -372,5 +372,11 @@ class InternshipOffer
     public function getCompanyPhotos(): array
     {
         return $this->company->getPhotos();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyLinkedin(): string
+    {
+        return $this->company->getLinkedinUrl();
     }
 }
