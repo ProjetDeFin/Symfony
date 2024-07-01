@@ -31,21 +31,26 @@ class DashboardController extends AbstractController
         $data = $request->headers->get('Authorization');
         $token = str_replace('Bearer ', '', $data);
         $user = $userRepository->findOneBy(['apiToken' => $token]);
+        if (!$user) {
+            return new JsonResponse('Invalid token', 400);
+        }
         if ($role === 'ROLE_STUDENT') {
-            $student = $studentRepository->findOneBy(['user' => $user]);
-            $toSerialized = [
+            $student = $studentRepository->getFromUser($user);
+            $toSerialize = [
                 'role' => $student,
                 'user' => $user,
             ];
         } elseif ($role === 'ROLE_COMPANY') {
             $companyResponsible = $companyResponsableRepository->findOneBy(['user' => $user]);
-            $toSerialized = [
+            $toSerialize = [
                 'role' => $companyResponsible,
                 'user' => $user,
             ];
+        } else {
+            return new JsonResponse('Invalid role', 400);
         }
 
-        $serialized = $this->serializer->serialize($toSerialized, 'json', ['groups' => 'profile']);
+        $serialized = $this->serializer->serialize($toSerialize, 'json', ['groups' => 'profile']);
         return new JsonResponse($serialized, 200, ['Content-Type' => 'application/json']);
     }
 }
