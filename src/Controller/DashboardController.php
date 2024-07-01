@@ -52,7 +52,9 @@ class DashboardController extends AbstractController
     ): JsonResponse
     {
         $data = $request->headers->get('Authorization');
-        dd(str_replace('Bearer ', '', $data));
+        $token = str_replace('Bearer ', '', $data);
+        $user = $userRepository->findOneBy(['apiToken' => $token]);
+        dd($user);
 
     }
 
