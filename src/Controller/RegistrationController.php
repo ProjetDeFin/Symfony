@@ -26,10 +26,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api', name: 'api_')]
 class RegistrationController extends AbstractController
 {
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+    ) {
+    }
+
     #[Route(path: '/register', name: 'register', methods: ['POST'])]
     public function login(
         Request $request,
@@ -119,5 +125,35 @@ class RegistrationController extends AbstractController
         }
 
         return $response;
+    }
+
+    #[Route(path: '/register/selects/company', name: 'register_selects_company', methods: ['get'])]
+    public function selects(
+        CategoryRepository $categoryRepository,
+        SectorRepository $sectorRepository,
+    ): Response
+    {
+        $selects = [
+            'categories' => $categoryRepository->findAll(),
+            'sectors' => $sectorRepository->findAll(),
+        ];
+
+        $jsonContent = $this->serializer->serialize($selects, 'json', ['groups' => 'selectsRegisterCompany']);
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
+    }
+
+    #[Route(path: '/register/selects/student', name: 'register_selects_student', methods: ['get'])]
+    public function selectsStudent(
+        StudyLevelRepository $studyLevelRepository,
+        DiplomaSearchedRepository $diplomaSearchedRepository,
+    ): Response
+    {
+        $selects = [
+            'studyLevels' => $studyLevelRepository->findAll(),
+            'diplomasSearched' => $diplomaSearchedRepository->findAll(),
+        ];
+
+        $jsonContent = $this->serializer->serialize($selects, 'json', ['groups' => 'selectsRegisterStudent']);
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 }

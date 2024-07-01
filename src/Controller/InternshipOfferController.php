@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\DiplomaSearchedRepository;
 use App\Repository\InternshipOfferRepository;
 use App\Repository\JobProfileRepository;
+use App\Repository\SkillRepository;
 use Proxies\__CG__\App\Entity\DiplomaSearched;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,7 @@ class InternshipOfferController extends AbstractController
         private readonly SerializerInterface $serializer,
         private readonly DiplomaSearchedRepository $diplomaSearchedRepository,
         private readonly JobProfileRepository $jobProfileRepository,
+        private readonly SkillRepository $skillRepository
     )
     {
     }
@@ -53,12 +55,11 @@ class InternshipOfferController extends AbstractController
     ): Response
     {
         $internshipOffer = $this->internshipOfferRepository->find($id);
-
         $similarOffers = $this->internshipOfferRepository->findSimilarOffers($internshipOffer);
 
         $internshipOffer = [
             'offer' => $internshipOffer,
-            'similarOffers' => $similarOffers
+            'similarOffers' => $similarOffers,
         ];
 
         $jsonContent = $this->serializer->serialize($internshipOffer, 'json', ['groups' => 'internship_offers']);

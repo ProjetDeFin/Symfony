@@ -63,11 +63,11 @@ class InternshipOffer
     private ?\DateTimeImmutable $endApplyDate = null;
 
     #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'internshipOffers')]
-    #[Groups(['internship_offer', 'company'])]
+    #[Groups(['internship_offer', 'company', 'internship_offers'])]
     private Collection $skills;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['internship_offer', 'internship_offers', 'company', 'home'])]
+    #[Groups(['internship_offer', 'internship_offers', 'company', 'home', 'companies'])]
     private ?string $type = null;
 
     public function __construct()
@@ -320,21 +320,57 @@ class InternshipOffer
         return $this->startAt->diff($this->endAt)->format('%a');
     }
 
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offers', 'internship_offer'])]
     public function getFormatedEndApplyDate(): string
     {
         return $this->endApplyDate->format('d/m/Y');
     }
 
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getFormatedStartApplyDate(): string
+    {
+        return $this->startApplyDate->format('d/m/Y');
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
     public function getFormatedStartAt(): string
     {
         return $this->startAt->format('d/m/Y');
     }
 
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offers', 'internship_offer'])]
     public function getFormatedEndAt(): string
     {
         return $this->endAt->format('d/m/Y');
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyDescription(): string
+    {
+        return $this->company->getDescription();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyId(): string
+    {
+        return $this->company->getId();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyLat(): string
+    {
+        return $this->company->getLatitude();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyLng(): string
+    {
+        return $this->company->getLongitude();
+    }
+
+    #[Groups(['internship_offers', 'internship_offer'])]
+    public function getCompanyPhotos(): array
+    {
+        return $this->company->getPhotos();
     }
 }

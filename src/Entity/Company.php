@@ -62,36 +62,36 @@ class Company
     private ?string $logo = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['internship_offer'])]
     private ?string $photo1 = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['internship_offer'])]
     private ?string $photo2 = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['internship_offer'])]
     private ?string $photo3 = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
-    private ?string $photo4 = null;
-
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
-    private ?string $photo5 = null;
-
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['company'])]
     private ?string $detail1 = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['company'])]
     private ?string $detail2 = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['company', 'companies', 'home', 'internship_offer',  'internship_offers'])]
+    #[Groups(['company'])]
     private ?string $detail3 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
+    private ?string $detail4 = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['company'])]
+    private ?string $detail5 = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
     #[Groups(['company'])]
@@ -137,7 +137,7 @@ class Company
     private Collection $categories;
 
     #[ORM\OneToMany(targetEntity: InternshipOffer::class, mappedBy: 'company')]
-    #[Groups(['company'])]
+    #[Groups(['company', 'companies'])]
     private Collection $internshipOffers;
 
     public function __construct()
@@ -489,30 +489,6 @@ class Company
         return $this;
     }
 
-    public function getPhoto4(): ?string
-    {
-        return $this->photo4;
-    }
-
-    public function setPhoto4(string $photo4): static
-    {
-        $this->photo4 = $photo4;
-
-        return $this;
-    }
-
-    public function getPhoto5(): ?string
-    {
-        return $this->photo5;
-    }
-
-    public function setPhoto5(string $photo5): static
-    {
-        $this->photo5 = $photo5;
-
-        return $this;
-    }
-
     public function getDetail1(): ?string
     {
         return $this->detail1;
@@ -547,5 +523,34 @@ class Company
         $this->detail3 = $detail3;
 
         return $this;
+    }
+
+    public function getDetail4(): ?string
+    {
+        return $this->detail4;
+    }
+
+    public function setDetail4(string $detail4): static
+    {
+        $this->detail4 = $detail4;
+
+        return $this;
+    }
+
+    public function getDetail5(): ?string
+    {
+        return $this->detail5;
+    }
+
+    public function setDetail5(string $detail5): static
+    {
+        $this->detail5 = $detail5;
+
+        return $this;
+    }
+
+    public function getPhotos(): array
+    {
+        return [$this->photo1, $this->photo2, $this->photo3];
     }
 }

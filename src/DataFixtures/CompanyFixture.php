@@ -16,7 +16,12 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             [
                 'name' => 'Company 1',
                 'socialReason' => 'Social Reason1',
-                'description' => 'Description1',
+                'description' => 'Aliquam rhoncus, massa a egestas volutpat, ligula leo rutrum quam, eget tristique eros
+                 lectus ac risus. Integer id rhoncus purus. Sed placerat metus sit amet nisi sodales porttitor. Interdum
+                  et malesuada fames ac ante ipsum primis in faucibus.Etiam in urna sapien. Mauris accumsan, mauris at
+                   commodo vestibulum, diam ipsum congue urna, non pharetra ante risus ac turpis. Maecenas pulvinar 
+                   lorem sit amet metus porta, nec lobortis felis maximus. Maecenas ultrices vulputate ultricies. 
+                   Donec congue fermentum diam, sit amet varius ipsum fringilla sed',
                 'siret' => 123412341234123,
                 'workforce' => '100',
                 'sellFigure' => 1000.0,
@@ -25,7 +30,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'city' => 'Paris',
                 'postalCode' => '75000',
                 'country' => 'France',
-                'logo' => 'intel.svg',
+                'logo' => '/uploads/logo/intel.svg',
                 'phone' => '0121567892',
                 'email' => 'company1@example.com',
                 'websiteUrl' => 'https://www.company1.com',
@@ -36,6 +41,14 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'xUrl' => 'https://www.x.com/company1',
                 'latitude' => 48.856614,
                 'longitude' => 2.3522219,
+                'photo1' => '/uploads/company/photo1.jpg',
+                'photo2' => '/uploads/company/photo2.jpg',
+                'photo3' => '/uploads/company/photo3.jpg',
+                'detail1' => '/uploads/company/detail1.jpg',
+                'detail2' => '/uploads/company/detail2.jpg',
+                'detail3' => '/uploads/company/detail3.jpg',
+                'detail4' => '/uploads/company/detail4.jpg',
+                'detail5' => '/uploads/company/detail5.jpg',
                 'categories' => [
                     $this->getReference('category_0'),
                     $this->getReference('category_1'),
@@ -47,7 +60,12 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             [
                 'name' => 'Company 2',
                 'socialReason' => 'Social Reason2',
-                'description' => 'Description1',
+                'description' => 'Aliquam rhoncus, massa a egestas volutpat, ligula leo rutrum quam, eget tristique eros
+                 lectus ac risus. Integer id rhoncus purus. Sed placerat metus sit amet nisi sodales porttitor. Interdum
+                  et malesuada fames ac ante ipsum primis in faucibus.Etiam in urna sapien. Mauris accumsan, mauris at
+                   commodo vestibulum, diam ipsum congue urna, non pharetra ante risus ac turpis. Maecenas pulvinar 
+                   lorem sit amet metus porta, nec lobortis felis maximus. Maecenas ultrices vulputate ultricies. 
+                   Donec congue fermentum diam, sit amet varius ipsum fringilla sed',
                 'siret' => 12345678401235,
                 'workforce' => '200',
                 'sellFigure' => 2000.0,
@@ -56,7 +74,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'city' => 'Paris',
                 'postalCode' => '75000',
                 'country' => 'France',
-                'logo' => 'amd.svg',
+                'logo' => '/uploads/logo/amd.svg',
                 'phone' => '0123456789',
                 'email' => 'company2@example.com',
                 'websiteUrl' => 'https://www.company2.com',
@@ -67,6 +85,14 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'xUrl' => 'https://www.x.com/company2',
                 'latitude' => 48.856614,
                 'longitude' => 2.3522219,
+                'photo1' => '/uploads/company/photo1.jpg',
+                'photo2' => '/uploads/company/photo2.jpg',
+                'photo3' => '/uploads/company/photo3.jpg',
+                'detail1' => '/uploads/company/detail1.jpg',
+                'detail2' => '/uploads/company/detail2.jpg',
+                'detail3' => '/uploads/company/detail3.jpg',
+                'detail4' => '/uploads/company/detail4.jpg',
+                'detail5' => '/uploads/company/detail5.jpg',
                 'categories' => [
                     $this->getReference('category_1'),
                 ],
@@ -77,7 +103,12 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             ],
             [
                 'name' => 'Company 3',
-                'description' => 'Description3',
+                'description' => 'Aliquam rhoncus, massa a egestas volutpat, ligula leo rutrum quam, eget tristique eros
+                 lectus ac risus. Integer id rhoncus purus. Sed placerat metus sit amet nisi sodales porttitor. Interdum
+                  et malesuada fames ac ante ipsum primis in faucibus.Etiam in urna sapien. Mauris accumsan, mauris at
+                   commodo vestibulum, diam ipsum congue urna, non pharetra ante risus ac turpis. Maecenas pulvinar 
+                   lorem sit amet metus porta, nec lobortis felis maximus. Maecenas ultrices vulputate ultricies. 
+                   Donec congue fermentum diam, sit amet varius ipsum fringilla sed',
                 'socialReason' => 'Social Reason3',
                 'siret' => 123123123123123,
                 'workforce' => '300',
@@ -87,7 +118,7 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'city' => 'Paris',
                 'postalCode' => '75000',
                 'country' => 'France',
-                'logo' => 'talkit.svg',
+                'logo' => '/uploads/logo/talkit.svg',
                 'phone' => '0123123123',
                 'email' => 'company3@example.com',
                 'websiteUrl' => 'https://www.company3.com',
@@ -98,6 +129,14 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
                 'xUrl' => 'https://www.x.com/company3',
                 'latitude' => 48.856614,
                 'longitude' => 2.3522219,
+                'photo1' => '/uploads/company/photo1.jpg',
+                'photo2' => '/uploads/company/photo2.jpg',
+                'photo3' => '/uploads/company/photo3.jpg',
+                'detail1' => '/uploads/company/detail1.jpg',
+                'detail2' => '/uploads/company/detail2.jpg',
+                'detail3' => '/uploads/company/detail3.jpg',
+                'detail4' => '/uploads/company/detail4.jpg',
+                'detail5' => '/uploads/company/detail5.jpg',
                 'categories' => [
                     $this->getReference('category_2'),
                     $this->getReference('category_4'),
@@ -135,6 +174,14 @@ class CompanyFixture extends Fixture implements DependentFixtureInterface
             $company->setXUrl($companyData['xUrl']);
             $company->setLatitude($companyData['latitude']);
             $company->setLongitude($companyData['longitude']);
+            $company->setPhoto1($companyData['photo1']);
+            $company->setPhoto2($companyData['photo2']);
+            $company->setPhoto3($companyData['photo3']);
+            $company->setDetail1($companyData['detail1']);
+            $company->setDetail2($companyData['detail2']);
+            $company->setDetail3($companyData['detail3']);
+            $company->setDetail4($companyData['detail4']);
+            $company->setDetail5($companyData['detail5']);
             foreach ($companyData['categories'] as $category) {
                 $company->addCategory($category);
             }
