@@ -57,7 +57,6 @@ class RegistrationController extends AbstractController
             $userDTO = new UserRegisterDTO($data, $userRepository);
             $user = User::fromDTO($userDTO);
             $user->setPassword($passwordHasher->hashPassword($user, $userDTO->getPassword()));
-            $entityManager->persist($user);
 
             if (true === $data['isStudent']) {
                 $user->setRoles(['ROLE_STUDENT']);
@@ -73,6 +72,7 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($company);
             }
 
+            $entityManager->persist($user);
             $entityManager->flush();
 
             $mailService->sendMail($user->getEmail(), 3,
