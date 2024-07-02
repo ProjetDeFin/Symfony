@@ -40,7 +40,7 @@ class DashboardController extends AbstractController
                 'role' => $student,
                 'user' => $user,
             ];
-        } elseif ($role === 'ROLE_COMPANY') {
+        } elseif ($role === 'ROLE_COMPANY_RESPONSIBLE') {
             $companyResponsible = $companyResponsableRepository->findOneBy(['user' => $user]);
             $toSerialize = [
                 'role' => $companyResponsible,
@@ -50,7 +50,6 @@ class DashboardController extends AbstractController
             return new JsonResponse('Invalid role', 400);
         }
 
-        $serialized = $this->serializer->serialize($toSerialize, 'json', ['groups' => 'profile']);
-        return new JsonResponse($serialized, 200, ['Content-Type' => 'application/json']);
+        return new JsonResponse($toSerialize, 200, ['Content-Type' => 'application/json']);
     }
 }
