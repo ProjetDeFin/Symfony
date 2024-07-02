@@ -364,4 +364,9 @@ class Student
 
         return $student;
     }
+
+    public function __toString(): string
+    {
+        return $this->getUser()->getFullName();
+    }
 }

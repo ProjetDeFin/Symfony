@@ -11,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class CompanyCrudController extends AbstractCrudController
 {
@@ -19,30 +21,31 @@ class CompanyCrudController extends AbstractCrudController
         return Company::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id')->hideOnForm(),
-            TextField::new('name', 'Company Name'),
-            TextField::new('socialReason', 'Social Reason'),
-            TextField::new('address1', 'Address')->hideOnIndex(),
-            TextField::new('zipCode', 'Postal Code'), // Corrected here
-            TextField::new('city', 'City'),
-            TextField::new('country', 'Country')->hideOnIndex(),
-            IntegerField::new('siret', 'SIRET Number'),
-            TextField::new('workforce', 'Workforce'),
-            NumberField::new('sellFigure', 'Sell Figure')->setNumDecimals(2),
-            DateField::new('creation', 'Creation Date'),
-            TextField::new('phone', 'Phone Number'),
-            EmailField::new('email', 'Email Address'),
-            UrlField::new('websiteUrl', 'Website URL')->hideOnIndex(),
-            TextField::new('fax', 'Fax Number')->hideOnIndex(),
-            UrlField::new('linkedinUrl', 'LinkedIn URL')->hideOnIndex(),
-            UrlField::new('facebookUrl', 'Facebook URL')->hideOnIndex(),
-            UrlField::new('instagramUrl', 'Instagram URL')->hideOnIndex(),
-            UrlField::new('xUrl', 'Other URL')->hideOnIndex(),
+            TextField::new('name', 'Nom de l\'entreprise'),
+            TextField::new('socialReason', 'Raison sociale'),
+            TextField::new('address1', 'Adresse')->hideOnIndex(),
+            TextField::new('zipCode', 'Code postal'),
+            TextField::new('city', 'Ville'),
+            TextField::new('country', 'Pays')->hideOnIndex(),
+            IntegerField::new('siret', 'Numéro SIRET'),
+            TextField::new('workforce', 'Effectif'),
+            NumberField::new('sellFigure', 'Chiffre d\'affaires')->setNumDecimals(2),
+            DateField::new('creation', 'Date de création'),
+            TextField::new('phone', 'Numéro de téléphone'),
+            EmailField::new('email', 'Adresse email'),
+            UrlField::new('websiteUrl', 'URL du site web')->hideOnIndex(),
+            TextField::new('fax', 'Numéro de fax')->hideOnIndex(),
+            UrlField::new('linkedinUrl', 'URL LinkedIn')->hideOnIndex(),
+            UrlField::new('facebookUrl', 'URL Facebook')->hideOnIndex(),
+            UrlField::new('instagramUrl', 'URL Instagram')->hideOnIndex(),
+            UrlField::new('xUrl', 'Autre URL')->hideOnIndex(),
+            ImageField::new('logo', 'Logo de l\'entreprise')->setBasePath('uploads/logo')->setUploadDir('public/uploads/logo'),
+            AssociationField::new('sectors', 'Secteurs')->hideOnIndex(),
+            AssociationField::new('categories', 'Catégories')->hideOnIndex(),
         ];
     }
-
 }

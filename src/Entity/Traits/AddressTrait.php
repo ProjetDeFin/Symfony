@@ -29,11 +29,11 @@ trait AddressTrait
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['company'])]
-    protected ?string $latitude = null;
+    protected ?float $latitude = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['company'])]
-    protected ?string $longitude = null;
+    protected ?float $longitude = null;
 
     public function getAddress1(): ?string
     {

@@ -2,8 +2,21 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Application;
+use App\Entity\Category;
 use App\Entity\Company;
+use App\Entity\CompanyResponsible;
+use App\Entity\DiplomaSearched;
+use App\Entity\Hobby;
+use App\Entity\InternshipOffer;
+use App\Entity\JobProfile;
+use App\Entity\Language;
+use App\Entity\LanguageStudent;
+use App\Entity\ProfesionalExperience;
+use App\Entity\Sector;
+use App\Entity\Skill;
 use App\Entity\Student;
+use App\Entity\StudyLevel;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -51,6 +64,17 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
         yield MenuItem::linkToCrud('Students', 'fas fa-user-graduate', Student::class);
         yield MenuItem::linkToCrud('Companies', 'fas fa-building', Company::class);
+        yield MenuItem::linkToCrud('Applications', 'fas fa-file-alt', Application::class);
+        yield MenuItem::linkToCrud('Categories', 'fas fa-list', Category::class);
+        yield MenuItem::linkToCrud('Diplomas Searched', 'fas fa-graduation-cap', DiplomaSearched::class);
+        yield MenuItem::linkToCrud('Hobbies', 'fas fa-gamepad', Hobby::class);
+        yield MenuItem::linkToCrud('Internship Offers', 'fas fa-briefcase', InternshipOffer::class);
+        yield MenuItem::linkToCrud('Job Profiles', 'fas fa-clipboard', JobProfile::class);
+        yield MenuItem::linkToCrud('Languages', 'fas fa-language', Language::class);
+        yield MenuItem::linkToCrud('Professional Experiences', 'fas fa-briefcase', ProfesionalExperience::class);
+        yield MenuItem::linkToCrud('Sectors', 'fas fa-industry', Sector::class);
+        yield MenuItem::linkToCrud('Skills', 'fas fa-tools', Skill::class);
+        yield MenuItem::linkToCrud('Study Levels', 'fas fa-graduation-cap', StudyLevel::class);
         yield MenuItem::section();
         yield MenuItem::linkToLogout('Logout', 'fas fa-sign-out-alt');
     }

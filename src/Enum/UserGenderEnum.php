@@ -17,4 +17,13 @@ enum UserGenderEnum: string
             default => throw new \InvalidArgumentException('Gender value is not valid.'),
         };
     }
+
+    public function toString(): string
+    {
+        return match ($this) {
+            self::MAN => 'M.',
+            self::WOMAN => 'Mme',
+            self::OTHER => 'Autres',
+        };
+    }
 }
