@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\CompanyResponsible;
 use App\Repository\CategoryRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\CompanyResponsibleRepository;
 use App\Repository\SectorRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +20,8 @@ class CompaniesController extends AbstractController
         private readonly CompanyRepository $companyRepository,
         private readonly SerializerInterface $serializer,
         private readonly SectorRepository $sectorRepository,
-        private readonly CategoryRepository $categoryRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly CompanyResponsibleRepository $companyResponsibleRepository,
     ) {
     }
 
@@ -48,10 +51,12 @@ class CompaniesController extends AbstractController
         int $id,
     ): Response {
         $company = $this->companyRepository->find($id);
+        $companyResponsables = $this->companyResponsibleRepository->findBy(['company' => $company]);
 
-        if (!$company) {
-            return new Response('Company not found', 404);
-        }
+        $company = [
+            'company' => $company,
+            'contacts' => $companyResponsables,
+        ];
 
         $jsonContent = $this->serializer->serialize($company, 'json', ['groups' => 'company']);
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
