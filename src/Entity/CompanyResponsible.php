@@ -18,6 +18,7 @@ class CompanyResponsible
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['company'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(targetEntity: User::class)]
@@ -27,11 +28,11 @@ class CompanyResponsible
     private ?Company $company = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Groups(['profile'])]
+    #[Groups(['profile', 'company'])]
     private ?string $position = null;
 
     #[ORM\Column(type: Types::STRING, length: 10)]
-    #[Groups(['profile'])]
+    #[Groups(['profile', 'company'])]
     private ?string $phone = null;
 
     public function getId(): ?int
@@ -94,5 +95,17 @@ class CompanyResponsible
         $companyResponsible->setPhone($companyResponsibleDTO->getPhone());
 
         return $companyResponsible;
+    }
+
+    #[Groups(['company'])]
+    public function getUserName(): string
+    {
+        return $this->getUser()->getFullName();
+    }
+
+    #[Groups(['company'])]
+    public function getUserEmail(): string
+    {
+        return $this->getUser()->getEmail();
     }
 }

@@ -30,15 +30,15 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    #[Groups(['user', 'profile'])]
+    #[Groups(['user', 'profile', 'company'])]
     private string $firstname;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    #[Groups(['user', 'profile'])]
+    #[Groups(['user', 'profile', 'company'])]
     private string $lastName;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['user', 'profile'])]
+    #[Groups(['user', 'profile', 'company'])]
     private ?string $picture = null;
 
     #[ORM\Column(type: Types::STRING, enumType: UserGenderEnum::class)]
@@ -46,7 +46,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?UserGenderEnum $civility = null;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    #[Groups(['user', 'profile'])]
+    #[Groups(['user', 'profile', 'company'])]
     private string $email;
 
     #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
@@ -144,6 +144,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
+    #[Groups(['user', 'company'])]
     public function getFullName(): string
     {
         return $this->getFirstname() . ' ' . $this->getLastName();
