@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\DesiredProfile;
 use App\Entity\InternshipOffer;
+use App\Entity\Mission;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -34,6 +36,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 2',
@@ -57,6 +68,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 3',
@@ -78,6 +98,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 4',
@@ -98,6 +127,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 5',
@@ -120,6 +158,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 6',
@@ -142,6 +189,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 7',
@@ -164,6 +220,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 8',
@@ -186,6 +251,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 9',
@@ -208,6 +282,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
             [
                 'name' => 'Offer 10',
@@ -230,6 +313,15 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
                 'endAt' => new \DateTimeImmutable('2025-03-01'),
                 'endApplyDate' => new \DateTimeImmutable('2025-12-31'),
                 'startApplyDate' => new \DateTimeImmutable('2025-01-01'),
+                'missions' => [
+                    'Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne',
+                    'Se concentrer sur la publication de contenu sur les médias sociaux',
+                    'Soutien au marketing et à la stratégie',
+                ],
+                'desiredProfiles' => [
+                    'Vous êtes passionné par le digital et pratiquez les principaux réseaux sociaux',
+                    'Vous avez le sens des relations humaines et du travail en équipe',
+                ]
             ],
         ];
 
@@ -253,6 +345,20 @@ class InternshipOfferFixture extends Fixture implements DependentFixtureInterfac
 
             foreach ($offerData['skills'] as $skill) {
                 $offer->addSkill($skill);
+            }
+
+            foreach ($offerData['missions'] as $missionDescription) {
+                $mission = new Mission();
+                $mission->setDescription($missionDescription);
+                $mission->setInternshipOffer($offer);
+                $manager->persist($mission);
+            }
+
+            foreach ($offerData['desiredProfiles'] as $profileDescription) {
+                $profile = new DesiredProfile();
+                $profile->setDescription($profileDescription);
+                $profile->setInternshipOffer($offer);
+                $manager->persist($profile);
             }
 
             $offer->setCompany($offerData['company']);

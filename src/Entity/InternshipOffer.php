@@ -70,12 +70,22 @@ class InternshipOffer
     #[Groups(['internship_offer', 'internship_offers', 'company', 'home', 'companies'])]
     private ?string $type = null;
 
+    #[ORM\OneToMany(targetEntity: Mission::class, mappedBy: 'internshipOffer')]
+    #[Groups(['internship_offer', 'company', 'internship_offers'])]
+    private Collection $missions;
+
+    #[ORM\OneToMany(targetEntity: DesiredProfile::class, mappedBy: 'internshipOffer')]
+    #[Groups(['internship_offer', 'company', 'internship_offers'])]
+    private Collection $desiredProfiles;
+
     public function __construct()
     {
         $this->jobProfiles = new ArrayCollection();
         $this->diplomasSearched = new ArrayCollection();
         $this->applications = new ArrayCollection();
         $this->skills = new ArrayCollection();
+        $this->missions = new ArrayCollection();
+        $this->desiredProfiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,6 +210,33 @@ class InternshipOffer
         return $this;
     }
 
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+            $skill->addInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        if ($this->skills->removeElement($skill)) {
+            $skill->removeInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
     public function getStartAt(): ?\DateTimeImmutable
     {
         return $this->startAt;
@@ -244,30 +281,6 @@ class InternshipOffer
     public function setStartApplyDate(\DateTimeImmutable $startApplyDate): static
     {
         $this->startApplyDate = $startApplyDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Skill>
-     */
-    public function getSkills(): Collection
-    {
-        return $this->skills;
-    }
-
-    public function addSkill(Skill $skill): static
-    {
-        if (!$this->skills->contains($skill)) {
-            $this->skills->add($skill);
-        }
-
-        return $this;
-    }
-
-    public function removeSkill(Skill $skill): static
-    {
-        $this->skills->removeElement($skill);
 
         return $this;
     }
@@ -357,13 +370,13 @@ class InternshipOffer
     }
 
     #[Groups(['internship_offers', 'internship_offer'])]
-    public function getCompanyLat(): string
+    public function getCompanyLat(): float
     {
         return $this->company->getLatitude();
     }
 
     #[Groups(['internship_offers', 'internship_offer'])]
-    public function getCompanyLng(): string
+    public function getCompanyLng(): float
     {
         return $this->company->getLongitude();
     }
@@ -372,5 +385,70 @@ class InternshipOffer
     public function getCompanyPhotos(): array
     {
         return $this->company->getPhotos();
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return Collection<int, Mission>
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(Mission $mission): static
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions->add($mission);
+            $mission->setInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMission(Mission $mission): static
+    {
+        if ($this->missions->removeElement($mission)) {
+            // set the owning side to null (unless already changed)
+            if ($mission->getInternshipOffer() === $this) {
+                $mission->setInternshipOffer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DesiredProfile>
+     */
+    public function getDesiredProfiles(): Collection
+    {
+        return $this->desiredProfiles;
+    }
+
+    public function addDesiredProfile(DesiredProfile $desiredProfile): static
+    {
+        if (!$this->desiredProfiles->contains($desiredProfile)) {
+            $this->desiredProfiles->add($desiredProfile);
+            $desiredProfile->setInternshipOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDesiredProfile(DesiredProfile $desiredProfile): static
+    {
+        if ($this->desiredProfiles->removeElement($desiredProfile)) {
+            // set the owning side to null (unless already changed)
+            if ($desiredProfile->getInternshipOffer() === $this) {
+                $desiredProfile->setInternshipOffer(null);
+            }
+        }
+
+        return $this;
     }
 }

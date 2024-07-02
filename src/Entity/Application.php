@@ -178,4 +178,9 @@ class Application
     {
         return $this->startAt->format('d/m/Y') . ' - ' . $this->endAt->format('d/m/Y');
     }
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
 }

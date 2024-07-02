@@ -21,8 +21,14 @@ class StudentCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             AssociationField::new('user', 'Utilisateur'),
-            DateField::new('birthday'),
-            TextField::new('mobile'),
+            DateField::new('birthday', 'Date de naissance'),
+            TextField::new('mobile', 'Numéro de téléphone mobile'),
+            TextField::new('schoolName', 'Nom de l\'école'),
+            AssociationField::new('profesionalExperiences', 'Expériences professionnelles')->hideOnIndex(),
+            AssociationField::new('hobbies', 'Loisirs')->hideOnIndex(),
+            AssociationField::new('skills', 'Compétences')->hideOnIndex(),
+            AssociationField::new('studyLevel', 'Niveau d\'études')->hideOnIndex(),
+            AssociationField::new('diplomasSearched', 'Niveau de diplome')->hideOnIndex(),
         ];
     }
 }

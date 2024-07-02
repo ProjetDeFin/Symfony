@@ -547,4 +547,9 @@ class Company
     {
         return [$this->photo1, $this->photo2, $this->photo3];
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }
