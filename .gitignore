@@ -2,7 +2,6 @@
 vendor/
 var/**/
 public/bundles/
-public/uploads/
 public/index.php
 supervisord.log
 supervisord.pid
