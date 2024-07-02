@@ -54,32 +54,32 @@ class Student
      * @var Collection<int, ProfesionalExperience>
      */
     #[ORM\OneToMany(targetEntity: ProfesionalExperience::class, mappedBy: 'student')]
-    #[Groups(['student', 'profile'])]
+    #[Groups(['student'])]
     private Collection $profesionalExperiences;
 
     /**
      * @var Collection<int, Hobby>
      */
     #[ORM\OneToMany(targetEntity: Hobby::class, mappedBy: 'student')]
-    #[Groups(['student', 'profile'])]
+    #[Groups(['student'])]
     private Collection $hobbies;
 
     /**
      * @var Collection<int, Skill>
      */
     #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'student')]
-    #[Groups(['student', 'profile'])]
+    #[Groups(['student'])]
     private Collection $skills;
 
     #[ORM\ManyToOne(targetEntity: StudyLevel::class, inversedBy: 'students')]
-    #[Groups(['student', 'profile'])]
+    #[Groups(['student'])]
     private ?StudyLevel $studyLevel = null;
 
     /**
      * @var Collection<int, DiplomaSearched>
      */
     #[ORM\ManyToMany(targetEntity: DiplomaSearched::class, mappedBy: 'students')]
-    #[Groups(['student', 'profile'])]
+    #[Groups(['student'])]
     private Collection $diplomasSearched;
 
     /**
