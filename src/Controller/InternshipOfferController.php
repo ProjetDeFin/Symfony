@@ -6,6 +6,7 @@ use App\Repository\DiplomaSearchedRepository;
 use App\Repository\InternshipOfferRepository;
 use App\Repository\JobProfileRepository;
 use App\Repository\SkillRepository;
+use App\Repository\UserRepository;
 use Proxies\__CG__\App\Entity\DiplomaSearched;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ class InternshipOfferController extends AbstractController
         private readonly SerializerInterface $serializer,
         private readonly DiplomaSearchedRepository $diplomaSearchedRepository,
         private readonly JobProfileRepository $jobProfileRepository,
-        private readonly SkillRepository $skillRepository
+        private readonly UserRepository $UserRepository,
     )
     {
     }
@@ -76,6 +77,18 @@ class InternshipOfferController extends AbstractController
         $internshipOffer = $this->internshipOfferRepository->find($id);
 
         $jsonContent = $this->serializer->serialize($internshipOffer, 'json', ['groups' => 'internship_offer']);
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
+    }
+
+    #[Route(path: '/company/{id}', name: 'company_offers', methods: ['GET'])]
+    public function companyOffers(
+        int $id
+    ): Response
+    {
+        $company = $this->UserRepository->findCompanyFromUser($id);
+        $internshipOffers = $this->internshipOfferRepository->findBy(['company' => $company]);
+
+        $jsonContent = $this->serializer->serialize($internshipOffers, 'json', ['groups' => 'internship_offers']);
         return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
     }
 }

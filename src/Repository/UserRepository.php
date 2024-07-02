@@ -40,17 +40,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function countCompanyResponsible(Company $company): int
+    public function findCompanyFromUser(int $id): ?Company
     {
-        $qb = $this->createQueryBuilder('u');
-        $qb->select('count(u.id)')
-            ->where('u.roles LIKE :role')
-            ->andWhere('u.company = :company')  // Assuming the User entity has a 'company' relation
-            ->setParameters([
-                'role' => '%"ROLE_COMPANY_RESPONSIBLE"%',
-                'company' => $company
-            ]);
-
-        return (int)$qb->getQuery()->getSingleScalarResult();
+        return $this->createQueryBuilder('u')
+            ->select('c')
+            ->join(CompanyResponsible::class, 'cr', 'WITH', 'cr.user = u')
+            ->join(Company::class, 'c', 'WITH', 'c = cr.company')
+            ->where('u.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

@@ -47,7 +47,7 @@ class InternshipOffer
     private Collection $diplomasSearched;
 
     #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
-    #[Groups(['internship_offer'])]
+    #[Groups(['internship_offer', 'internship_offers'])]
     private Collection $applications;
 
     #[ORM\Column]
